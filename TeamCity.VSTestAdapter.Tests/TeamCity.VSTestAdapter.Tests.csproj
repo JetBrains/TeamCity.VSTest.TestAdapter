@@ -77,8 +77,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Suite.cs" />
     <Compile Include="TeamCityTestLoggerTests.cs" />
     <Compile Include="Events.cs" />
+    <Compile Include="Root.cs" />
+    <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -57,12 +57,7 @@
             using (var testWriter = testSuiteWriter.OpenTest(testCase.FullyQualifiedName))
             {
                 // ReSharper disable once SuspiciousTypeConversion.Global
-                var messageWriter = testWriter as ITeamCityMessageWriter;
-                if (messageWriter != null)
-                {
-                    SendMessages(messageWriter);
-                }
-
+                SendMessages(testWriter as ITeamCityMessageWriter);
                 switch (result.Outcome)
                 {
                     case TestOutcome.Passed:
@@ -89,30 +84,34 @@
 
         private void OnTestRunComplete(object sender, TestRunCompleteEventArgs ev)
         {
-            ReleaseTestSuite();
+            SendMessages(_testSuiteWriter as ITeamCityMessageWriter);
+            _testSuiteWriter?.Dispose();
             _rootWriter.Dispose();
         }
 
-        private void SendMessages(ITeamCityMessageWriter messageWriter)
+        private void SendMessages([CanBeNull] ITeamCityMessageWriter messageWriter)
         {
-            foreach (var messageItem in _messages)
+            if (messageWriter != null)
             {
-                switch (messageItem.Level)
+                foreach (var messageItem in _messages)
                 {
-                    case TestMessageLevel.Informational:
-                        messageWriter.WriteMessage(messageItem.Message);
-                        break;
+                    switch (messageItem.Level)
+                    {
+                        case TestMessageLevel.Informational:
+                            messageWriter.WriteMessage(messageItem.Message);
+                            break;
 
-                    case TestMessageLevel.Warning:
-                        messageWriter.WriteWarning(messageItem.Message);
-                        break;
+                        case TestMessageLevel.Warning:
+                            messageWriter.WriteWarning(messageItem.Message);
+                            break;
 
-                    case TestMessageLevel.Error:
-                        messageWriter.WriteError(messageItem.Message);
-                        break;
+                        case TestMessageLevel.Error:
+                            messageWriter.WriteError(messageItem.Message);
+                            break;
 
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
                 }
             }
 
@@ -128,23 +127,11 @@
                 return _testSuiteWriter;
             }
 
-            ReleaseTestSuite();
+            _testSuiteWriter?.Dispose();
             _testSuiteSource = source;
             var testSuiteWriter = _rootWriter.OpenTestSuite(source);
             _testSuiteWriter = testSuiteWriter;
             return testSuiteWriter;
-        }
-
-        private void ReleaseTestSuite()
-        {
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            var messageWriter = _testSuiteWriter as ITeamCityMessageWriter;
-            if (messageWriter != null)
-            {
-                SendMessages(messageWriter);
-            }
-
-            _testSuiteWriter?.Dispose();
         }
     }
 }
