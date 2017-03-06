@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<PackageVersion Condition=" '$(PackageVersion)' == '' ">1.0.0</PackageVersion>
+
+		<Build_Number Condition=" '$(Build_Number)' == '' ">0</Build_Number>		
+		<AssemblyVersion>$(PackageVersion).$(Build_Number)</AssemblyVersion>
+		<Version>$(PackageVersion).$(Build_Number)-beta</Version>
+		<Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+		<PackagesDirectory>packages</PackagesDirectory>	
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Package Include="TeamCity.VSTestAdapter"/>
+	</ItemGroup>
+
+	<UsingTask TaskName="DownloadFile" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+		<ParameterGroup>
+			<Url ParameterType="System.String" Required="true" />
+			<LocalFilePath ParameterType="System.String" Required="true"/>
+		</ParameterGroup>
+		<Task>
+		<Using Namespace="System"/>
+		<Using Namespace="System.IO"/>
+		<Using Namespace="System.Net"/>
+      	<Code Type="Fragment" Language="cs">
+			<![CDATA[		
+				try
+				{				
+					var dirName = Path.GetDirectoryName(LocalFilePath);
+					if (dirName != null && Directory.Exists(dirName))	
+					{
+						Directory.CreateDirectory(dirName);
+					}
+
+					using (WebClient client = new WebClient())
+					{
+						client.DownloadFile(Url, LocalFilePath);
+					}
+				}
+				catch(Exception ex)
+				{
+					Log.LogMessage(MessageImportance.High, string.Format("##teamcity[buildProblem description='{0}' identity='{0}']", ex.Message));
+					throw;
+				}
+			]]>
+      	</Code>
+    	</Task>
+	</UsingTask>
+
+	<UsingTask TaskName="Replace" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+		<ParameterGroup>
+			<FilePath ParameterType="System.String" Required="true"/>
+			<Pattern ParameterType="System.String" Required="true" />
+			<Replacement ParameterType="System.String" Required="true" />
+		</ParameterGroup>
+		<Task>
+		<Using Namespace="System"/>
+		<Using Namespace="System.IO"/>
+		<Using Namespace="System.Linq"/>
+		<Using Namespace="System.Text.RegularExpressions"/>
+      	<Code Type="Fragment" Language="cs">
+			<![CDATA[		
+				try
+				{	
+					File.WriteAllLines(FilePath, File.ReadAllLines(FilePath).Select(line => Regex.Replace(line, Pattern, Replacement)).ToList());
+				}
+				catch(Exception ex)
+				{
+					Log.LogMessage(MessageImportance.High, string.Format("##teamcity[buildProblem description='{0}' identity='{0}']", ex.Message));
+					throw;
+				}
+			]]>
+      	</Code>
+    	</Task>
+	</UsingTask>
+
+	<Target Name="GetNuGet">
+		<DownloadFile
+	    	Url="https://dist.nuget.org/win-x86-commandline/v3.5.0/NuGet.exe"
+	    	LocalFilePath="packages\nuget.exe"/>
+	</Target>
+
+	<Target Name="RestorePackages" DependsOnTargets="GetNuGet">
+		<Exec Command="packages\nuget.exe restore TeamCity.VSTestAdapter.sln"/>
+	</Target>
+
+	<Target Name="UpdateVersions">
+		<Replace
+	    	FilePath='TeamCity.VSTestAdapter\Properties\AssemblyInfo.cs'
+			Pattern='(\[assembly:\s(AssemblyVersion|AssemblyFileVersion)\()"(\d+\.\d+\.\d+\.\d+)"(\)\])'
+			Replacement='$1"$(AssemblyVersion)"$4'/>
+	</Target>
+
+	<Target Name="Build" DependsOnTargets="RestorePackages;UpdateVersions">
+		<MSBuild Projects="TeamCity.VSTestAdapter.sln" BuildInParallel="true" Targets="Clean;Build" Properties="Configuration=$(Configuration)"/>
+	</Target>	
+
+	<Target Name="RunTests" DependsOnTargets="Build">
+		<Exec Command="packages\nuget.exe install NUnit.Console -Version 3.6.0 -o packages"/>
+		<Exec IgnoreExitCode="True" Command="$(MSBuildProjectDirectory)\packages\NUnit.ConsoleRunner.3.6.0\tools\nunit3-console.exe $(MSBuildProjectDirectory)\TeamCity.ServiceMessages.Tests\bin\$(Configuration)\JetBrains.TeamCity.ServiceMessages.Tests.dll --noresult --noheader --workers=1 --inprocess">
+			<Output TaskParameter="ExitCode" ItemName="exitCode"/>
+		</Exec>
+	</Target>
+
+	<Target Name="CreatePackages" DependsOnTargets="RunTests">
+		<Exec Command="packages\nuget.exe pack %(Package.Identity)\package.nuspec -Version $(Version) -OutputDirectory $(PackagesDirectory)"/>
+		<Message Text="##teamcity[publishArtifacts '$(PackagesDirectory)\%(Package.FileName)%(Package.Extension).$(Version).nupkg=>$(PackagesDirectory)']" />
+	</Target>
+
+	<Target Name="PushPackagesToNuGet" DependsOnTargets="GetNuGet">
+		<Exec Command="packages\nuget.exe push $(PackagesDirectory)\%(Package.FileName)%(Package.Extension).$(Version).nupkg -ApiKey $(NuGetApiKey) -Source https://nuget.org/"/>
+	</Target>
+
+</Project>
