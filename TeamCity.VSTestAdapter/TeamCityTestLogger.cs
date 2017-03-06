@@ -53,8 +53,8 @@
 
             var result = ev.Result;
             var testCase = result.TestCase;
-            var testSuiteWriter = GetTestSuiteWriter(testCase.Source);
-            using (var testWriter = testSuiteWriter.OpenTest(testCase.FullyQualifiedName))
+            var testSuiteWriter = GetTestSuiteWriter(testCase.Source ?? "VSTest");
+            using (var testWriter = testSuiteWriter.OpenTest(testCase.FullyQualifiedName ?? "Test"))
             {
                 // ReSharper disable once SuspiciousTypeConversion.Global
                 SendMessages(testWriter as ITeamCityMessageWriter);
@@ -65,7 +65,7 @@
                         break;
 
                     case TestOutcome.Failed:
-                        testWriter.WriteFailed(result.ErrorMessage, result.ErrorStackTrace);
+                        testWriter.WriteFailed(result.ErrorMessage ?? string.Empty, result.ErrorStackTrace ?? string.Empty);
                         break;
 
                     case TestOutcome.Skipped:
@@ -105,6 +105,11 @@
             {
                 foreach (var messageItem in _messages)
                 {
+                    if (string.IsNullOrEmpty(messageItem.Message))
+                    {
+                        continue;
+                    }
+
                     switch (messageItem.Level)
                     {
                         case TestMessageLevel.Informational:
