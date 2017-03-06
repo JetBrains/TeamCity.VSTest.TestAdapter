@@ -23,7 +23,7 @@
 
         public ITeamCityTestWriter OpenTest(string testName)
         {
-            return new Test(_lines, testName);
+            return new Test(_lines, $"{_source}/{testName}" );
         }
 
         public ITeamCityTestsSubWriter OpenFlow()

@@ -43,9 +43,9 @@
             {
                  "+ root"
                 ,"+ suite assembly.dll"
-                ,"+ test test1"
-                ,"# test test1 duration 00:00:01"
-                ,"- test test1"
+                ,"+ test assembly.dll/test1"
+                ,"# test assembly.dll/test1 duration 00:00:01"
+                ,"- test assembly.dll/test1"
             });
         }
 
@@ -63,12 +63,45 @@
             {
                  "+ root"
                 ,"+ suite assembly.dll"
-                ,"+ test test1"
-                ,"# test test1 duration 00:00:01"
-                ,"- test test1"
-                ,"+ test test2"
-                ,"# test test2 duration 00:00:01"
-                ,"- test test2"
+                ,"+ test assembly.dll/test1"
+                ,"# test assembly.dll/test1 duration 00:00:01"
+                ,"- test assembly.dll/test1"
+                ,"+ test assembly.dll/test2"
+                ,"# test assembly.dll/test2 duration 00:00:01"
+                ,"- test assembly.dll/test2"
+            });
+        }
+
+        [Test]
+        public void ShouldProcessWhenSeveralPassedTestsInDifferentSuites()
+        {
+            // Given
+
+            // When
+            _events.SendTestResult(CreateTestResult());
+            _events.SendTestResult(CreateTestResult(TestOutcome.Passed, "test2"));
+            _events.SendTestResult(CreateTestResult(TestOutcome.Passed, "test3", "assembly2.dll"));
+            _events.SendTestResult(CreateTestResult(TestOutcome.Passed, "test4", "assembly2.dll"));
+
+            // Then
+            _lines.ShouldBe(new[]
+            {
+                 "+ root"
+                ,"+ suite assembly.dll"
+                ,"+ test assembly.dll/test1"
+                ,"# test assembly.dll/test1 duration 00:00:01"
+                ,"- test assembly.dll/test1"
+                ,"+ test assembly.dll/test2"
+                ,"# test assembly.dll/test2 duration 00:00:01"
+                ,"- test assembly.dll/test2"
+                ,"- suite assembly.dll"
+                ,"+ suite assembly2.dll"
+                ,"+ test assembly2.dll/test3"
+                ,"# test assembly2.dll/test3 duration 00:00:01"
+                ,"- test assembly2.dll/test3"
+                ,"+ test assembly2.dll/test4"
+                ,"# test assembly2.dll/test4 duration 00:00:01"
+                ,"- test assembly2.dll/test4"
             });
         }
 
@@ -89,13 +122,13 @@
             {
                  "+ root"
                 ,"+ suite assembly.dll"
-                ,"+ test test1"
-                ,"# test test1 message text 1"
-                ,"# test test1 warning warningInfo"
-                ,"# test test1 message text 2"
-                ,"# test test1 error errorDetails"
-                ,"# test test1 duration 00:00:01"
-                ,"- test test1"
+                ,"+ test assembly.dll/test1"
+                ,"# test assembly.dll/test1 message text 1"
+                ,"# test assembly.dll/test1 warning warningInfo"
+                ,"# test assembly.dll/test1 message text 2"
+                ,"# test assembly.dll/test1 error errorDetails"
+                ,"# test assembly.dll/test1 duration 00:00:01"
+                ,"- test assembly.dll/test1"
             });
         }
 
@@ -117,16 +150,16 @@
             {
                  "+ root"
                 ,"+ suite assembly.dll"
-                ,"+ test test1"
-                ,"# test test1 message text 1"
-                ,"# test test1 warning warningInfo"
-                ,"# test test1 duration 00:00:01"
-                ,"- test test1"
-                ,"+ test test2"
-                ,"# test test2 message text 2"
-                ,"# test test2 error errorDetails"
-                ,"# test test2 duration 00:00:01"
-                ,"- test test2"
+                ,"+ test assembly.dll/test1"
+                ,"# test assembly.dll/test1 message text 1"
+                ,"# test assembly.dll/test1 warning warningInfo"
+                ,"# test assembly.dll/test1 duration 00:00:01"
+                ,"- test assembly.dll/test1"
+                ,"+ test assembly.dll/test2"
+                ,"# test assembly.dll/test2 message text 2"
+                ,"# test assembly.dll/test2 error errorDetails"
+                ,"# test assembly.dll/test2 duration 00:00:01"
+                ,"- test assembly.dll/test2"
             });
         }
 
@@ -148,11 +181,11 @@
             {
                  "+ root"
                 ,"+ suite assembly.dll"
-                ,"+ test test1"
-                ,"# test test1 message text 1"
-                ,"# test test1 warning warningInfo"
-                ,"# test test1 duration 00:00:01"
-                ,"- test test1"
+                ,"+ test assembly.dll/test1"
+                ,"# test assembly.dll/test1 message text 1"
+                ,"# test assembly.dll/test1 warning warningInfo"
+                ,"# test assembly.dll/test1 duration 00:00:01"
+                ,"- test assembly.dll/test1"
                 ,"# suite assembly.dll message text 2"
                 ,"# suite assembly.dll error errorDetails"
                 ,"- suite assembly.dll"
