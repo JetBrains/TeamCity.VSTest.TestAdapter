@@ -58,16 +58,26 @@
             {
                 // ReSharper disable once SuspiciousTypeConversion.Global
                 SendMessages(testWriter as ITeamCityMessageWriter);
+                testWriter.WriteDuration(result.Duration);
                 switch (result.Outcome)
                 {
                     case TestOutcome.Passed:
-                        testWriter.WriteDuration(result.Duration);
                         break;
 
                     case TestOutcome.Failed:
+                        testWriter.WriteFailed(result.ErrorMessage, result.ErrorStackTrace);
                         break;
 
                     case TestOutcome.Skipped:
+                        if (string.IsNullOrEmpty(result.ErrorMessage))
+                        {
+                            testWriter.WriteIgnored();
+                        }
+                        else
+                        {
+                            testWriter.WriteIgnored(result.ErrorMessage);
+                        }
+
                         break;
 
                     case TestOutcome.NotFound:

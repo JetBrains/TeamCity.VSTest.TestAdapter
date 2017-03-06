@@ -33,17 +33,17 @@
 
         public void WriteIgnored(string ignoreReason)
         {
-            throw new NotImplementedException();
+            _lines.Add($"? test {_testName} {ignoreReason}");
         }
 
         public void WriteIgnored()
         {
-            throw new NotImplementedException();
+            _lines.Add($"? test {_testName}");
         }
 
         public void WriteFailed(string errorMessage, string errorDetails)
         {
-            throw new NotImplementedException();
+            _lines.Add($"! test {_testName} {errorMessage} {errorDetails}");
         }
 
         public void WriteDuration(TimeSpan duration)

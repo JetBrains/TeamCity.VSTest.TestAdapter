@@ -50,6 +50,68 @@
         }
 
         [Test]
+        public void ShouldProcessWhenFailedTest()
+        {
+            // Given
+
+            // When
+            _events.SendTestResult(CreateTestResult(TestOutcome.Failed, "test1", "assembly.dll", "errorInfo", "stackTrace"));
+
+            // Then
+            _lines.ShouldBe(new[]
+            {
+                 "+ root"
+                ,"+ suite assembly.dll"
+                ,"+ test assembly.dll/test1"
+                ,"# test assembly.dll/test1 duration 00:00:01"
+                ,"! test assembly.dll/test1 errorInfo stackTrace"
+                ,"- test assembly.dll/test1"
+            });
+        }
+
+        [Test]
+        public void ShouldProcessWhenSkippedTest()
+        {
+            // Given
+
+            // When
+            _events.SendTestResult(CreateTestResult(TestOutcome.Skipped, "test1", "assembly.dll", "reason"));
+
+            // Then
+            _lines.ShouldBe(new[]
+            {
+                 "+ root"
+                ,"+ suite assembly.dll"
+                ,"+ test assembly.dll/test1"
+                ,"# test assembly.dll/test1 duration 00:00:01"
+                ,"? test assembly.dll/test1 reason"
+                ,"- test assembly.dll/test1"
+            });
+        }
+
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        public void ShouldProcessWhenSkippedTestWithoutReason(string reason)
+        {
+            // Given
+
+            // When
+            _events.SendTestResult(CreateTestResult(TestOutcome.Skipped, "test1", "assembly.dll", reason));
+
+            // Then
+            _lines.ShouldBe(new[]
+            {
+                 "+ root"
+                ,"+ suite assembly.dll"
+                ,"+ test assembly.dll/test1"
+                ,"# test assembly.dll/test1 duration 00:00:01"
+                ,"? test assembly.dll/test1"
+                ,"- test assembly.dll/test1"
+            });
+        }
+
+        [Test]
         public void ShouldProcessWhenSeveralPassedTests()
         {
             // Given
@@ -202,6 +264,8 @@
             TestOutcome outcome = TestOutcome.Passed,
             string fullyQualifiedName = "test1",
             string source = "assembly.dll",
+            string errorMessage = null,
+            string errorStackTrace = null,
             string extensionId = TeamCityTestLogger.ExtensionId)
         {
             return new TestResultEventArgs(
@@ -212,7 +276,9 @@
                         source))
                 {
                     Outcome = outcome,
-                    Duration = TimeSpan.FromSeconds(1)
+                    Duration = TimeSpan.FromSeconds(1),
+                    ErrorMessage = errorMessage,
+                    ErrorStackTrace = errorStackTrace
                 });
         }
 
