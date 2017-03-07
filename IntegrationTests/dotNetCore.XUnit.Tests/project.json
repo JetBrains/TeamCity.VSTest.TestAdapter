@@ -1,0 +1,22 @@
+{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "Microsoft.NET.Sdk": "1.0.0-alpha-20161104-2",
+    "Microsoft.NET.Test.Sdk": "15.0.0",
+    "NETStandard.Library": "1.6.1",
+    "TeamCity.VSTestAdapter": "1.0.0-beta",
+    "xunit": "2.2.0",
+    "xunit.runner.visualstudio": "2.2.0"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  },
+
+  "runtimes": {
+    "win10-x64": { }
+  }
+}
