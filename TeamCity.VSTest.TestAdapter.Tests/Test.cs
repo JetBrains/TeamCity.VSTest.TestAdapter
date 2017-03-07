@@ -1,4 +1,4 @@
-﻿namespace TeamCity.VSTestAdapter.Tests
+﻿namespace TeamCity.VSTest.TestAdapter.Tests
 {
     using System;
     using System.Collections.Generic;

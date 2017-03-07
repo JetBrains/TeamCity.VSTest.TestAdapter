@@ -1,1 +1,1 @@
-# TeamCity.VSTestAdapter
+# TeamCity.VSTest.TestAdapter

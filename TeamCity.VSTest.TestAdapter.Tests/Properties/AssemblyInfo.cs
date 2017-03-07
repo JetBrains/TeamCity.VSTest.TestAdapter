@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TeamCity.VSTestAdapter.Tests")]
+[assembly: AssemblyTitle("TeamCity.VSTest.TestAdapter.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("JetBrains")]
-[assembly: AssemblyProduct("TeamCity.VSTestAdapter.Tests")]
+[assembly: AssemblyProduct("TeamCity.VSTest.TestAdapter.Tests")]
 [assembly: AssemblyCopyright("Copyright © JetBrains 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

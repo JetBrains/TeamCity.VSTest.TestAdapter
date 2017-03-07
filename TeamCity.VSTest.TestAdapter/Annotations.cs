@@ -29,7 +29,7 @@ SOFTWARE. */
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable InconsistentNaming
 
-namespace TeamCity.VSTestAdapter
+namespace TeamCity.VSTest.TestAdapter
 {
     using System;
 

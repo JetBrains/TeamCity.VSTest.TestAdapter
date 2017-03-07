@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamCity.VSTestAdapter", "TeamCity.VSTestAdapter\TeamCity.VSTestAdapter.csproj", "{2B305BED-554B-4F9C-9444-96FF5F59CA99}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamCity.VSTest.TestAdapter", "TeamCity.VSTest.TestAdapter\TeamCity.VSTest.TestAdapter.csproj", "{2B305BED-554B-4F9C-9444-96FF5F59CA99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamCity.VSTestAdapter.Tests", "TeamCity.VSTestAdapter.Tests\TeamCity.VSTestAdapter.Tests.csproj", "{E2A3B07C-F4DC-4B59-9D8A-22CF7CE06E29}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamCity.VSTest.TestAdapter.Tests", "TeamCity.VSTest.TestAdapter.Tests\TeamCity.VSTest.TestAdapter.Tests.csproj", "{E2A3B07C-F4DC-4B59-9D8A-22CF7CE06E29}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{E9EECA36-7BB3-4D65-BCF7-90A98B6DA2E5}"
 EndProject

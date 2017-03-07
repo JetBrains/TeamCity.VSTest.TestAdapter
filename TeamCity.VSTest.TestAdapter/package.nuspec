@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>TeamCity.VSTestAdapter</id>
+    <id>TeamCity.VSTest.TestAdapter</id>
 	<title>TeamCity VSTest Adapter</title>
     <version>$Version$</version>
 	<language>en-us</language>
     <authors>NikolayP</authors>
     <owners>JetBrains</owners>
-    <licenseUrl>https://github.com/NikolayPianikov/TeamCity.VSTestAdapter/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/NikolayPianikov/TeamCity.VSTestAdapter</projectUrl>
+    <licenseUrl>https://github.com/NikolayPianikov/TeamCity.VSTest.TestAdapter/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/NikolayPianikov/TeamCity.VSTest.TestAdapter</projectUrl>
 	<iconUrl>https://www.jetbrains.com/_assets//shared/favicons/jetbrains.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>This library provides integration TeamCity and VSTest</description>
@@ -18,7 +18,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\TeamCity.VSTestAdapter.*" target="lib\portable-net46+netcore50+netstandard1.5+netstandard1.6+netcoreapp1.0" />
+    <file src="bin\Release\TeamCity.VSTest.TestAdapter.*" target="lib\portable-net46+netcore50+netstandard1.5+netstandard1.6+netcoreapp1.0" />
     <file src="..\LICENSE" target="LICENSE.txt" />
   </files>
 </package>

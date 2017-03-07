@@ -11,7 +11,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Package Include="TeamCity.VSTestAdapter"/>
+		<Package Include="TeamCity.VSTest.TestAdapter"/>
 	</ItemGroup>
 
 	<UsingTask TaskName="DownloadFile" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
@@ -82,18 +82,18 @@
 	</Target>
 
 	<Target Name="RestorePackages" DependsOnTargets="GetNuGet">
-		<Exec Command="packages\nuget.exe restore TeamCity.VSTestAdapter.sln"/>
+		<Exec Command="packages\nuget.exe restore TeamCity.VSTest.TestAdapter.sln"/>
 	</Target>
 
 	<Target Name="UpdateVersions">
 		<Replace
-	    	FilePath='TeamCity.VSTestAdapter\Properties\AssemblyInfo.cs'
+	    	FilePath='TeamCity.VSTest.TestAdapter\Properties\AssemblyInfo.cs'
 			Pattern='(\[assembly:\s(AssemblyVersion|AssemblyFileVersion)\()"(\d+\.\d+\.\d+\.\d+)"(\)\])'
 			Replacement='$1"$(AssemblyVersion)"$4'/>
 	</Target>
 
 	<Target Name="Build" DependsOnTargets="RestorePackages;UpdateVersions">
-		<MSBuild Projects="TeamCity.VSTestAdapter.sln" BuildInParallel="true" Targets="Clean;Build" Properties="Configuration=$(Configuration)"/>
+		<MSBuild Projects="TeamCity.VSTest.TestAdapter.sln" BuildInParallel="true" Targets="Clean;Build" Properties="Configuration=$(Configuration)"/>
 	</Target>	
 
 	<Target Name="RunTests" DependsOnTargets="Build">

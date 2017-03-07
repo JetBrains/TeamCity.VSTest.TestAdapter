@@ -1,4 +1,4 @@
-﻿namespace TeamCity.VSTestAdapter.Tests
+﻿namespace TeamCity.VSTest.TestAdapter.Tests
 {
     using System.Collections.Generic;
     using JetBrains.TeamCity.ServiceMessages;
