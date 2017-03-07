@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading;
     using JetBrains.TeamCity.ServiceMessages.Write.Special;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
@@ -11,7 +12,7 @@
     [FriendlyName("TeamCity")]
     public class TeamCityTestLogger : ITestLogger
     {
-        public const string ExtensionId = "logger://TeamCityLogger";
+        public const string ExtensionId = "logger://teamcity";
         [NotNull] private readonly List<TestRunMessageEventArgs> _messages = new List<TestRunMessageEventArgs>();
         [NotNull] private readonly ITeamCityWriter _rootWriter;
         private readonly Uri _extensionUri;
@@ -21,6 +22,11 @@
         public TeamCityTestLogger()
             :this(Factory.CreateTeamCityWriter())
         {
+            /*while (!System.Diagnostics.Debugger.IsAttached)
+            {
+                Thread.Sleep(1000);
+            }
+            System.Diagnostics.Debugger.Break();*/
         }
 
         internal TeamCityTestLogger(
@@ -46,11 +52,6 @@
 
         private void OnTestResult(object sender, TestResultEventArgs ev)
         {
-            if (ev.Result.TestCase.ExecutorUri != _extensionUri)
-            {
-                return;
-            }
-
             var result = ev.Result;
             var testCase = result.TestCase;
             var testSuiteWriter = GetTestSuiteWriter(testCase.Source ?? "VSTest");

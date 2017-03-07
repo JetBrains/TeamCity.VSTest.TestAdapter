@@ -1,0 +1,1 @@
+dotnet test IntegrationTests\dotNetCore.XUnit.Tests\dotNetCore.XUnit.Tests.csproj /p:VSTestLogger=TeamCity;VSTestTestAdapterPath=C:\Projects\TeamCity.VSTest.TestAdapter\IntegrationTests\dotNetCore.XUnit.Tests\bin\Debug\netcoreapp1.0
