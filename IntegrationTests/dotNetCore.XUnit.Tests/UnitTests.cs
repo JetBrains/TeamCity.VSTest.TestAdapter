@@ -7,6 +7,7 @@ namespace dotNetCore.XUnit.Tests
         [Fact]
         public void TestPassed()
         {
+            System.Console.WriteLine("some text");
         }
 
         [Fact]

@@ -27,7 +27,7 @@
             _events = new Events();
             var root = new Root(_lines);
             _logger = new TeamCityTestLogger(root);
-            _logger.Initialize(_events, null);
+            _logger.Initialize(_events, (string)null);
         }
 
         [Test]

@@ -10,36 +10,45 @@
 
     [ExtensionUri(ExtensionId)]
     [FriendlyName("TeamCity")]
-    public class TeamCityTestLogger : ITestLogger
+    public class TeamCityTestLogger : ITestLoggerWithParameters
     {
         public const string ExtensionId = "logger://teamcity";
         [NotNull] private readonly List<TestRunMessageEventArgs> _messages = new List<TestRunMessageEventArgs>();
         [NotNull] private readonly ITeamCityWriter _rootWriter;
-        private readonly Uri _extensionUri;
         [CanBeNull] private ITeamCityTestsSubWriter _testSuiteWriter;
         [CanBeNull] private string _testSuiteSource;
 
         public TeamCityTestLogger()
             :this(Factory.CreateTeamCityWriter())
         {
-            /*while (!System.Diagnostics.Debugger.IsAttached)
+            while (!System.Diagnostics.Debugger.IsAttached)
             {
                 Thread.Sleep(1000);
             }
-            System.Diagnostics.Debugger.Break();*/
+            System.Diagnostics.Debugger.Break();
         }
 
         internal TeamCityTestLogger(
             [NotNull] ITeamCityWriter rootWriter)
         {
             if (rootWriter == null) throw new ArgumentNullException(nameof(rootWriter));
-            _extensionUri = new Uri(ExtensionId);
             _rootWriter = rootWriter;
         }
 
-        public void Initialize(TestLoggerEvents events, string testRunDirectory)
+        public void Initialize([NotNull] TestLoggerEvents events, Dictionary<string, string> parameters)
         {
             if (events == null) throw new ArgumentNullException(nameof(events));
+            SubscribeToEvets(events);
+        }
+
+        public void Initialize([NotNull] TestLoggerEvents events, string testRunDirectory)
+        {
+            if (events == null) throw new ArgumentNullException(nameof(events));
+            SubscribeToEvets(events);
+        }
+
+        private void SubscribeToEvets(TestLoggerEvents events)
+        {
             events.TestRunMessage += OnTestRunMessage;
             events.TestResult += OnTestResult;
             events.TestRunComplete += OnTestRunComplete;
