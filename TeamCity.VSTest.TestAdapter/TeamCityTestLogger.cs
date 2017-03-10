@@ -2,37 +2,35 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Threading;
     using JetBrains.TeamCity.ServiceMessages.Write.Special;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
     [ExtensionUri(ExtensionId)]
-    [FriendlyName("TeamCity")]
+    [FriendlyName(FriendlyName)]
     public class TeamCityTestLogger : ITestLoggerWithParameters
     {
-        public const string ExtensionId = "logger://teamcity";
-        [NotNull] private readonly List<TestRunMessageEventArgs> _messages = new List<TestRunMessageEventArgs>();
+        public const string FriendlyName = "teamcity";
+        public const string ExtensionId = "logger://" + FriendlyName;
         [NotNull] private readonly ITeamCityWriter _rootWriter;
+        [NotNull] private readonly ITestCaseFilter _testCaseFilter;
         [CanBeNull] private ITeamCityTestsSubWriter _testSuiteWriter;
-        [CanBeNull] private string _testSuiteSource;
+        [CanBeNull] private string _testSuiteSource;     
 
         public TeamCityTestLogger()
-            :this(Factory.CreateTeamCityWriter())
+            :this(ServiceLocator.GetTeamCityWriter(), ServiceLocator.GetTestCaseFilter())
         {
-            while (!System.Diagnostics.Debugger.IsAttached)
-            {
-                Thread.Sleep(1000);
-            }
-            System.Diagnostics.Debugger.Break();
         }
 
         internal TeamCityTestLogger(
-            [NotNull] ITeamCityWriter rootWriter)
+            [NotNull] ITeamCityWriter rootWriter,
+            [NotNull] ITestCaseFilter testCaseFilter)
         {
             if (rootWriter == null) throw new ArgumentNullException(nameof(rootWriter));
+            if (testCaseFilter == null) throw new ArgumentNullException(nameof(testCaseFilter));
             _rootWriter = rootWriter;
+            _testCaseFilter = testCaseFilter;
         }
 
         public void Initialize([NotNull] TestLoggerEvents events, Dictionary<string, string> parameters)
@@ -49,26 +47,49 @@
 
         private void SubscribeToEvets(TestLoggerEvents events)
         {
-            events.TestRunMessage += OnTestRunMessage;
             events.TestResult += OnTestResult;
             events.TestRunComplete += OnTestRunComplete;
         }
 
-        private void OnTestRunMessage(object sender, TestRunMessageEventArgs ev)
+        private void OnTestResult(object sender, [NotNull] TestResultEventArgs ev)
         {
-            _messages.Add(ev);
-        }
-
-        private void OnTestResult(object sender, TestResultEventArgs ev)
-        {
+            if (ev == null) throw new ArgumentNullException(nameof(ev));
             var result = ev.Result;
             var testCase = result.TestCase;
+            if (!_testCaseFilter.IsSupported(testCase))
+            {
+                return;
+            }
+
             var testSuiteWriter = GetTestSuiteWriter(testCase.Source ?? "VSTest");
             using (var testWriter = testSuiteWriter.OpenTest(testCase.FullyQualifiedName ?? "Test"))
             {
                 // ReSharper disable once SuspiciousTypeConversion.Global
-                SendMessages(testWriter as ITeamCityMessageWriter);
                 testWriter.WriteDuration(result.Duration);
+                if (result.Messages != null && result.Messages.Count > 0)
+                {
+                    var messageWriter = testWriter as ITeamCityMessageWriter;
+                    if (messageWriter != null)
+                    {
+                        foreach (var message in result.Messages)
+                        {
+                            if (
+                                TestResultMessage.StandardOutCategory.Equals(message.Category, StringComparison.CurrentCultureIgnoreCase)
+                                || TestResultMessage.AdditionalInfoCategory.Equals(message.Category, StringComparison.CurrentCultureIgnoreCase)
+                                || TestResultMessage.DebugTraceCategory.Equals(message.Category, StringComparison.CurrentCultureIgnoreCase))
+                            {
+                                messageWriter.WriteMessage(message.Text);
+                                continue;
+                            }
+
+                            if (TestResultMessage.StandardErrorCategory.Equals(message.Category, StringComparison.CurrentCultureIgnoreCase))
+                            {
+                                messageWriter.WriteError(message.Text);
+                            }
+                        }
+                    }
+                }
+
                 switch (result.Outcome)
                 {
                     case TestOutcome.Passed:
@@ -87,7 +108,7 @@
                         {
                             testWriter.WriteIgnored(result.ErrorMessage);
                         }
-
+                        
                         break;
 
                     case TestOutcome.NotFound:
@@ -104,43 +125,8 @@
 
         private void OnTestRunComplete(object sender, TestRunCompleteEventArgs ev)
         {
-            SendMessages(_testSuiteWriter as ITeamCityMessageWriter);
             _testSuiteWriter?.Dispose();
             _rootWriter.Dispose();
-        }
-
-        private void SendMessages([CanBeNull] ITeamCityMessageWriter messageWriter)
-        {
-            if (messageWriter != null)
-            {
-                foreach (var messageItem in _messages)
-                {
-                    if (string.IsNullOrEmpty(messageItem.Message))
-                    {
-                        continue;
-                    }
-
-                    switch (messageItem.Level)
-                    {
-                        case TestMessageLevel.Informational:
-                            messageWriter.WriteMessage(messageItem.Message);
-                            break;
-
-                        case TestMessageLevel.Warning:
-                            messageWriter.WriteWarning(messageItem.Message);
-                            break;
-
-                        case TestMessageLevel.Error:
-                            messageWriter.WriteError(messageItem.Message);
-                            break;
-
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                }
-            }
-
-            _messages.Clear();
         }
 
         [NotNull]

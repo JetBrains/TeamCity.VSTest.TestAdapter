@@ -38,17 +38,17 @@
 
         public void WriteMessage(string text)
         {
-            _lines.Add($"# suite {_source} message {text}");
+            throw new System.NotImplementedException();
         }
 
         public void WriteWarning(string text)
         {
-            _lines.Add($"# suite {_source} warning {text}");
+            throw new System.NotImplementedException();
         }
 
         public void WriteError(string text, string errorDetails = null)
         {
-            _lines.Add($"# suite {_source} error {text}");
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -63,7 +63,7 @@
 
         public void WriteError(string text, string errorDetails = null)
         {
-            _lines.Add($"# test {_testName} error {text}");
+            _lines.Add($"# test {_testName} error {text} {errorDetails ?? string.Empty}".Trim());
         }
     }
 }

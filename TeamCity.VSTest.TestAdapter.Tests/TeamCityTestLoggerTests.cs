@@ -19,14 +19,19 @@
         private readonly List<string> _lines = new List<string>();
         private Events _events;
         private TeamCityTestLogger _logger;
+        private Mock<ITestCaseFilter> _testCaseFilter;
 
         [SetUp]
         public void SetUp()
         {
             _lines.Clear();
             _events = new Events();
+
+            _testCaseFilter = new Mock<ITestCaseFilter>();
+            _testCaseFilter.Setup(i => i.IsSupported(It.IsAny<TestCase>())).Returns(true);
+
             var root = new Root(_lines);
-            _logger = new TeamCityTestLogger(root);
+            _logger = new TeamCityTestLogger(root, _testCaseFilter.Object);
             _logger.Initialize(_events, (string)null);
         }
 
@@ -37,6 +42,7 @@
             
             // When
             _events.SendTestResult(CreateTestResult());
+            _events.SendTestRunComplete(CreateComplete());
 
             // Then
             _lines.ShouldBe(new[]
@@ -46,6 +52,83 @@
                 ,"+ test assembly.dll/test1"
                 ,"# test assembly.dll/test1 duration 00:00:01"
                 ,"- test assembly.dll/test1"
+                ,"- suite assembly.dll"
+                ,"- root"
+            });
+        }
+
+        [Test]
+        public void ShouldProcessWhenPassedTestWithMessages()
+        {
+            // Given
+            var testResult = CreateTestResult();
+
+            // When
+            testResult.Result.Messages.Add(new TestResultMessage(TestResultMessage.StandardOutCategory, "some text"));
+            testResult.Result.Messages.Add(new TestResultMessage(TestResultMessage.AdditionalInfoCategory, "additional text"));
+            testResult.Result.Messages.Add(new TestResultMessage(TestResultMessage.DebugTraceCategory, "trace text"));
+            testResult.Result.Messages.Add(new TestResultMessage(TestResultMessage.StandardErrorCategory, "error text"));
+            _events.SendTestResult(testResult);
+            _events.SendTestRunComplete(CreateComplete());
+
+
+            // Then
+            _lines.ShouldBe(new[]
+            {
+                 "+ root"
+                ,"+ suite assembly.dll"
+                ,"+ test assembly.dll/test1"
+                ,"# test assembly.dll/test1 duration 00:00:01"
+                ,"# test assembly.dll/test1 message some text"
+                ,"# test assembly.dll/test1 message additional text"
+                ,"# test assembly.dll/test1 message trace text"
+                ,"# test assembly.dll/test1 error error text"
+                ,"- test assembly.dll/test1"
+                ,"- suite assembly.dll"
+                ,"- root"
+            });
+        }
+
+        [Test]
+        public void ShouldNotProduceAnyMessagesWhenTestCaseFilterFiltersAllMessages()
+        {
+            // Given
+            var testResult = CreateTestResult(TestOutcome.Passed, "test2");
+
+            // When
+            _testCaseFilter.Setup(i => i.IsSupported(testResult.Result.TestCase)).Returns(false);            
+            _events.SendTestResult(testResult);
+            _events.SendTestRunComplete(CreateComplete());
+
+            // Then
+            _lines.ShouldNotBeEmpty();
+        }
+
+        [Test]
+        public void ShouldProduceMessagesWhenTestCaseFilterFiltersNotAllMessages()
+        {
+            // Given
+            var testResult1 = CreateTestResult();
+            var testResult2 = CreateTestResult(TestOutcome.Passed, "test2");
+
+            // When
+            _testCaseFilter.Setup(i => i.IsSupported(testResult1.Result.TestCase)).Returns(false);
+            _testCaseFilter.Setup(i => i.IsSupported(testResult2.Result.TestCase)).Returns(true);
+            _events.SendTestResult(testResult1);
+            _events.SendTestResult(testResult2);
+            _events.SendTestRunComplete(CreateComplete());
+
+            // Then
+            // Then
+            _lines.ShouldBe(new[]
+            {
+                 "+ root"
+                ,"+ suite assembly.dll"
+                ,"+ test assembly.dll/test2"
+                ,"# test assembly.dll/test2 duration 00:00:01"
+                ,"- test assembly.dll/test2"
+                ,"- suite assembly.dll"
+                ,"- root"
             });
         }
 
@@ -56,6 +139,7 @@
 
             // When
             _events.SendTestResult(CreateTestResult(TestOutcome.Failed, "test1", "assembly.dll", "errorInfo", "stackTrace"));
+            _events.SendTestRunComplete(CreateComplete());
 
             // Then
             _lines.ShouldBe(new[]
@@ -66,6 +150,8 @@
                 ,"# test assembly.dll/test1 duration 00:00:01"
                 ,"! test assembly.dll/test1 errorInfo stackTrace"
                 ,"- test assembly.dll/test1"
+                ,"- suite assembly.dll"
+                ,"- root"
             });
         }
 
@@ -76,6 +162,7 @@
 
             // When
             _events.SendTestResult(CreateTestResult(TestOutcome.Skipped, "test1", "assembly.dll", "reason"));
+            _events.SendTestRunComplete(CreateComplete());
 
             // Then
             _lines.ShouldBe(new[]
@@ -86,6 +173,8 @@
                 ,"# test assembly.dll/test1 duration 00:00:01"
                 ,"? test assembly.dll/test1 reason"
                 ,"- test assembly.dll/test1"
+                ,"- suite assembly.dll"
+                ,"- root"
             });
         }
 
@@ -98,6 +187,7 @@
 
             // When
             _events.SendTestResult(CreateTestResult(TestOutcome.Skipped, "test1", "assembly.dll", reason));
+            _events.SendTestRunComplete(CreateComplete());
 
             // Then
             _lines.ShouldBe(new[]
@@ -108,6 +198,8 @@
                 ,"# test assembly.dll/test1 duration 00:00:01"
                 ,"? test assembly.dll/test1"
                 ,"- test assembly.dll/test1"
+                ,"- suite assembly.dll"
+                ,"- root"
             });
         }
 
@@ -119,6 +211,7 @@
             // When
             _events.SendTestResult(CreateTestResult());
             _events.SendTestResult(CreateTestResult(TestOutcome.Passed, "test2"));
+            _events.SendTestRunComplete(CreateComplete());
 
             // Then
             _lines.ShouldBe(new[]
@@ -131,6 +224,8 @@
                 ,"+ test assembly.dll/test2"
                 ,"# test assembly.dll/test2 duration 00:00:01"
                 ,"- test assembly.dll/test2"
+                ,"- suite assembly.dll"
+                ,"- root"
             });
         }
 
@@ -144,6 +239,7 @@
             _events.SendTestResult(CreateTestResult(TestOutcome.Passed, "test2"));
             _events.SendTestResult(CreateTestResult(TestOutcome.Passed, "test3", "assembly2.dll"));
             _events.SendTestResult(CreateTestResult(TestOutcome.Passed, "test4", "assembly2.dll"));
+            _events.SendTestRunComplete(CreateComplete());
 
             // Then
             _lines.ShouldBe(new[]
@@ -164,102 +260,11 @@
                 ,"+ test assembly2.dll/test4"
                 ,"# test assembly2.dll/test4 duration 00:00:01"
                 ,"- test assembly2.dll/test4"
-            });
-        }
-
-        [Test]
-        public void ShouldProcessWhenMessageBeforePassedTest()
-        {
-            // Given
-
-            // When
-            _events.SendTestRunMessage(CreateMessage(TestMessageLevel.Informational, "text 1"));
-            _events.SendTestRunMessage(CreateMessage(TestMessageLevel.Warning, "warningInfo"));
-            _events.SendTestRunMessage(CreateMessage(TestMessageLevel.Informational, "text 2"));
-            _events.SendTestRunMessage(CreateMessage(TestMessageLevel.Error, "errorDetails"));
-            _events.SendTestResult(CreateTestResult());
-
-            // Then
-            _lines.ShouldBe(new[]
-            {
-                 "+ root"
-                ,"+ suite assembly.dll"
-                ,"+ test assembly.dll/test1"
-                ,"# test assembly.dll/test1 message text 1"
-                ,"# test assembly.dll/test1 warning warningInfo"
-                ,"# test assembly.dll/test1 message text 2"
-                ,"# test assembly.dll/test1 error errorDetails"
-                ,"# test assembly.dll/test1 duration 00:00:01"
-                ,"- test assembly.dll/test1"
-            });
-        }
-
-        [Test]
-        public void ShouldProcessWhenMessageForSeveralPassedTests()
-        {
-            // Given
-
-            // When
-            _events.SendTestRunMessage(CreateMessage(TestMessageLevel.Informational, "text 1"));
-            _events.SendTestRunMessage(CreateMessage(TestMessageLevel.Warning, "warningInfo"));
-            _events.SendTestResult(CreateTestResult());
-            _events.SendTestRunMessage(CreateMessage(TestMessageLevel.Informational, "text 2"));
-            _events.SendTestRunMessage(CreateMessage(TestMessageLevel.Error, "errorDetails"));
-            _events.SendTestResult(CreateTestResult(TestOutcome.Passed, "test2"));
-
-            // Then
-            _lines.ShouldBe(new[]
-            {
-                 "+ root"
-                ,"+ suite assembly.dll"
-                ,"+ test assembly.dll/test1"
-                ,"# test assembly.dll/test1 message text 1"
-                ,"# test assembly.dll/test1 warning warningInfo"
-                ,"# test assembly.dll/test1 duration 00:00:01"
-                ,"- test assembly.dll/test1"
-                ,"+ test assembly.dll/test2"
-                ,"# test assembly.dll/test2 message text 2"
-                ,"# test assembly.dll/test2 error errorDetails"
-                ,"# test assembly.dll/test2 duration 00:00:01"
-                ,"- test assembly.dll/test2"
-            });
-        }
-
-        [Test]
-        public void ShouldProcessWhenMessageAfterAllTestsSuiteы()
-        {
-            // Given
-
-            // When
-            _events.SendTestRunMessage(CreateMessage(TestMessageLevel.Informational, "text 1"));
-            _events.SendTestRunMessage(CreateMessage(TestMessageLevel.Warning, "warningInfo"));
-            _events.SendTestResult(CreateTestResult());
-            _events.SendTestRunMessage(CreateMessage(TestMessageLevel.Informational, "text 2"));
-            _events.SendTestRunMessage(CreateMessage(TestMessageLevel.Error, "errorDetails"));
-            _events.SendTestRunComplete(CreateComplete());
-
-            // Then
-            _lines.ShouldBe(new[]
-            {
-                 "+ root"
-                ,"+ suite assembly.dll"
-                ,"+ test assembly.dll/test1"
-                ,"# test assembly.dll/test1 message text 1"
-                ,"# test assembly.dll/test1 warning warningInfo"
-                ,"# test assembly.dll/test1 duration 00:00:01"
-                ,"- test assembly.dll/test1"
-                ,"# suite assembly.dll message text 2"
-                ,"# suite assembly.dll error errorDetails"
-                ,"- suite assembly.dll"
+                ,"- suite assembly2.dll"
                 ,"- root"
             });
         }
-
-        private static TestRunMessageEventArgs CreateMessage(TestMessageLevel level, string message)
-        {
-            return new TestRunMessageEventArgs(level, message);
-        }
-
+                
         private static TestResultEventArgs CreateTestResult(
             TestOutcome outcome = TestOutcome.Passed,
             string fullyQualifiedName = "test1",

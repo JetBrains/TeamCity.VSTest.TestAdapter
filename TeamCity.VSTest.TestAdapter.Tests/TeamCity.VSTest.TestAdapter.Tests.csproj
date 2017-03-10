@@ -87,6 +87,7 @@
     <Compile Include="Events.cs" />
     <Compile Include="Root.cs" />
     <Compile Include="Test.cs" />
+    <Compile Include="TestCaseFilterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

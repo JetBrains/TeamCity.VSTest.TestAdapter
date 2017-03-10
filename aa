@@ -1,0 +1,51 @@
+
+C:\Projects\TeamCity.VSTestAdapter>rem SET VSTEST_HOST_DEBUG=1 
+
+C:\Projects\TeamCity.VSTestAdapter>rem SET VSTEST_RUNNER_DEBUG=1 
+
+C:\Projects\TeamCity.VSTestAdapter>dotnet test IntegrationTests\dotNetCore.XUnit.Tests\dotNetCore.XUnit.Tests.csproj /p:VSTestLogger=TeamCity;VSTestTestAdapterPath=. 
+Build started, please wait...
+Build completed.
+
+Test run for C:\Projects\TeamCity.VSTestAdapter\IntegrationTests\dotNetCore.XUnit.Tests\bin\Debug\netcoreapp1.0\dotNetCore.XUnit.Tests.dll(.NETCoreApp,Version=v1.0)
+Microsoft (R) Test Execution Command Line Tool Version 15.0.0.0
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+[xUnit.net 00:00:00.6994488]   Discovering: dotNetCore.XUnit.Tests
+[xUnit.net 00:00:00.8260603]   Discovered:  dotNetCore.XUnit.Tests
+[xUnit.net 00:00:00.8693338]   Starting:    dotNetCore.XUnit.Tests
+[xUnit.net 00:00:00.9556564]     dotNetCore.XUnit.Tests.UnitTests.TestIgnored [SKIP]
+[xUnit.net 00:00:00.9558435]       skip reason
+some text
+[xUnit.net 00:00:01.0376480]     dotNetCore.XUnit.Tests.UnitTests.TestFailed [FAIL]
+[xUnit.net 00:00:01.0390202]       error details
+[xUnit.net 00:00:01.0390847]       Expected: True
+[xUnit.net 00:00:01.0391203]       Actual:   False
+[xUnit.net 00:00:01.0399199]       Stack Trace:
+[xUnit.net 00:00:01.0445677]         C:\Projects\TeamCity.VSTestAdapter\IntegrationTests\dotNetCore.XUnit.Tests\UnitTests.cs(16,0): at dotNetCore.XUnit.Tests.UnitTests.TestFailed()
+[xUnit.net 00:00:01.0491145]   Finished:    dotNetCore.XUnit.Tests
+##teamcity[testSuiteStarted name='C:\Projects\TeamCity.VSTestAdapter\IntegrationTests\dotNetCore.XUnit.Tests\bin\Debug\netcoreapp1.0\dotNetCore.XUnit.Tests.dll' timestamp='2017-03-10T09:33:56.552+0000' flowId='1']
+##teamcity[testStarted name='dotNetCore.XUnit.Tests.UnitTests.TestIgnored' captureStandardOutput='false' timestamp='2017-03-10T09:33:56.559+0000' flowId='1']
+##teamcity[testIgnored name='dotNetCore.XUnit.Tests.UnitTests.TestIgnored' timestamp='2017-03-10T09:33:56.563+0000' flowId='1']
+##teamcity[testFinished name='dotNetCore.XUnit.Tests.UnitTests.TestIgnored' duration='1' timestamp='2017-03-10T09:33:56.564+0000' flowId='1']
+Skipped  dotNetCore.XUnit.Tests.UnitTests.TestIgnored
+##teamcity[testStarted name='dotNetCore.XUnit.Tests.UnitTests.TestFailed' captureStandardOutput='false' timestamp='2017-03-10T09:33:56.567+0000' flowId='1']
+##teamcity[testFailed name='dotNetCore.XUnit.Tests.UnitTests.TestFailed' message='error details|r|nExpected: True|r|nActual:   False' details='   at dotNetCore.XUnit.Tests.UnitTests.TestFailed() in C:\Projects\TeamCity.VSTestAdapter\IntegrationTests\dotNetCore.XUnit.Tests\UnitTests.cs:line 16' timestamp='2017-03-10T09:33:56.568+0000' flowId='1']
+##teamcity[testFinished name='dotNetCore.XUnit.Tests.UnitTests.TestFailed' duration='7' timestamp='2017-03-10T09:33:56.568+0000' flowId='1']
+Failed   dotNetCore.XUnit.Tests.UnitTests.TestFailed
+Error Message:
+ error details
+Expected: True
+Actual:   False
+Stack Trace:
+   at dotNetCore.XUnit.Tests.UnitTests.TestFailed() in C:\Projects\TeamCity.VSTestAdapter\IntegrationTests\dotNetCore.XUnit.Tests\UnitTests.cs:line 16
+##teamcity[testStarted name='dotNetCore.XUnit.Tests.UnitTests.TestPassed' captureStandardOutput='false' timestamp='2017-03-10T09:33:56.569+0000' flowId='1']
+##teamcity[testFinished name='dotNetCore.XUnit.Tests.UnitTests.TestPassed' duration='4' timestamp='2017-03-10T09:33:56.569+0000' flowId='1']
+##teamcity[testSuiteFinished name='C:\Projects\TeamCity.VSTestAdapter\IntegrationTests\dotNetCore.XUnit.Tests\bin\Debug\netcoreapp1.0\dotNetCore.XUnit.Tests.dll' timestamp='2017-03-10T09:33:56.570+0000' flowId='1']
+
+Total tests: 3. Passed: 1. Failed: 1. Skipped: 1.
+Test Run Failed.
+Test execution time: 2,1141 Seconds
+
+
