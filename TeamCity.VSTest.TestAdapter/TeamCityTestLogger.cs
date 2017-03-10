@@ -40,7 +40,7 @@
             _suiteNameProvider = suiteNameProvider;
         }
 
-        public void Initialize([NotNull] TestLoggerEvents events, string testRunDirectory)
+        public void Initialize([NotNull] TestLoggerEvents events, [CanBeNull] string testRunDirectory)
         {
             if (events == null) throw new ArgumentNullException(nameof(events));
             _testRunDirectory = testRunDirectory;
