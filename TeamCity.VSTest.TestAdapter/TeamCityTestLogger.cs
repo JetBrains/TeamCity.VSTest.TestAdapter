@@ -12,18 +12,19 @@
     {
         internal const string ExtensionId = "logger://" + FriendlyName;
         private const string FriendlyName = "teamcity";
+
         private readonly ITeamCityWriter _rootWriter;
-        private readonly ITestCaseFilter _testCaseFilter;
         private readonly ISuiteNameProvider _suiteNameProvider;
-        [CanBeNull] private ITeamCityTestsSubWriter _testSuiteWriter;
-        [CanBeNull] private string _testSuiteSource;
+        private readonly ITestCaseFilter _testCaseFilter;
         [CanBeNull] private string _testRunDirectory;
+        [CanBeNull] private string _testSuiteSource;
+        [CanBeNull] private ITeamCityTestsSubWriter _testSuiteWriter;
 
         public TeamCityTestLogger()
-            :this(
-                 ServiceLocator.GetTeamCityWriter(),
-                 ServiceLocator.GetTestCaseFilter(),
-                 ServiceLocator.GetSuiteNameProvider())
+            : this(
+                ServiceLocator.GetTeamCityWriter(),
+                ServiceLocator.GetTestCaseFilter(),
+                ServiceLocator.GetSuiteNameProvider())
         {
         }
 
@@ -59,9 +60,7 @@
             var result = ev.Result;
             var testCase = result.TestCase;
             if (!_testCaseFilter.IsSupported(testCase))
-            {
                 return;
-            }
 
             var suiteName = _suiteNameProvider.GetSuiteName(_testRunDirectory, testCase.Source);
             var testSuiteWriter = GetTestSuiteWriter(suiteName);
@@ -73,7 +72,6 @@
                 {
                     var messageWriter = testWriter as ITeamCityMessageWriter;
                     if (messageWriter != null)
-                    {
                         foreach (var message in result.Messages)
                         {
                             if (
@@ -86,11 +84,8 @@
                             }
 
                             if (TestResultMessage.StandardErrorCategory.Equals(message.Category, StringComparison.CurrentCultureIgnoreCase))
-                            {
                                 messageWriter.WriteError(message.Text);
-                            }
                         }
-                    }
                 }
 
                 switch (result.Outcome)
@@ -104,14 +99,10 @@
 
                     case TestOutcome.Skipped:
                         if (string.IsNullOrEmpty(result.ErrorMessage))
-                        {
                             testWriter.WriteIgnored();
-                        }
                         else
-                        {
                             testWriter.WriteIgnored(result.ErrorMessage);
-                        }
-                        
+
                         break;
 
                     case TestOutcome.NotFound:
@@ -138,9 +129,7 @@
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (_testSuiteWriter != null && _testSuiteSource == source)
-            {
                 return _testSuiteWriter;
-            }
 
             _testSuiteWriter?.Dispose();
             _testSuiteSource = source;

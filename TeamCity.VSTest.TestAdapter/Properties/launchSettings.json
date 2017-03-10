@@ -3,7 +3,8 @@
     "TeamCity.VSTest.TestAdapter": {
       "commandName": "Executable",
       "executablePath": "C:\\Program Files\\dotnet\\dotnet.exe",
-      "commandLineArgs": "test IntegrationTests\\dotNetCore.XUnit.Tests\\dotNetCore.XUnit.Tests.csproj /p:VSTestLogger=TeamCity;VSTestTestAdapterPath=.",
+      "commandLineArgs":
+        "test IntegrationTests\\dotNetCore.XUnit.Tests\\dotNetCore.XUnit.Tests.csproj /p:VSTestLogger=TeamCity;VSTestTestAdapterPath=.",
       "workingDirectory": "C:\\Projects\\TeamCity.VSTestAdapter",
       "environmentVariables": {
         "VSTEST_HOST_DEBUG": "1"

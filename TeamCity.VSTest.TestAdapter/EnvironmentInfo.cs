@@ -2,7 +2,7 @@
 {
     using System;
 
-    internal class EnvironmentInfo: IEnvironmentInfo
+    internal class EnvironmentInfo : IEnvironmentInfo
     {
         internal const string TeamCityProjectEnvVarName = "TEAMCITY_PROJECT_NAME";
 

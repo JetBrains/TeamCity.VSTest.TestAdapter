@@ -4,8 +4,8 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
-    using System.Text;
     using System.Linq;
+    using System.Text;
 
     public class CommandLine
     {
@@ -13,11 +13,13 @@
 
         public CommandLine(string executableFile, params string[] args)
         {
+            if (executableFile == null) throw new ArgumentNullException(nameof(executableFile));
+            if (args == null) throw new ArgumentNullException(nameof(args));
             ExecutableFile = executableFile;
             Args = args;
         }
 
-        public string ExecutableFile { [NotNull]get; }
+        public string ExecutableFile { [NotNull] get; }
 
         public string[] Args { [NotNull] get; }
 
@@ -48,9 +50,7 @@
             };
 
             foreach (var envVar in _envitonmentVariables)
-            {
                 process.StartInfo.EnvironmentVariables.Add(envVar.Key, envVar.Value);
-            }
 
             var stdOut = new StringBuilder();
             var stdError = new StringBuilder();

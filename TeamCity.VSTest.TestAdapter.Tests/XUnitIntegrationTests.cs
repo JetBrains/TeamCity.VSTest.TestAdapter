@@ -15,25 +15,6 @@
         }
 
         [Test]
-        public void ShouldRunTests()
-        {
-            // Given
-            var testCommandLine = new CommandLine(
-                @"dotnet",
-                "test",
-                @"IntegrationTests\dotNetCore.XUnit.Tests\dotNetCore.XUnit.Tests.csproj",
-                @"/p:VSTestLogger=teamcity;VSTestTestAdapterPath=.");
-
-            // When
-            testCommandLine.TryExecute(out CommandLineResult result).ShouldBe(true);
-
-            // Then
-            result.ExitCode.ShouldBe(1);
-            result.StdError.Trim().ShouldBe(string.Empty);
-            ServiceMessages.ResultShouldContainCorrectStructureAndSequence(result.StdOut);
-        }
-
-        [Test]
         public void ShouldGenerateServiceMessageWhenUnderTeamCityByItself()
         {
             // Given
@@ -52,6 +33,25 @@
             result.StdError.Trim().ShouldBe(string.Empty);
             ServiceMessages.ResultShouldContainCorrectStructureAndSequence(result.StdOut);
             result.StdOut.IndexOf("##teamcity[testSuiteStarted name='Test collection for ", StringComparison.Ordinal).ShouldBeGreaterThan(0);
+        }
+
+        [Test]
+        public void ShouldRunTests()
+        {
+            // Given
+            var testCommandLine = new CommandLine(
+                @"dotnet",
+                "test",
+                @"IntegrationTests\dotNetCore.XUnit.Tests\dotNetCore.XUnit.Tests.csproj",
+                @"/p:VSTestLogger=teamcity;VSTestTestAdapterPath=.");
+
+            // When
+            testCommandLine.TryExecute(out CommandLineResult result).ShouldBe(true);
+
+            // Then
+            result.ExitCode.ShouldBe(1);
+            result.StdError.Trim().ShouldBe(string.Empty);
+            ServiceMessages.ResultShouldContainCorrectStructureAndSequence(result.StdOut);
         }
     }
 }

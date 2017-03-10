@@ -4,18 +4,22 @@
     using Microsoft.VisualStudio.TestPlatform.ObjectModel;
     using Moq;
     using NUnit.Framework;
-
     using Shouldly;
 
     [TestFixture]
     public class TestCaseFilterTests
     {
-        private Mock<IEnvironmentInfo> _environmentInfo;
-
         [SetUp]
         public void SetUp()
         {
             _environmentInfo = new Mock<IEnvironmentInfo>();
+        }
+
+        private Mock<IEnvironmentInfo> _environmentInfo;
+
+        private TestCaseFilter CreateInstance()
+        {
+            return new TestCaseFilter(_environmentInfo.Object);
         }
 
         [Test]
@@ -39,11 +43,6 @@
 
             // Then
             actualIsSupported.ShouldBe(expectedIsSupported);
-        }
-
-        private TestCaseFilter CreateInstance()
-        {
-            return new TestCaseFilter(_environmentInfo.Object);
         }
     }
 }

@@ -1,15 +1,10 @@
 namespace dotNetCore.XUnit.Tests
 {
+    using System;
     using Xunit;
 
     public class UnitTests
     {
-        [Fact]
-        public void TestPassed()
-        {
-            System.Console.WriteLine("some text");
-        }
-
         [Fact]
         public void TestFailed()
         {
@@ -19,6 +14,12 @@ namespace dotNetCore.XUnit.Tests
         [Fact(Skip = "skip reason")]
         public void TestIgnored()
         {
+        }
+
+        [Fact]
+        public void TestPassed()
+        {
+            Console.WriteLine("some text");
         }
     }
 }

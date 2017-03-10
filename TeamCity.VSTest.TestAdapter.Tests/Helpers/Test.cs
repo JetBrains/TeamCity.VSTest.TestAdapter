@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using JetBrains.TeamCity.ServiceMessages.Write.Special;
 
-    internal class Test: ITeamCityTestWriter, ITeamCityMessageWriter
+    internal class Test : ITeamCityTestWriter, ITeamCityMessageWriter
     {
         private readonly List<string> _lines;
         private readonly string _testName;
@@ -14,6 +14,21 @@
             _lines = lines;
             _testName = testName;
             _lines.Add($"+ test {_testName}");
+        }
+
+        public void WriteMessage(string text)
+        {
+            _lines.Add($"# test {_testName} message {text}");
+        }
+
+        public void WriteWarning(string text)
+        {
+            _lines.Add($"# test {_testName} warning {text}");
+        }
+
+        public void WriteError(string text, string errorDetails = null)
+        {
+            _lines.Add($"# test {_testName} error {text} {errorDetails ?? string.Empty}".Trim());
         }
 
         public void Dispose()
@@ -49,21 +64,6 @@
         public void WriteDuration(TimeSpan duration)
         {
             _lines.Add($"# test {_testName} duration {duration}");
-        }
-
-        public void WriteMessage(string text)
-        {
-            _lines.Add($"# test {_testName} message {text}");
-        }
-
-        public void WriteWarning(string text)
-        {
-            _lines.Add($"# test {_testName} warning {text}");
-        }
-
-        public void WriteError(string text, string errorDetails = null)
-        {
-            _lines.Add($"# test {_testName} error {text} {errorDetails ?? string.Empty}".Trim());
         }
     }
 }

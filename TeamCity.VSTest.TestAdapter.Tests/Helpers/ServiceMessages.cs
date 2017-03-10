@@ -36,9 +36,7 @@
                 flow.ProcessMessage(message);
 
                 if (flow.IsFinished)
-                {
                     rootFlows.Remove(flow);
-                }
             }
         }
 
@@ -138,9 +136,7 @@
                         Assert.AreEqual(message.FlowIdAttr, FlowId, "Invalid FlowId attribute");
                         Assert.IsNotEmpty(message.NameAttr, "Name attribute is empty");
                         if (message.CaptureStandardOutputAttr != null)
-                        {
                             Assert.AreEqual(message.CaptureStandardOutputAttr, "false", "Invalid CaptureStandardOutput attribute");
-                        }
 
                         _messages.Push(message);
                         break;
