@@ -1,7 +1,6 @@
 ﻿namespace TeamCity.VSTest.TestAdapter
 {
     using System;
-    using System.Collections.Generic;
     using JetBrains.TeamCity.ServiceMessages.Write.Special;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
@@ -9,39 +8,42 @@
 
     [ExtensionUri(ExtensionId)]
     [FriendlyName(FriendlyName)]
-    public class TeamCityTestLogger : ITestLoggerWithParameters
+    public class TeamCityTestLogger : ITestLogger
     {
-        public const string FriendlyName = "teamcity";
-        public const string ExtensionId = "logger://" + FriendlyName;
-        [NotNull] private readonly ITeamCityWriter _rootWriter;
-        [NotNull] private readonly ITestCaseFilter _testCaseFilter;
+        internal const string ExtensionId = "logger://" + FriendlyName;
+        private const string FriendlyName = "teamcity";
+        private readonly ITeamCityWriter _rootWriter;
+        private readonly ITestCaseFilter _testCaseFilter;
+        private readonly ISuiteNameProvider _suiteNameProvider;
         [CanBeNull] private ITeamCityTestsSubWriter _testSuiteWriter;
-        [CanBeNull] private string _testSuiteSource;     
+        [CanBeNull] private string _testSuiteSource;
+        [CanBeNull] private string _testRunDirectory;
 
         public TeamCityTestLogger()
-            :this(ServiceLocator.GetTeamCityWriter(), ServiceLocator.GetTestCaseFilter())
+            :this(
+                 ServiceLocator.GetTeamCityWriter(),
+                 ServiceLocator.GetTestCaseFilter(),
+                 ServiceLocator.GetSuiteNameProvider())
         {
         }
 
         internal TeamCityTestLogger(
             [NotNull] ITeamCityWriter rootWriter,
-            [NotNull] ITestCaseFilter testCaseFilter)
+            [NotNull] ITestCaseFilter testCaseFilter,
+            [NotNull] ISuiteNameProvider suiteNameProvider)
         {
             if (rootWriter == null) throw new ArgumentNullException(nameof(rootWriter));
             if (testCaseFilter == null) throw new ArgumentNullException(nameof(testCaseFilter));
+            if (suiteNameProvider == null) throw new ArgumentNullException(nameof(suiteNameProvider));
             _rootWriter = rootWriter;
             _testCaseFilter = testCaseFilter;
-        }
-
-        public void Initialize([NotNull] TestLoggerEvents events, Dictionary<string, string> parameters)
-        {
-            if (events == null) throw new ArgumentNullException(nameof(events));
-            SubscribeToEvets(events);
+            _suiteNameProvider = suiteNameProvider;
         }
 
         public void Initialize([NotNull] TestLoggerEvents events, string testRunDirectory)
         {
             if (events == null) throw new ArgumentNullException(nameof(events));
+            _testRunDirectory = testRunDirectory;
             SubscribeToEvets(events);
         }
 
@@ -61,8 +63,9 @@
                 return;
             }
 
-            var testSuiteWriter = GetTestSuiteWriter(testCase.Source ?? "VSTest");
-            using (var testWriter = testSuiteWriter.OpenTest(testCase.FullyQualifiedName ?? "Test"))
+            var suiteName = _suiteNameProvider.GetSuiteName(_testRunDirectory, testCase.Source);
+            var testSuiteWriter = GetTestSuiteWriter(suiteName);
+            using (var testWriter = testSuiteWriter.OpenTest(testCase.FullyQualifiedName ?? testCase.DisplayName ?? testCase.Id.ToString()))
             {
                 // ReSharper disable once SuspiciousTypeConversion.Global
                 testWriter.WriteDuration(result.Duration);
@@ -127,6 +130,7 @@
         {
             _testSuiteWriter?.Dispose();
             _rootWriter.Dispose();
+            _suiteNameProvider.Reset();
         }
 
         [NotNull]

@@ -9,6 +9,7 @@
     using Shouldly;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using Helpers;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
     using Moq;
 
@@ -20,6 +21,7 @@
         private Events _events;
         private TeamCityTestLogger _logger;
         private Mock<ITestCaseFilter> _testCaseFilter;
+        private Mock<ISuiteNameProvider> _suiteNameProvider;
 
         [SetUp]
         public void SetUp()
@@ -30,9 +32,12 @@
             _testCaseFilter = new Mock<ITestCaseFilter>();
             _testCaseFilter.Setup(i => i.IsSupported(It.IsAny<TestCase>())).Returns(true);
 
+            _suiteNameProvider = new Mock<ISuiteNameProvider>();
+            _suiteNameProvider.Setup(i => i.GetSuiteName(It.IsAny<string>(), It.IsAny<string>())).Returns<string, string>((baseDir, source) => source);
+
             var root = new Root(_lines);
-            _logger = new TeamCityTestLogger(root, _testCaseFilter.Object);
-            _logger.Initialize(_events, (string)null);
+            _logger = new TeamCityTestLogger(root, _testCaseFilter.Object, _suiteNameProvider.Object);
+            _logger.Initialize(_events, null);
         }
 
         [Test]
@@ -264,7 +269,21 @@
                 ,"- root"
             });
         }
-                
+
+        [Test]
+        public void ShouldUseSuiteNameProvider()
+        {
+            // Given
+
+            // When
+            _events.SendTestResult(CreateTestResult());
+            _events.SendTestRunComplete(CreateComplete());
+
+            // Then
+            _suiteNameProvider.Verify(i => i.GetSuiteName(null, "assembly.dll"), Times.Once);
+            _suiteNameProvider.Verify(i => i.Reset(), Times.Once);
+        }
+
         private static TestResultEventArgs CreateTestResult(
             TestOutcome outcome = TestOutcome.Passed,
             string fullyQualifiedName = "test1",

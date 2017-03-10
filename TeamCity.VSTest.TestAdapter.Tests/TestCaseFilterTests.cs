@@ -3,7 +3,6 @@
     using System;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel;
     using Moq;
-
     using NUnit.Framework;
 
     using Shouldly;
@@ -11,21 +10,29 @@
     [TestFixture]
     public class TestCaseFilterTests
     {
+        private Mock<IEnvironmentInfo> _environmentInfo;
+
         [SetUp]
         public void SetUp()
         {
+            _environmentInfo = new Mock<IEnvironmentInfo>();
         }
 
         [Test]
-        [TestCase("executor://some", true)]
-        [TestCase("abc://some", true)]
-        [TestCase("executor://xunit/VsTestRunner", false)]
-        [TestCase("executor://xunit/VsTestRunner2", false)]
-        public void Should(string executorUri, bool expectedIsSupported)
+        [TestCase(true, "executor://some", true)]
+        [TestCase(true, "abc://some", true)]
+        [TestCase(false, "executor://some", true)]
+        [TestCase(false, "abc://some", true)]
+        [TestCase(true, "executor://xunit/VsTestRunner", false)]
+        [TestCase(false, "executor://xunit/VsTestRunner", true)]
+        [TestCase(true, "executor://xunit/VsTestRunner2", false)]
+        [TestCase(false, "executor://xunit/VsTestRunner2", true)]
+        public void Should(bool isUnderTeamCity, string executorUri, bool expectedIsSupported)
         {
             // Given
+            _environmentInfo.SetupGet(i => i.IsUnderTeamCity).Returns(isUnderTeamCity);
             var filter = CreateInstance();
-            var testCase = new TestCase() {ExecutorUri = new Uri(executorUri)};
+            var testCase = new TestCase {ExecutorUri = new Uri(executorUri)};
 
             // When
             var actualIsSupported = filter.IsSupported(testCase);
@@ -34,9 +41,9 @@
             actualIsSupported.ShouldBe(expectedIsSupported);
         }
 
-        private static TestCaseFilter CreateInstance()
+        private TestCaseFilter CreateInstance()
         {
-            return new TestCaseFilter();
+            return new TestCaseFilter(_environmentInfo.Object);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace TeamCity.VSTest.TestAdapter.Tests
+﻿namespace TeamCity.VSTest.TestAdapter.Tests.Helpers
 {
     using System;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;

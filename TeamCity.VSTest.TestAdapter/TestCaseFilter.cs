@@ -6,15 +6,28 @@
 
     internal class TestCaseFilter : ITestCaseFilter
     {
+        private readonly IEnvironmentInfo _environmentInfo;
+
         private static readonly HashSet<Uri> NotSupportedExecutorUri = new HashSet<Uri>
         {
             new Uri("executor://xunit/VsTestRunner"),
             new Uri("executor://xunit/VsTestRunner2")
         };
-        
+
+        public TestCaseFilter([NotNull] IEnvironmentInfo environmentInfo)
+        {
+            if (environmentInfo == null) throw new ArgumentNullException(nameof(environmentInfo));
+            _environmentInfo = environmentInfo;
+        }
+
         public bool IsSupported(TestCase testCase)
         {
             if (testCase == null) throw new ArgumentNullException(nameof(testCase));
+            if (!_environmentInfo.IsUnderTeamCity)
+            {
+                return true;
+            }
+
             return !NotSupportedExecutorUri.Contains(testCase.ExecutorUri);
         }
     }
