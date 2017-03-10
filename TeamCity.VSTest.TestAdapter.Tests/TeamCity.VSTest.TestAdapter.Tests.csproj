@@ -84,6 +84,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\CommandLine.cs" />
+    <Compile Include="Helpers\CommandLineResult.cs" />
+    <Compile Include="Helpers\ServiceMessages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\Suite.cs" />
     <Compile Include="SuiteNameProviderTests.cs" />
@@ -92,6 +95,7 @@
     <Compile Include="Helpers\Root.cs" />
     <Compile Include="Helpers\Test.cs" />
     <Compile Include="TestCaseFilterTests.cs" />
+    <Compile Include="XUnitIntegrationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

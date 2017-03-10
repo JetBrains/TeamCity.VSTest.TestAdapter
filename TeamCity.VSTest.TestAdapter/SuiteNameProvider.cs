@@ -18,6 +18,6 @@
 
         public void Reset()
         {
-        }        
+        }
     }
 }

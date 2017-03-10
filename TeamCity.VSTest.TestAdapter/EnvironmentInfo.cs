@@ -4,9 +4,11 @@
 
     internal class EnvironmentInfo: IEnvironmentInfo
     {
+        internal const string TeamCityProjectEnvVarName = "TEAMCITY_PROJECT_NAME";
+
         public EnvironmentInfo()
         {
-            var teamCityProjectName = Environment.GetEnvironmentVariable("TEAMCITY_PROJECT_NAME");
+            var teamCityProjectName = Environment.GetEnvironmentVariable(TeamCityProjectEnvVarName);
             IsUnderTeamCity = !string.IsNullOrEmpty(teamCityProjectName);
         }
 
