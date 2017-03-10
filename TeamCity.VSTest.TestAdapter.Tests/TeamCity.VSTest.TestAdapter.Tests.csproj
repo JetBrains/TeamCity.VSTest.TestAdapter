@@ -95,7 +95,7 @@
     <Compile Include="Helpers\Root.cs" />
     <Compile Include="Helpers\Test.cs" />
     <Compile Include="TestCaseFilterTests.cs" />
-    <Compile Include="XUnitIntegrationTests.cs" />
+    <Compile Include="IntegrationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

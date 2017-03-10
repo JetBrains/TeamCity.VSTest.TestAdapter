@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamCity.VSTest.TestAdapter
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotNetCore.XUnit.Tests", "IntegrationTests\dotNetCore.XUnit.Tests\dotNetCore.XUnit.Tests.csproj", "{27307A67-4232-4708-B561-84BAF0D6559F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotNetCore.MS.Tests", "IntegrationTests\dotNetCore.MS.Tests\dotNetCore.MS.Tests.csproj", "{FCDD047D-D115-4AC8-9E05-C22AB9940D4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,11 +30,16 @@ Global
 		{27307A67-4232-4708-B561-84BAF0D6559F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27307A67-4232-4708-B561-84BAF0D6559F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27307A67-4232-4708-B561-84BAF0D6559F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCDD047D-D115-4AC8-9E05-C22AB9940D4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCDD047D-D115-4AC8-9E05-C22AB9940D4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCDD047D-D115-4AC8-9E05-C22AB9940D4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCDD047D-D115-4AC8-9E05-C22AB9940D4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{27307A67-4232-4708-B561-84BAF0D6559F} = {E9EECA36-7BB3-4D65-BCF7-90A98B6DA2E5}
+		{FCDD047D-D115-4AC8-9E05-C22AB9940D4A} = {E9EECA36-7BB3-4D65-BCF7-90A98B6DA2E5}
 	EndGlobalSection
 EndGlobal
