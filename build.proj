@@ -98,7 +98,7 @@
 
 	<Target Name="RunTests" DependsOnTargets="Build">
 		<Exec Command="packages\nuget.exe install NUnit.Console -Version 3.6.0 -o packages"/>
-		<Exec IgnoreExitCode="True" Command="$(MSBuildProjectDirectory)\packages\NUnit.ConsoleRunner.3.6.0\tools\nunit3-console.exe $(MSBuildProjectDirectory)\TeamCity.ServiceMessages.Tests\bin\$(Configuration)\JetBrains.TeamCity.ServiceMessages.Tests.dll --noresult --noheader --workers=1 --inprocess">
+		<Exec IgnoreExitCode="True" Command="$(MSBuildProjectDirectory)\packages\NUnit.ConsoleRunner.3.6.0\tools\nunit3-console.exe $(MSBuildProjectDirectory)\TeamCity.VSTest.TestAdapter.Tests\bin\$(Configuration)\TeamCity.VSTest.TestAdapter.Tests.dll --noresult --noheader --workers=1 --inprocess">
 			<Output TaskParameter="ExitCode" ItemName="exitCode"/>
 		</Exec>
 	</Target>
