@@ -14,6 +14,14 @@
     <GenerateNeutralResourcesLanguageAttribute>false</GenerateNeutralResourcesLanguageAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <PostBuildEvent>XCOPY $(SolutionDir)packages\TeamCity.ServiceMessages.3.0.6\lib\portable-net46+netcore50+netstandard1.5+netstandard1.6+netcoreapp1.0\*.* $(SolutionDir)IntegrationTests\dotNet.MS.Tests\bin\Debug  /Y /R
+XCOPY $(TargetDir)*.* $(SolutionDir)IntegrationTests\dotNet.MS.Tests\bin\Debug /Y /R
+
+XCOPY $(SolutionDir)packages\TeamCity.ServiceMessages.3.0.6\lib\portable-net46+netcore50+netstandard1.5+netstandard1.6+netcoreapp1.0\*.* $(SolutionDir)IntegrationTests\dotNetCore.MS.Tests\bin\Debug\netcoreapp1.0  /Y /R
+XCOPY $(TargetDir)*.* $(SolutionDir)IntegrationTests\dotNetCore.MS.Tests\bin\Debug\netcoreapp1.0 /Y /R
+
+XCOPY $(SolutionDir)packages\TeamCity.ServiceMessages.3.0.6\lib\portable-net46+netcore50+netstandard1.5+netstandard1.6+netcoreapp1.0\*.* $(SolutionDir)IntegrationTests\dotNetCore.XUnit.Tests\bin\Debug\netcoreapp1.0  /Y /R
+XCOPY $(TargetDir)*.* $(SolutionDir)IntegrationTests\dotNetCore.XUnit.Tests\bin\Debug\netcoreapp1.0 /Y /R</PostBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,15 +29,6 @@
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="15.0.0" />
     <PackageReference Include="System.Runtime.Extensions" Version="4.1.0" />
     <PackageReference Include="TeamCity.ServiceMessages" Version="3.0.6" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.ExecutionCommon">
-      <HintPath>..\..\..\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Microsoft.VisualStudio.QualityTools.ExecutionCommon.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.TestPlatform.Common">
-      <HintPath>..\..\..\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Microsoft.VisualStudio.TestPlatform.Common.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

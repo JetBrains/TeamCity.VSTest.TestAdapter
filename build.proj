@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
 		<PackageVersion Condition=" '$(PackageVersion)' == '' ">1.0.0</PackageVersion>
 
@@ -93,7 +93,7 @@
 	</Target>
 
 	<Target Name="Build" DependsOnTargets="RestorePackages;UpdateVersions">
-		<MSBuild Projects="TeamCity.VSTest.TestAdapter.sln" BuildInParallel="true" Targets="Clean;Build" Properties="Configuration=$(Configuration)"/>
+		<MSBuild Projects="TeamCity.VSTest.TestAdapter.sln" BuildInParallel="true" Targets="Clean;Restore;Build" Properties="Configuration=$(Configuration)"/>
 	</Target>	
 
 	<Target Name="RunTests" DependsOnTargets="Build">

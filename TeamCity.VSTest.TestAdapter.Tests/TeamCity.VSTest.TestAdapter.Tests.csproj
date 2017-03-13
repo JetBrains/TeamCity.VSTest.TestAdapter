@@ -121,14 +121,8 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>XCOPY $(SolutionDir)packages\TeamCity.ServiceMessages.3.0.6\lib\portable-net46+netcore50+netstandard1.5+netstandard1.6+netcoreapp1.0\*.* $(SolutionDir)IntegrationTests\dotNetCore.MS.Tests\bin\$(Configuration)\netcoreapp1.0  /Y /Q /R /I
-XCOPY $(TargetPath) $(SolutionDir)IntegrationTests\dotNetCore.MS.Tests\bin\$(Configuration)\netcoreapp1.0 /Y /Q /R /I
-
-XCOPY $(SolutionDir)packages\TeamCity.ServiceMessages.3.0.6\lib\portable-net46+netcore50+netstandard1.5+netstandard1.6+netcoreapp1.0\*.* $(SolutionDir)IntegrationTests\dotNet.MS.Tests\bin\$(Configuration)  /Y /Q /R /I
-XCOPY $(TargetPath) $(SolutionDir)IntegrationTests\dotNet.MS.Tests\bin\$(Configuration) /Y /Q /R /I
-
-XCOPY $(SolutionDir)packages\TeamCity.ServiceMessages.3.0.6\lib\portable-net46+netcore50+netstandard1.5+netstandard1.6+netcoreapp1.0\*.* $(SolutionDir)IntegrationTests\dotNetCore.XUnit.Tests\bin\$(Configuration)\netcoreapp1.0  /Y /Q /R /I
-XCOPY $(TargetPath) $(SolutionDir)IntegrationTests\dotNetCore.XUnit.Tests\bin\$(Configuration)\netcoreapp1.0 /Y /Q /R /I</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

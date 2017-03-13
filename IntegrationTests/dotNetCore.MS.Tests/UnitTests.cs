@@ -12,7 +12,7 @@ namespace dotNetCore.MS.Tests
             Assert.IsTrue(false, "error details");
         }
 
-        [TestMethod]
+        [TestMethod, Ignore]
         public void TestIgnored()
         {
         }
