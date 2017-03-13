@@ -80,7 +80,7 @@
 
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();
-            process.WaitForExit(10000);
+            process.WaitForExit();
             result = new CommandLineResult(this, process.ExitCode, stdOut.ToString(), stdError.ToString());
             return true;
         }
