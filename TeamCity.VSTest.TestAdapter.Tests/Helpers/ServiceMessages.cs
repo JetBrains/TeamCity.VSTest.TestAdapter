@@ -11,11 +11,11 @@
     {
         private static readonly IServiceMessageParser Parser = new ServiceMessageParser();
 
-        public static void ShouldContainsNumberServiceMessage([NotNull] string text, int expectedNumberOfServiceMessages)
+        public static int GetNumberServiceMessage([NotNull] string text)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
             var actualMessages = Parser.ParseServiceMessages(text).ToList();
-            Assert.AreEqual(expectedNumberOfServiceMessages, actualMessages.Count);
+            return actualMessages.Count;
         }
 
         public static void ResultShouldContainCorrectStructureAndSequence([NotNull] string text)

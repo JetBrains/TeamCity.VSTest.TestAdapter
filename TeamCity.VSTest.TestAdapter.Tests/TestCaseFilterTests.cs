@@ -25,12 +25,10 @@
         [Test]
         [TestCase(true, "executor://some", true)]
         [TestCase(true, "abc://some", true)]
-        [TestCase(false, "executor://some", true)]
-        [TestCase(false, "abc://some", true)]
-        [TestCase(true, "executor://xunit/VsTestRunner", false)]
-        [TestCase(false, "executor://xunit/VsTestRunner", true)]
+        [TestCase(false, "executor://some", false)]
+        [TestCase(false, "abc://some", false)]
         [TestCase(true, "executor://xunit/VsTestRunner2", false)]
-        [TestCase(false, "executor://xunit/VsTestRunner2", true)]
+        [TestCase(false, "executor://xunit/VsTestRunner2", false)]
         public void Should(bool isUnderTeamCity, string executorUri, bool expectedIsSupported)
         {
             // Given

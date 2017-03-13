@@ -17,7 +17,32 @@
         [Test]
         [TestCase(@"IntegrationTests\dotNetCore.XUnit.Tests\dotNetCore.XUnit.Tests.csproj")]
         [TestCase(@"IntegrationTests\dotNetCore.MS.Tests\dotNetCore.MS.Tests.csproj")]
-        public void ShouldRunTests(string projectName)
+        [TestCase(@"IntegrationTests\dotNet.MS.Tests\dotNet.MS.Tests.csproj")]
+        public void ShouldRunTestsWhenUnderTeamCity(string projectName)
+        {
+            // Given
+            var testCommandLine = new CommandLine(
+                @"dotnet",
+                "test",
+                projectName,
+                @"/p:VSTestLogger=teamcity;VSTestTestAdapterPath=.");
+
+            // When
+            testCommandLine.AddEnvitonmentVariable(EnvironmentInfo.TeamCityProjectEnvVarName, "someproj");
+            testCommandLine.TryExecute(out CommandLineResult result).ShouldBe(true);
+
+            // Then
+            result.ExitCode.ShouldBe(1);
+            result.StdError.Trim().ShouldBe(string.Empty);
+            ServiceMessages.GetNumberServiceMessage(result.StdOut).ShouldBeGreaterThan(0);
+            ServiceMessages.ResultShouldContainCorrectStructureAndSequence(result.StdOut);
+        }
+
+        [Test]
+        [TestCase(@"IntegrationTests\dotNetCore.XUnit.Tests\dotNetCore.XUnit.Tests.csproj")]
+        [TestCase(@"IntegrationTests\dotNetCore.MS.Tests\dotNetCore.MS.Tests.csproj")]
+        [TestCase(@"IntegrationTests\dotNet.MS.Tests\dotNet.MS.Tests.csproj")]
+        public void ShouldNotGenerateServiceMessageWhenNotUnderTeamCity(string projectName)
         {
             // Given
             var testCommandLine = new CommandLine(
@@ -32,28 +57,7 @@
             // Then
             result.ExitCode.ShouldBe(1);
             result.StdError.Trim().ShouldBe(string.Empty);
-            ServiceMessages.ResultShouldContainCorrectStructureAndSequence(result.StdOut);
-        }
-
-        [Test]
-        public void ShouldGenerateServiceMessageWhenUnderTeamCityByItself()
-        {
-            // Given
-            var testCommandLine = new CommandLine(
-                @"dotnet",
-                "test",
-                @"IntegrationTests\dotNetCore.XUnit.Tests\dotNetCore.XUnit.Tests.csproj",
-                @"/p:VSTestLogger=teamcity;VSTestTestAdapterPath=.");
-
-            // When
-            testCommandLine.AddEnvitonmentVariable(EnvironmentInfo.TeamCityProjectEnvVarName, "someproj");
-            testCommandLine.TryExecute(out CommandLineResult result).ShouldBe(true);
-
-            // Then
-            result.ExitCode.ShouldBe(1);
-            result.StdError.Trim().ShouldBe(string.Empty);
-            ServiceMessages.ResultShouldContainCorrectStructureAndSequence(result.StdOut);
-            result.StdOut.IndexOf("##teamcity[testSuiteStarted name='Test collection for ", StringComparison.Ordinal).ShouldBeGreaterThan(0);
+            ServiceMessages.GetNumberServiceMessage(result.StdOut).ShouldBe(0);
         }
     }
 }

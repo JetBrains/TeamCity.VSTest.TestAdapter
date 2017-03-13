@@ -8,7 +8,6 @@
     {
         private static readonly HashSet<Uri> NotSupportedExecutorUri = new HashSet<Uri>
         {
-            new Uri("executor://xunit/VsTestRunner"),
             new Uri("executor://xunit/VsTestRunner2")
         };
 
@@ -24,7 +23,9 @@
         {
             if (testCase == null) throw new ArgumentNullException(nameof(testCase));
             if (!_environmentInfo.IsUnderTeamCity)
-                return true;
+            {
+                return false;
+            }
 
             return !NotSupportedExecutorUri.Contains(testCase.ExecutorUri);
         }
