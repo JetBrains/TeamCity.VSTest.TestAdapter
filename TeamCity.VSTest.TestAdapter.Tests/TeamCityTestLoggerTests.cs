@@ -88,6 +88,26 @@
         }
 
         [Test]
+        public void ShouldRegisterOutputMessageInTestCaseFilterWhenReceiveTestRunMessageEventArgs()
+        {
+            // Given
+            var testResult = CreateTestResult();
+
+            // When
+            _testCaseFilter.Setup(i => i.IsSupported(testResult.Result.TestCase)).Returns(false);
+            _events.SendTestRunMessage(new TestRunMessageEventArgs(TestMessageLevel.Error, "err"));
+            _events.SendTestRunMessage(new TestRunMessageEventArgs(TestMessageLevel.Informational, "abc"));
+            _events.SendTestRunMessage(new TestRunMessageEventArgs(TestMessageLevel.Warning, "warn"));
+            _events.SendTestResult(testResult);
+            _events.SendTestRunComplete(CreateComplete());
+
+            // Then
+            _testCaseFilter.Verify(i => i.RegisterOutputMessage("err"), Times.Never);
+            _testCaseFilter.Verify(i => i.RegisterOutputMessage("abc"), Times.Once);
+            _testCaseFilter.Verify(i => i.RegisterOutputMessage("warn"), Times.Never);
+        }
+
+        [Test]
         public void ShouldProcessWhenFailedTest()
         {
             // Given

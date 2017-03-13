@@ -4,6 +4,8 @@
 
     internal interface ITestCaseFilter
     {
+        void RegisterOutputMessage([NotNull] string outputLine);
+
         bool IsSupported([NotNull] TestCase testCase);
     }
 }

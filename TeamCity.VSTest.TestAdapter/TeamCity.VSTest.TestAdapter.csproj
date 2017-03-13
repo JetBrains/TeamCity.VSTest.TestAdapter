@@ -14,14 +14,6 @@
     <GenerateNeutralResourcesLanguageAttribute>false</GenerateNeutralResourcesLanguageAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
-    <PostBuildEvent Condition=" '$(TargetDir)' != '' ">XCOPY $(SolutionDir)packages\TeamCity.ServiceMessages.3.0.6\lib\portable-net46+netcore50+netstandard1.5+netstandard1.6+netcoreapp1.0\*.* $(SolutionDir)IntegrationTests\dotNet.MS.Tests\bin\Debug  /Y /R /Q
-XCOPY $(TargetDir)*.* $(SolutionDir)IntegrationTests\dotNet.MS.Tests\bin\Debug /Y /R /Q
-
-XCOPY $(SolutionDir)packages\TeamCity.ServiceMessages.3.0.6\lib\portable-net46+netcore50+netstandard1.5+netstandard1.6+netcoreapp1.0\*.* $(SolutionDir)IntegrationTests\dotNetCore.MS.Tests\bin\Debug\netcoreapp1.0  /Y /R /Q
-XCOPY $(TargetDir)*.* $(SolutionDir)IntegrationTests\dotNetCore.MS.Tests\bin\Debug\netcoreapp1.0 /Y /R /Q
-
-XCOPY $(SolutionDir)packages\TeamCity.ServiceMessages.3.0.6\lib\portable-net46+netcore50+netstandard1.5+netstandard1.6+netcoreapp1.0\*.* $(SolutionDir)IntegrationTests\dotNetCore.XUnit.Tests\bin\Debug\netcoreapp1.0  /Y /R /Q
-XCOPY $(TargetDir)*.* $(SolutionDir)IntegrationTests\dotNetCore.XUnit.Tests\bin\Debug\netcoreapp1.0 /Y /R /Q</PostBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>

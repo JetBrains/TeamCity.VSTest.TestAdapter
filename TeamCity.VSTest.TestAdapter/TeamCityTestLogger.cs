@@ -50,8 +50,17 @@
 
         private void SubscribeToEvets(TestLoggerEvents events)
         {
+            events.TestRunMessage += OnTestRunMessage;
             events.TestResult += OnTestResult;
             events.TestRunComplete += OnTestRunComplete;
+        }
+
+        private void OnTestRunMessage(object sender, TestRunMessageEventArgs ev)
+        {
+            if (ev.Level == TestMessageLevel.Informational && !string.IsNullOrWhiteSpace(ev.Message))
+            {
+                _testCaseFilter.RegisterOutputMessage(ev.Message);
+            }
         }
 
         private void OnTestResult(object sender, [NotNull] TestResultEventArgs ev)

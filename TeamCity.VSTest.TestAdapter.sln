@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotNetCore.MS.Tests", "Inte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotNet.MS.Tests", "IntegrationTests\dotNet.MS.Tests\dotNet.MS.Tests.csproj", "{0F5C8397-84C4-4A15-9B0C-BB939164AC4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotNet.XUnit.Tests", "IntegrationTests\dotNet.XUnit.Tests\dotNet.XUnit.Tests.csproj", "{91D202D1-AD5F-4792-9A99-759B0789EF09}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{0F5C8397-84C4-4A15-9B0C-BB939164AC4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F5C8397-84C4-4A15-9B0C-BB939164AC4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F5C8397-84C4-4A15-9B0C-BB939164AC4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91D202D1-AD5F-4792-9A99-759B0789EF09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91D202D1-AD5F-4792-9A99-759B0789EF09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91D202D1-AD5F-4792-9A99-759B0789EF09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91D202D1-AD5F-4792-9A99-759B0789EF09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,5 +54,6 @@ Global
 		{27307A67-4232-4708-B561-84BAF0D6559F} = {E9EECA36-7BB3-4D65-BCF7-90A98B6DA2E5}
 		{FCDD047D-D115-4AC8-9E05-C22AB9940D4A} = {E9EECA36-7BB3-4D65-BCF7-90A98B6DA2E5}
 		{0F5C8397-84C4-4A15-9B0C-BB939164AC4C} = {E9EECA36-7BB3-4D65-BCF7-90A98B6DA2E5}
+		{91D202D1-AD5F-4792-9A99-759B0789EF09} = {E9EECA36-7BB3-4D65-BCF7-90A98B6DA2E5}
 	EndGlobalSection
 EndGlobal

@@ -12,6 +12,8 @@
 
 	<ItemGroup>
 		<Package Include="TeamCity.VSTest.TestAdapter"/>
+		<Dependency Include="$(SolutionDir)packages\TeamCity.ServiceMessages.3.0.6\lib\portable-net46+netcore50+netstandard1.5+netstandard1.6+netcoreapp1.0\*.*"/>
+		<Dependency Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\netstandard1.5\*.*"/>
 	</ItemGroup>
 
 	<UsingTask TaskName="DownloadFile" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
@@ -94,6 +96,10 @@
 
 	<Target Name="Build" DependsOnTargets="RestorePackages;UpdateVersions">
 		<MSBuild Projects="TeamCity.VSTest.TestAdapter.sln" BuildInParallel="true" Targets="Clean;Restore;Build" Properties="Configuration=$(Configuration)"/>
+		<Copy SourceFiles="@(Dependency)" DestinationFiles="$(SolutionDir)IntegrationTests\dotNet.MS.Tests\bin\$(Configuration)\%(Dependency.Filename)%(Dependency.Extension)" /> 
+		<Copy SourceFiles="@(Dependency)" DestinationFiles="$(SolutionDir)IntegrationTests\dotNet.XUnit.Tests\bin\$(Configuration)\%(Dependency.Filename)%(Dependency.Extension)" /> 
+		<Copy SourceFiles="@(Dependency)" DestinationFiles="$(SolutionDir)IntegrationTests\dotNetCore.MS.Tests\bin\$(Configuration)\netcoreapp1.0\%(Dependency.Filename)%(Dependency.Extension)" /> 
+        <Copy SourceFiles="@(Dependency)" DestinationFiles="$(SolutionDir)IntegrationTests\dotNetCore.XUnit.Tests\bin\$(Configuration)\netcoreapp1.0\%(Dependency.Filename)%(Dependency.Extension)" /> 		
 	</Target>	
 
 	<Target Name="RunTests" DependsOnTargets="Build">

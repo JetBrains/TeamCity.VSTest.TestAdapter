@@ -7,8 +7,7 @@
     {
         private static readonly IEnvironmentInfo SharedEnvironmentInfo = new EnvironmentInfo();
         private static readonly ITeamCityWriter SharedTeamCityWriter = new TeamCityServiceMessages().CreateWriter(Console.WriteLine);
-        private static readonly ITestCaseFilter SharedTestCaseFilter = new TestCaseFilter(SharedEnvironmentInfo);
-
+        
         public static ITeamCityWriter GetTeamCityWriter()
         {
             return SharedTeamCityWriter;
@@ -16,7 +15,7 @@
 
         public static ITestCaseFilter GetTestCaseFilter()
         {
-            return SharedTestCaseFilter;
+            return new TestCaseFilter(SharedEnvironmentInfo);
         }
 
         public static ISuiteNameProvider GetSuiteNameProvider()
