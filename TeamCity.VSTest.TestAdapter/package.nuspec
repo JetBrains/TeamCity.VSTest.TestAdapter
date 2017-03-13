@@ -19,8 +19,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\TeamCity.VSTest.TestAdapter.*"
-          target="lib\portable-net46+netcore50+netstandard1.5+netstandard1.6+netcoreapp1.0" />
-    <file src="..\LICENSE" target="LICENSE.txt" />
+    <file src="bin\Release\netstandard1.5\TeamCity.VSTest.TestAdapter.dll" target="lib\portable-net46+netcore50+netstandard1.5+netstandard1.6+netcoreapp1.0" />
+    <file src="..\LICENSE" target="LICENSE" />
   </files>
 </package>
