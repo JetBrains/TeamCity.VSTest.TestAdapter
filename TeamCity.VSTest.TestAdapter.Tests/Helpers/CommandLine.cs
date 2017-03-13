@@ -23,10 +23,9 @@
 
         public string[] Args { [NotNull] get; }
 
-        public void AddEnvitonmentVariable([NotNull] string name, [NotNull] string value)
+        public void AddEnvitonmentVariable([NotNull] string name, [CanBeNull] string value)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
-            if (value == null) throw new ArgumentNullException(nameof(value));
             _envitonmentVariables.Add(name, value);
         }
 
@@ -50,7 +49,24 @@
             };
 
             foreach (var envVar in _envitonmentVariables)
-                process.StartInfo.EnvironmentVariables.Add(envVar.Key, envVar.Value);
+            {
+                var remove = envVar.Value == null;
+                if (process.StartInfo.EnvironmentVariables.ContainsKey(envVar.Key))
+                {
+                    process.StartInfo.EnvironmentVariables.Remove(envVar.Key);
+                    if (!remove)
+                    {
+                        process.StartInfo.EnvironmentVariables.Add(envVar.Key, envVar.Value);
+                    }
+                }
+                else
+                {
+                    if (!remove)
+                    {
+                        process.StartInfo.EnvironmentVariables.Add(envVar.Key, envVar.Value);
+                    }
+                }
+            }
 
             var stdOut = new StringBuilder();
             var stdError = new StringBuilder();

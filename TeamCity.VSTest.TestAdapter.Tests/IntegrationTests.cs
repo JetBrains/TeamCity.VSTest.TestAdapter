@@ -53,6 +53,7 @@
                 @"/p:VSTestLogger=teamcity;VSTestTestAdapterPath=.");
 
             // When
+            testCommandLine.AddEnvitonmentVariable(EnvironmentInfo.TeamCityProjectEnvVarName, null);
             testCommandLine.TryExecute(out CommandLineResult result).ShouldBe(true);
 
             // Then
