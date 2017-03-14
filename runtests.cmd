@@ -5,10 +5,10 @@ rem SET TEAMCITY_PROJECT_NAME=aaa
 SET TEAMCITY_PROJECT_NAME=aaa
 
 rem Integration
-rem dotnet test IntegrationTests\dotNetCore.XUnit.Tests\dotNetCore.XUnit.Tests.csproj /p:VSTestLogger=teamcity;VSTestTestAdapterPath=.
+dotnet test IntegrationTests\dotNetCore.XUnit.Tests\dotNetCore.XUnit.Tests.csproj /p:VSTestLogger=teamcity;VSTestTestAdapterPath=.
 dotnet test IntegrationTests\dotNet.XUnit.Tests\dotNet.XUnit.Tests.csproj /p:VSTestLogger=teamcity;VSTestTestAdapterPath=.
-rem dotnet test IntegrationTests\dotNetCore.MS.Tests\dotNetCore.MS.Tests.csproj /p:VSTestLogger=teamcity;VSTestTestAdapterPath=.
-rem dotnet test IntegrationTests\dotNet.MS.Tests\dotNet.MS.Tests.csproj /p:VSTestLogger=teamcity;VSTestTestAdapterPath=.
+dotnet test IntegrationTests\dotNetCore.MS.Tests\dotNetCore.MS.Tests.csproj /p:VSTestLogger=teamcity;VSTestTestAdapterPath=.
+dotnet test IntegrationTests\dotNet.MS.Tests\dotNet.MS.Tests.csproj /p:VSTestLogger=teamcity;VSTestTestAdapterPath=.
 
 rem Samples
-dotnet test Samples\dotNet.XUnit.Tests\dotNet.XUnit.Tests.csproj /p:VSTestLogger=teamcity;VSTestTestAdapterPath=.
+rem dotnet test Samples\dotNet.XUnit.Tests\dotNet.XUnit.Tests.csproj /p:VSTestLogger=teamcity;VSTestTestAdapterPath=.

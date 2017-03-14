@@ -50,21 +50,13 @@
 
             foreach (var envVar in _envitonmentVariables)
             {
-                var remove = envVar.Value == null;
-                if (process.StartInfo.EnvironmentVariables.ContainsKey(envVar.Key))
+                if (envVar.Value == null)
                 {
                     process.StartInfo.EnvironmentVariables.Remove(envVar.Key);
-                    if (!remove)
-                    {
-                        process.StartInfo.EnvironmentVariables.Add(envVar.Key, envVar.Value);
-                    }
                 }
                 else
                 {
-                    if (!remove)
-                    {
-                        process.StartInfo.EnvironmentVariables.Add(envVar.Key, envVar.Value);
-                    }
+                    process.StartInfo.EnvironmentVariables[envVar.Key] = envVar.Value;
                 }
             }
 
