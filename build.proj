@@ -14,6 +14,11 @@
 		<Package Include="TeamCity.VSTest.TestAdapter"/>
 		<Dependency Include="$(SolutionDir)packages\TeamCity.ServiceMessages.3.0.7\lib\netstandard1.3\*.*"/>
 		<Dependency Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\netstandard1.5\*.*"/>
+
+		<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNet.MS.Tests\bin\$(Configuration)</Path></TestOutputDirectory> 
+		<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNetCore.MS.Tests\bin\$(Configuration)\netcoreapp1.0</Path></TestOutputDirectory> 
+		<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNet.XUnit.Tests\bin\$(Configuration)</Path></TestOutputDirectory> 
+		<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNetCore.XUnit.Tests\bin\$(Configuration)\netcoreapp1.0</Path></TestOutputDirectory> 
 	</ItemGroup>
 
 	<UsingTask TaskName="DownloadFile" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
@@ -95,21 +100,22 @@
 	</Target>
 
 	<Target Name="Build" DependsOnTargets="RestorePackages;UpdateVersions">
-		<MSBuild Projects="TeamCity.VSTest.TestAdapter.sln" BuildInParallel="true" Targets="Clean;Restore;Build" Properties="Configuration=$(Configuration)"/>
-		<Copy SourceFiles="@(Dependency)" DestinationFiles="$(SolutionDir)IntegrationTests\dotNet.MS.Tests\bin\$(Configuration)\%(Dependency.Filename)%(Dependency.Extension)" /> 
-		<Copy SourceFiles="@(Dependency)" DestinationFiles="$(SolutionDir)IntegrationTests\dotNet.XUnit.Tests\bin\$(Configuration)\%(Dependency.Filename)%(Dependency.Extension)" /> 
-		<Copy SourceFiles="@(Dependency)" DestinationFiles="$(SolutionDir)IntegrationTests\dotNetCore.MS.Tests\bin\$(Configuration)\netcoreapp1.0\%(Dependency.Filename)%(Dependency.Extension)" /> 
-        <Copy SourceFiles="@(Dependency)" DestinationFiles="$(SolutionDir)IntegrationTests\dotNetCore.XUnit.Tests\bin\$(Configuration)\netcoreapp1.0\%(Dependency.Filename)%(Dependency.Extension)" /> 		
-	</Target>	
+		<MSBuild Projects="TeamCity.VSTest.TestAdapter.sln" Targets="Clean;Restore;Build" Properties="Configuration=$(Configuration)"/>
+	</Target>
 
-	<Target Name="RunTests" DependsOnTargets="Build">
+	<Target Name="CopyDependencies">
+		<MakeDir Directories="$(TestOutputDirectory)"/>  
+		<Copy SourceFiles="@(Dependency)" DestinationFolder="%(TestOutputDirectory.Path)"/> 
+    </Target>  
+  
+	<Target Name="RunTests" DependsOnTargets="Build;CopyDependencies">
 		<Exec Command="packages\nuget.exe install NUnit.Console -Version 3.6.0 -o packages"/>
 		<Exec IgnoreExitCode="True" Command="$(MSBuildProjectDirectory)\packages\NUnit.ConsoleRunner.3.6.0\tools\nunit3-console.exe $(MSBuildProjectDirectory)\TeamCity.VSTest.TestAdapter.Tests\bin\$(Configuration)\TeamCity.VSTest.TestAdapter.Tests.dll --noresult --noheader --workers=1 --inprocess">
 			<Output TaskParameter="ExitCode" ItemName="exitCode"/>
 		</Exec>
 	</Target>
 
-	<Target Name="CreatePackages" DependsOnTargets="RunTests">
+	<Target Name="CreatePackages" DependsOnTargets="Build;RunTests">
 		<Exec Command="packages\nuget.exe pack %(Package.Identity)\package.nuspec -Version $(Version) -OutputDirectory $(PackagesDirectory)"/>
 		<Message Text="##teamcity[publishArtifacts '$(PackagesDirectory)\%(Package.FileName)%(Package.Extension).$(Version).nupkg=>$(PackagesDirectory)']" />
 	</Target>
