@@ -5,7 +5,6 @@
 
     internal class ServiceLocator
     {
-        private static readonly IEnvironmentInfo SharedEnvironmentInfo = new EnvironmentInfo();
         private static readonly ITeamCityWriter SharedTeamCityWriter = new TeamCityServiceMessages().CreateWriter(Console.WriteLine);
         
         public static ITeamCityWriter GetTeamCityWriter()
@@ -15,7 +14,7 @@
 
         public static ITestCaseFilter GetTestCaseFilter()
         {
-            return new TestCaseFilter(SharedEnvironmentInfo);
+            return new TestCaseFilter();
         }
 
         public static ISuiteNameProvider GetSuiteNameProvider()

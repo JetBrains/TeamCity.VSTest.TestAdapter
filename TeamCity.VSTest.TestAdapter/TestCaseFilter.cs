@@ -6,14 +6,7 @@
     internal class TestCaseFilter : ITestCaseFilter
     {
         internal const string TeamcityPrefix = "##teamcity";
-        private readonly IEnvironmentInfo _environmentInfo;
         private bool _alreadyProducesTeamCityServiceMessages;
-
-        public TestCaseFilter([NotNull] IEnvironmentInfo environmentInfo)
-        {
-            if (environmentInfo == null) throw new ArgumentNullException(nameof(environmentInfo));
-            _environmentInfo = environmentInfo;
-        }
 
         public void RegisterOutputMessage(string outputLine)
         {
@@ -29,11 +22,6 @@
         public bool IsSupported(TestCase testCase)
         {
             if (testCase == null) throw new ArgumentNullException(nameof(testCase));
-            if (!_environmentInfo.IsUnderTeamCity)
-            {
-                return false;
-            }
-
             return !_alreadyProducesTeamCityServiceMessages;
         }
     }

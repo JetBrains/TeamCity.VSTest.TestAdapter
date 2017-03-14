@@ -22,7 +22,7 @@
         }
 
         [Test, TestCaseSource(nameof(TestProjects))]
-        public void ShouldProduceServiceMessagesWhenUnderTeamCity(string projectName)
+        public void ShouldProduceServiceMessages(string projectName)
         {
             // Given
             var testCommandLine = new CommandLine(
@@ -32,7 +32,6 @@
                 @"/p:VSTestLogger=teamcity;VSTestTestAdapterPath=.");
 
             // When
-            testCommandLine.AddEnvitonmentVariable(EnvironmentInfo.TeamCityProjectEnvVarName, "someproj");
             testCommandLine.TryExecute(out CommandLineResult result).ShouldBe(true);
 
             // Then
@@ -40,26 +39,6 @@
             result.StdError.Trim().ShouldBe(string.Empty);
             ServiceMessages.GetNumberServiceMessage(result.StdOut).ShouldBe(10);
             ServiceMessages.ResultShouldContainCorrectStructureAndSequence(result.StdOut);
-        }
-
-        [Test, TestCaseSource(nameof(TestProjects))]
-        public void ShouldNotProduceServiceMessageWhenItIsNotUnderTeamCity(string projectName)
-        {
-            // Given
-            var testCommandLine = new CommandLine(
-                @"dotnet",
-                "test",
-                projectName,
-                @"/p:VSTestLogger=teamcity;VSTestTestAdapterPath=.");
-
-            // When
-            testCommandLine.AddEnvitonmentVariable(EnvironmentInfo.TeamCityProjectEnvVarName, null);
-            testCommandLine.TryExecute(out CommandLineResult result).ShouldBe(true);
-
-            // Then
-            result.ExitCode.ShouldBe(1);
-            result.StdError.Trim().ShouldBe(string.Empty);
-            ServiceMessages.GetNumberServiceMessage(result.StdOut).ShouldBe(0);
         }
     }
 }
