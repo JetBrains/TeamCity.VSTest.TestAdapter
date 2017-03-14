@@ -12,13 +12,6 @@
 
 	<ItemGroup>
 		<Package Include="TeamCity.VSTest.TestAdapter"/>
-		<Dependency Include="$(SolutionDir)packages\TeamCity.ServiceMessages.3.0.7\lib\netstandard1.3\*.*"/>
-		<Dependency Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\netstandard1.5\*.*"/>
-
-		<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNet.MS.Tests\bin\$(Configuration)</Path></TestOutputDirectory> 
-		<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNetCore.MS.Tests\bin\$(Configuration)\netcoreapp1.0</Path></TestOutputDirectory> 
-		<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNet.XUnit.Tests\bin\$(Configuration)</Path></TestOutputDirectory> 
-		<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNetCore.XUnit.Tests\bin\$(Configuration)\netcoreapp1.0</Path></TestOutputDirectory> 
 	</ItemGroup>
 
 	<UsingTask TaskName="DownloadFile" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
@@ -104,9 +97,18 @@
 	</Target>
 
 	<Target Name="CopyDependencies">
+		<ItemGroup>
+			<Dependency Include="$(SolutionDir)packages\TeamCity.ServiceMessages.3.0.7\lib\netstandard1.3\*.*"/>
+			<Dependency Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\netstandard1.5\*.*"/>
+			<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNet.MS.Tests\bin\$(Configuration)</Path></TestOutputDirectory> 
+			<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNetCore.MS.Tests\bin\$(Configuration)\netcoreapp1.0</Path></TestOutputDirectory> 
+			<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNet.XUnit.Tests\bin\$(Configuration)</Path></TestOutputDirectory> 
+			<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNetCore.XUnit.Tests\bin\$(Configuration)\netcoreapp1.0</Path></TestOutputDirectory> 
+		</ItemGroup>
+
 		<MakeDir Directories="$(TestOutputDirectory)"/>  
 		<Copy SourceFiles="@(Dependency)" DestinationFolder="%(TestOutputDirectory.Path)"/> 
-    </Target>  
+    </Target>	
   
 	<Target Name="RunTests" DependsOnTargets="Build;CopyDependencies">
 		<Exec Command="packages\nuget.exe install NUnit.Console -Version 3.6.0 -o packages"/>

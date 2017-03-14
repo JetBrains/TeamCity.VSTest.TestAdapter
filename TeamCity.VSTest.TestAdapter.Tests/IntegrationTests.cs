@@ -29,7 +29,14 @@
                 @"dotnet",
                 "test",
                 projectName,
-                @"/p:VSTestLogger=teamcity;VSTestTestAdapterPath=.");
+                "-l=teamcity",
+                "-a=.",
+#if DEBUG
+                "-c=Debug"
+#else
+                "-c=Release"
+#endif
+                );
 
             // When
             testCommandLine.TryExecute(out CommandLineResult result).ShouldBe(true);

@@ -1,2 +1,2 @@
 dotnet restore
-dotnet test /p:VSTestLogger=teamcity;VSTestTestAdapterPath=.
+dotnet test -l=teamcity -a=.

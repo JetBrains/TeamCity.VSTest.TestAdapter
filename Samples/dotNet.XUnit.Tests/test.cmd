@@ -1,2 +1,2 @@
 dotnet restore
-dotnet test /p:VSTestLogger=teamcity
+dotnet test -l=teamcity

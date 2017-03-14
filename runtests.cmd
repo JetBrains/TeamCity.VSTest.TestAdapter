@@ -1,12 +1,13 @@
 rem SET VSTEST_HOST_DEBUG=1
 rem SET VSTEST_RUNNER_DEBUG=1
-rem SET TEAMCITY_PROJECT_NAME=aaa
 
 rem Integration
-dotnet test IntegrationTests\dotNetCore.XUnit.Tests\dotNetCore.XUnit.Tests.csproj /p:VSTestLogger=teamcity;VSTestTestAdapterPath=.
-dotnet test IntegrationTests\dotNet.XUnit.Tests\dotNet.XUnit.Tests.csproj /p:VSTestLogger=teamcity;VSTestTestAdapterPath=.
-dotnet test IntegrationTests\dotNetCore.MS.Tests\dotNetCore.MS.Tests.csproj /p:VSTestLogger=teamcity;VSTestTestAdapterPath=.
-dotnet test IntegrationTests\dotNet.MS.Tests\dotNet.MS.Tests.csproj /p:VSTestLogger=teamcity;VSTestTestAdapterPath=.
+rem /p:VSTestLogger=teamcity;VSTestTestAdapterPath=.
+
+dotnet test IntegrationTests\dotNetCore.XUnit.Tests\dotNetCore.XUnit.Tests.csproj -c=Release -l=teamcity -a=.
+dotnet test IntegrationTests\dotNet.XUnit.Tests\dotNet.XUnit.Tests.csproj -c=Release -l=teamcity -a=.
+dotnet test IntegrationTests\dotNetCore.MS.Tests\dotNetCore.MS.Tests.csproj -c=Release -l=teamcity -a=.
+dotnet test IntegrationTests\dotNet.MS.Tests\dotNet.MS.Tests.csproj -c=Release -l=teamcity -a=.
 
 rem Samples
-rem dotnet test Samples\dotNet.XUnit.Tests\dotNet.XUnit.Tests.csproj /p:VSTestLogger=teamcity;VSTestTestAdapterPath=.
+rem dotnet test Samples\dotNet.XUnit.Tests\dotNet.XUnit.Tests.csproj -c=Release -l=teamcity -a=.

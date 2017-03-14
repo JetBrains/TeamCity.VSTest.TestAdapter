@@ -64,6 +64,8 @@
             var stdError = new StringBuilder();
             process.OutputDataReceived += (sender, args) => { stdOut.AppendLine(args.Data); };
             process.ErrorDataReceived += (sender, args) => { stdError.AppendLine(args.Data); };
+
+            Console.WriteLine($"Run: {process.StartInfo.FileName} {process.StartInfo.Arguments}");
             if (!process.Start())
             {
                 result = default(CommandLineResult);
