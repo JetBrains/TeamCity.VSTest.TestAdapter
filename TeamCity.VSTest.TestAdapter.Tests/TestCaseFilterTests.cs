@@ -35,7 +35,7 @@
         [TestCase(false, "executor://xunit/VsTestRunner2", "", false)]
         [TestCase(false, "executor://xunit/VsTestRunner2", TestCaseFilter.TeamcityPrefix + " abc", false)]
         [TestCase(false, "executor://xunit/VsTestRunner2", "[xUnit.net 00:00:00.8998020] " + TestCaseFilter.TeamcityPrefix + "testSuiteFinished name", false)]
-        public void Should(bool isUnderTeamCity, string executorUri, string messagesStr, bool expectedIsSupported)
+        public void ShouldFilter(bool isUnderTeamCity, string executorUri, string messagesStr, bool expectedIsSupported)
         {
             // Given
             _environmentInfo.SetupGet(i => i.IsUnderTeamCity).Returns(isUnderTeamCity);

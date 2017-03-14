@@ -12,7 +12,7 @@
 
 	<ItemGroup>
 		<Package Include="TeamCity.VSTest.TestAdapter"/>
-		<Dependency Include="$(SolutionDir)packages\TeamCity.ServiceMessages.3.0.7\lib\net46+netcore50+netcoreapp1.0+netstandard1.3\*.*"/>
+		<Dependency Include="$(SolutionDir)packages\TeamCity.ServiceMessages.3.0.7\lib\netstandard1.3\*.*"/>
 		<Dependency Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\netstandard1.5\*.*"/>
 	</ItemGroup>
 
