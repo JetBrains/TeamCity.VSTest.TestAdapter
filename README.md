@@ -33,7 +33,7 @@ To support the TeamCity integration:
 * [.net 4.5 XUnit tests](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/tree/master/Samples/dotNet.XUnit.Tests), to run run tests do the [following](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/blob/master/Samples/dotNet.XUnit.Tests/test.cmd):
 
 ```
-nuget restore ..\Samples.sln
+nuget restore Samples.sln
 dotnet test
 ```
 
