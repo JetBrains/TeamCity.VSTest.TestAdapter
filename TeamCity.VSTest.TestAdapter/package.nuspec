@@ -14,6 +14,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Provides the TeamCity integration with test frameworks via Visual Studio Test Platform.
 
+Usage:
+  - Create the a test project from the command line using the specified template, for example: dotnet new xunit
+  - To support the TeamCity integration add NuGet reference to this package
+
 Supported platforms:
   - .NET 4.5+
   - .NET Core
