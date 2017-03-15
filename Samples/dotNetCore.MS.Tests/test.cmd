@@ -1,2 +1,2 @@
 dotnet restore
-dotnet test -l=teamcity -a=.
+dotnet test

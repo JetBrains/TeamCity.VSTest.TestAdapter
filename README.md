@@ -34,18 +34,17 @@ To support the TeamCity integration:
 
 ```
 nuget restore ..\Samples.sln
-dotnet test -l=teamcity
+dotnet test
 ```
 
 * [netcoreapp 1.0 MS tests](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/tree/master/Samples/dotNetCore.MS.Tests), to run run tests the [following](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/blob/master/Samples/dotNetCore.MS.Tests/test.cmd):
 
 ```
 dotnet restore
-dotnet test -l=teamcity -a=.
+dotnet test
 ```
-It is important to note that in this case you should additionally specify a directory where logger should be found (an directory of testing assembly here).
 
-The project file for this project looks like:
+The project file for this test project looks like:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
