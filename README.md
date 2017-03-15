@@ -16,11 +16,11 @@ For each test project:
 
 * Choose a test framework which supports [Visual Studio Test Platform](https://github.com/Microsoft/vstest).
 
-* Add reference to the NuGet package of the selected test framework. For example [MSTest](https://www.nuget.org/packages/MSTest.TestFramework/) or [XUnit](https://www.nuget.org/packages/xunit/) or others.
+* Add the reference to the NuGet package of the selected test framework. For example [MSTest](https://www.nuget.org/packages/MSTest.TestFramework/) or [XUnit](https://www.nuget.org/packages/xunit/) or others.
 
-* Add reference to the NuGet package of the appropriate test adapter. For example [MSTest adapter](https://www.nuget.org/packages/MSTest.TestAdapter/) or [XUnit adapter](https://www.nuget.org/packages/xunit.runner.visualstudio/) or others.
+* Add the reference to the NuGet package of the appropriate test adapter. For example [MSTest adapter](https://www.nuget.org/packages/MSTest.TestAdapter/) or [XUnit adapter](https://www.nuget.org/packages/xunit.runner.visualstudio/) or others.
 
-* Add reference to the [Visual Studio Test Platform](https://www.nuget.org/packages/Microsoft.NET.Test.Sdk/).
+* Add the reference to the [Visual Studio Test Platform](https://www.nuget.org/packages/Microsoft.NET.Test.Sdk/).
 
 To support the TeamCity integration:
 
