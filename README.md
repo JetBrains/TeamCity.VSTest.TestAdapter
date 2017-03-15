@@ -22,7 +22,7 @@ For each test project:
 
 * Add the NuGet reference to the [Visual Studio Test Platform](https://www.nuget.org/packages/Microsoft.NET.Test.Sdk/).
 
-or just create the a test project from the command line:
+or just create the a test project from the command line using the specified [template](https://docs.microsoft.com/en-us/dotnet/articles/core/tools/dotnet-new):
 
 ```
 dotnet new mstest
