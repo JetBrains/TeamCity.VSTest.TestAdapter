@@ -12,19 +12,25 @@
     <projectUrl>https://github.com/NikolayPianikov/TeamCity.VSTest.TestAdapter</projectUrl>
     <iconUrl>https://www.jetbrains.com/_assets//shared/favicons/jetbrains.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>This library provides integration TeamCity and VSTest</description>
+    <description>Provides the TeamCity integration with test frameworks via Visual Studio Test Platform.
+
+Supported platforms:
+  - .NET 4.5+
+  - .NET Core
+  - Windows 8
+  - Universal (Windows Phone 8.1+, Windows 8.1+)
+  - .NET Standard 1.0
+  - Portable Libraries</description>
     <tags>TeamCity VSTest message</tags>
-    <dependencies>
-      <dependency id="Microsoft.TestPlatform.ObjectModel" version="[15.0.0,16.0.0)" />
-      <dependency id="NETStandard.Library" version="[1.6.0,1.7.0)" />
-    </dependencies>
   </metadata>
   <files>
 	<file src="bin\Release\netstandard1.5\TeamCity.VSTest.TestAdapter.dll;..\TeamCity.VSTest.TestAdapter.Tests\bin\Release\TeamCity.ServiceMessages.dll" target="build\_common" />
-	<file src="TeamCity.VSTest.TestAdapter.props" target="build\net46" />
-	<file src="TeamCity.VSTest.TestAdapter.props" target="build\netcore50" />
+	<file src="TeamCity.VSTest.TestAdapter.props" target="build\net45" />
+	<file src="TeamCity.VSTest.TestAdapter.props" target="build\portable-net45+win8+wpa81+wp8" />
+	<file src="TeamCity.VSTest.TestAdapter.props" target="build\netcore" />
 	<file src="TeamCity.VSTest.TestAdapter.props" target="build\netcoreapp1.0" />
-	<file src="TeamCity.VSTest.TestAdapter.props" target="build\netstandard1.3" />
+	<file src="TeamCity.VSTest.TestAdapter.props" target="build\uap" />
+	<file src="TeamCity.VSTest.TestAdapter.props" target="build\netstandard1.0" />
     <file src="..\LICENSE" target="LICENSE" />
   </files>
 </package>
