@@ -10,7 +10,7 @@ Provides the TeamCity integration with test frameworks via Visual Studio Test Pl
 
 ## VSTest 14, 15
 
-To support the TeamCity integration for each test project add the NuGet reference to the [TeamCity Test Adapter](https://www.nuget.org/packages/TeamCity.VSTest.TestAdapter) to turn on the TeamCity integration. 
+To support the TeamCity integration add the NuGet reference to the [TeamCity Test Adapter](https://www.nuget.org/packages/TeamCity.VSTest.TestAdapter) to turn on the TeamCity integration. 
 
 * To run tests from the command line
 
