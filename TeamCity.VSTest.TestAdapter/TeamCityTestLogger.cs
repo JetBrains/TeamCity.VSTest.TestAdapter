@@ -58,7 +58,7 @@
         private void OnTestRunMessage(object sender, TestRunMessageEventArgs ev)
         {
             if (ev == null) throw new ArgumentNullException(nameof(ev));
-            if (ev.Level == TestMessageLevel.Informational && !string.IsNullOrWhiteSpace(ev.Message))
+            if (ev.Level == TestMessageLevel.Informational && !ev.Message.IsNullOrWhiteSpace())
             {
                 _testCaseFilter.RegisterOutputMessage(ev.Message);
             }

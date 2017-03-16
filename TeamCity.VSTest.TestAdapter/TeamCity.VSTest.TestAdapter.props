@@ -15,5 +15,20 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>False</Visible>
     </Content>
+	<Content Include="$(MSBuildThisFileDirectory)..\_common\net35.TeamCity.VSTest.TestAdapter.dll">
+      <Link>net35.TeamCity.VSTest.TestAdapter.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
+	<Content Include="$(MSBuildThisFileDirectory)..\_common\net35.TeamCity.VSTest.TestAdapter.dll.config">
+      <Link>net35.TeamCity.VSTest.TestAdapter.dll.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
+	<Content Include="$(MSBuildThisFileDirectory)..\_common\net35.TeamCity.ServiceMessages.dll">
+      <Link>net35.TeamCity.ServiceMessages.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
   </ItemGroup>
 </Project>
