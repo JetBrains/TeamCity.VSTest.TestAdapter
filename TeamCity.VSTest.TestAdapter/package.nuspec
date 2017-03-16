@@ -12,6 +12,7 @@
     <projectUrl>https://github.com/NikolayPianikov/TeamCity.VSTest.TestAdapter</projectUrl>
     <iconUrl>https://www.jetbrains.com/_assets//shared/favicons/jetbrains.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
+	<summary>Provides the TeamCity integration with test frameworks via Visual Studio Test Platform.</summary>
     <description>Provides the TeamCity integration with test frameworks via Visual Studio Test Platform.
 
 Usage:
