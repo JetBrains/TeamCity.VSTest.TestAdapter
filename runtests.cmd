@@ -1,7 +1,7 @@
 rem SET VSTEST_HOST_DEBUG=1
 rem SET VSTEST_RUNNER_DEBUG=1
+SET TEAMCITY_PROJECT_NAME=myproj
 
-rem Integration
 rem /p:VSTestLogger=teamcity;VSTestTestAdapterPath=.
 
 dotnet test IntegrationTests\dotNetCore.XUnit.Tests\dotNetCore.XUnit.Tests.csproj -c=Release -l=teamcity -a=.

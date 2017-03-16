@@ -1,2 +1,3 @@
+SET TEAMCITY_PROJECT_NAME=myproj
 dotnet restore
 dotnet test
