@@ -1,16 +1,37 @@
 # TeamCity Test Adapter
 
+Provides the TeamCity integration with test frameworks via Visual Studio Test Platform or IDE VSTest tools.
+
 [<img src="http://teamcity.jetbrains.com/app/rest/builds/buildType:(id:TeamCityPluginsByJetBrains_TeamCityVSTestTestAdapter_Build)/statusIcon"/>](http://teamcity.jetbrains.com/viewType.html?buildTypeId=TeamCityPluginsByJetBrains_TeamCityVSTestTestAdapter_Build) [<img src="https://www.nuget.org/Content/Logos/nugetlogo.png" height="18">](https://www.nuget.org/packages/TeamCity.VSTest.TestAdapter)
 
-## Visual Studio Test Platform
+## Supported platforms:
+* VSTest 14, 15
+* Visual Studio Test Platform 15.0.0
+
+## VSTest 14, 15
+
+To support the TeamCity integration for each test project add the NuGet reference to the [TeamCity Test Adapter](https://www.nuget.org/packages/TeamCity.VSTest.TestAdapter) to turn on the TeamCity integration. 
+
+* To run tests from the command line
+
+  Use additional command line arguments `/TestAdapterPath:. /Logger:teamcity`
+
+  The first argument points to find where the runner might find the assembly of TeamCity logger (the directory of testing aseembly).
+  
+  The second argument specifies to use TeamCity [TeamCity service messages](http://confluence.jetbrains.net/display/TCDL/Build+Script+Interaction+with+TeamCity#BuildScriptInteractionwithTeamCity-ServiceMessages) logger.
+  
+For example:
+```
+"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" dotNet.XUnit.Tests.dll /Logger:teamcity /TestAdapterPath:.
+```
+  
+* In TeamCity use the same additional command line arguments `/TestAdapterPath:. /Logger:teamcity`
+ 
+## Visual Studio Test Platform 15.0.0
 
 Presently, Visual Studio has an open and extensible [test platform](https://github.com/Microsoft/vstest) with tests being written using various test frameworks and run using a variety of adapters. The Test Platform, from its vantage, resolves the lifecycle of the test into a series of stages – two of which are writing and running the test – with the goal of providing extensibility at each stage.
 
 See the [article](https://blogs.msdn.microsoft.com/visualstudioalm/2016/11/29/evolving-the-test-platform-part-3-net-core-convergence-and-cross-plat/) for details how to create tests using [Visual Studio Test Platform](https://github.com/Microsoft/vstest).
-
-## Usage
-
-TeamCity Test Adapter provides the [TeamCity](https://www.jetbrains.com/teamcity/) integration with test frameworks via [Visual Studio Test Platform](https://github.com/Microsoft/vstest) mentioned above.
 
 For each test project:
 
@@ -36,7 +57,7 @@ dotnet new xunit
 
 To support the TeamCity integration:
 
-* Add NuGet reference to the [TeamCity Test Adapter](https://www.nuget.org/packages/TeamCity.VSTest.TestAdapter) to turn on the TeamCity integration.
+* Add the NuGet reference to the [TeamCity Test Adapter](https://www.nuget.org/packages/TeamCity.VSTest.TestAdapter) to turn on the TeamCity integration.
 
 ## Example of test solution
 
