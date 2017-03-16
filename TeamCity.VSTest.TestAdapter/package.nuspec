@@ -12,29 +12,33 @@
     <projectUrl>https://github.com/NikolayPianikov/TeamCity.VSTest.TestAdapter</projectUrl>
     <iconUrl>https://www.jetbrains.com/_assets//shared/favicons/jetbrains.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-	<summary>Provides the TeamCity integration with test frameworks via Visual Studio Test Platform.</summary>
-    <description>Provides the TeamCity integration with test frameworks via Visual Studio Test Platform.
+	<summary>Provides the TeamCity integration with test frameworks via Visual Studio Test Platform or IDE VSTest tools.</summary>
+    <description>Provides the TeamCity integration with test frameworks via Visual Studio Test Platform or IDE VSTest tools.
 
 Usage:
-  - Create the a test project from the command line using the specified template, for example: dotnet new xunit
-  - To support the TeamCity integration add NuGet reference to this package
+
+  - Create the a test project, for example using the command line: dotnet new xunit
+  - Add NuGet reference to this package to turn on the TeamCity integration
 
 Supported platforms:
-  - .NET 3.5+
-  - .NET Core
-  - Windows 8
-  - Universal (Windows Phone 8.1+, Windows 8.1+)
-  - .NET Standard 1.0
-  - Portable Libraries</description>
+  - VSTest 14
+  - VSTest 15
+  - Visual Studio Test Platform 15.0.0</description>
     <tags>TeamCity VSTest message</tags>
   </metadata>
   <files>
 	<file src="bin\Release\netstandard1.5\TeamCity.VSTest.TestAdapter.dll" target="build\_common" />
 	<file src="..\TeamCity.VSTest.TestAdapter.Tests\bin\Release\TeamCity.ServiceMessages.dll" target="build\_common" />
-	<file src="..\net35.TeamCity.VSTest.TestAdapter\bin\Release\net35.TeamCity.VSTest.TestAdapter.dll" target="build\_common" />
-	<file src="..\net35.TeamCity.VSTest.TestAdapter\bin\Release\net35.TeamCity.VSTest.TestAdapter.dll.config" target="build\_common" />
-	<file src="..\net35.TeamCity.VSTest.TestAdapter\bin\Release\TeamCity.ServiceMessages.dll" target="build\_common\net35.TeamCity.ServiceMessages.dll" />
-	<file src="TeamCity.VSTest.TestAdapter.props" target="build\net35" />
+
+	<file src="..\TeamCity.VSTest.IDE.TestAdapter\bin\Release\14\TeamCity.VSTest.IDE14.TestAdapter.dll" target="build\_common" />
+	<file src="..\TeamCity.VSTest.IDE.TestAdapter\bin\Release\14\TeamCity.VSTest.IDE14.TestAdapter.dll.config" target="build\_common" />
+
+	<file src="..\TeamCity.VSTest.IDE.TestAdapter\bin\Release\15\TeamCity.VSTest.IDE15.TestAdapter.dll" target="build\_common" />
+	<file src="..\TeamCity.VSTest.IDE.TestAdapter\bin\Release\15\TeamCity.VSTest.IDE15.TestAdapter.dll.config" target="build\_common" />
+
+	<file src="..\TeamCity.VSTest.IDE.TestAdapter\bin\Release\14\TeamCity.ServiceMessages.dll" target="build\_common\net35" />
+
+	<file src="TeamCity.VSTest.TestAdapter.props" target="build\net20" />
 	<file src="TeamCity.VSTest.TestAdapter.props" target="build\portable-net45+win8+wpa81+wp8" />
 	<file src="TeamCity.VSTest.TestAdapter.props" target="build\netcore" />
 	<file src="TeamCity.VSTest.TestAdapter.props" target="build\netcoreapp1.0" />

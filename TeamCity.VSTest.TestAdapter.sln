@@ -16,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotNet.MS.Tests", "Integrat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotNet.XUnit.Tests", "IntegrationTests\dotNet.XUnit.Tests\dotNet.XUnit.Tests.csproj", "{91D202D1-AD5F-4792-9A99-759B0789EF09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "net35.TeamCity.VSTest.TestAdapter", "net35.TeamCity.VSTest.TestAdapter\net35.TeamCity.VSTest.TestAdapter.csproj", "{512C4D87-BC9F-48F5-B217-A85082C7C43F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamCity.VSTest.IDE.TestAdapter", "TeamCity.VSTest.IDE.TestAdapter\TeamCity.VSTest.IDE.TestAdapter.csproj", "{512C4D87-BC9F-48F5-B217-A85082C7C43F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
