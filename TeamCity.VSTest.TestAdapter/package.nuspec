@@ -18,7 +18,7 @@
 Usage:
 
   - Create the a test project, for example using the command line: dotnet new xunit
-  - Add NuGet reference to this package to turn on the TeamCity integration
+  - Add the NuGet reference to this package to turn on the TeamCity integration
 
 Supported platforms:
   - VSTest 14, 15
