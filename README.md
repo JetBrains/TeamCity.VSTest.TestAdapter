@@ -10,22 +10,16 @@ Provides the TeamCity integration with test frameworks via Visual Studio Test Pl
 
 ## VSTest 14, 15
 
-To support the TeamCity integration add the NuGet reference to the [TeamCity Test Adapter](https://www.nuget.org/packages/TeamCity.VSTest.TestAdapter) to turn on the TeamCity integration. 
+To support the TeamCity integration add the NuGet reference to the [TeamCity Test Adapter](https://www.nuget.org/packages/TeamCity.VSTest.TestAdapter)
 
-* To run tests from the command line
-
-  Use additional command line arguments `/TestAdapterPath:. /Logger:teamcity`
-
-  The first argument points to find where the runner might find the assembly of TeamCity logger (the directory of testing aseembly).
-  
-  The second argument specifies to use TeamCity [TeamCity service messages](http://confluence.jetbrains.net/display/TCDL/Build+Script+Interaction+with+TeamCity#BuildScriptInteractionwithTeamCity-ServiceMessages) logger.
+To run tests from the command line use additional command line arguments `/TestAdapterPath:. /Logger:teamcity`
+* The first argument points to find where the runner might find the assembly of TeamCity logger (the directory of testing aseembly).
+* The second argument specifies to use [TeamCity service messages](http://confluence.jetbrains.net/display/TCDL/Build+Script+Interaction+with+TeamCity#BuildScriptInteractionwithTeamCity-ServiceMessages) logger.
   
 For example:
 ```
 "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" dotNet.XUnit.Tests.dll /Logger:teamcity /TestAdapterPath:.
 ```
-  
-* In TeamCity use the same additional command line arguments `/TestAdapterPath:. /Logger:teamcity`
  
 ## Visual Studio Test Platform 15.0.0
 
