@@ -21,8 +21,7 @@ Usage:
   - Add NuGet reference to this package to turn on the TeamCity integration
 
 Supported platforms:
-  - VSTest 14
-  - VSTest 15
+  - VSTest 14, 15
   - Visual Studio Test Platform 15.0.0</description>
     <tags>TeamCity VSTest message</tags>
   </metadata>
