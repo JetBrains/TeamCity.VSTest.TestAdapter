@@ -1,4 +1,5 @@
 packages
+_ReSharper.Caches
 **/obj/
 **/bin/
 **/*.lock.json

@@ -5,7 +5,7 @@
     using System.Linq;
     using JetBrains.TeamCity.ServiceMessages;
     using JetBrains.TeamCity.ServiceMessages.Read;
-    using NUnit.Framework;
+    using Shouldly;
 
     internal static class ServiceMessages
     {
@@ -49,7 +49,7 @@
                 Name = message.Name;
 
                 FlowIdAttr = message.GetValue("flowId");
-                Assert.IsNotEmpty(FlowIdAttr);
+                IsNotEmpty(FlowIdAttr);
 
                 NameAttr = message.GetValue("name");
                 ParentAttr = message.GetValue("parent");
@@ -102,92 +102,117 @@
                 switch (message.Name)
                 {
                     case "testSuiteStarted":
-                        Assert.AreEqual(_messages.Count, 0, "testSuiteStarted should be a first message");
-                        Assert.IsNotEmpty(message.FlowIdAttr, "FlowId attribute is empty");
-                        Assert.IsNotEmpty(message.NameAttr, "Name attribute is empty");
+                        AreEqual(_messages.Count, 0, "testSuiteStarted should be a first message");
+                        IsNotEmpty(message.FlowIdAttr, "FlowId attribute is empty");
+                        IsNotEmpty(message.NameAttr, "Name attribute is empty");
                         FlowId = message.FlowIdAttr;
                         _messages.Push(message);
                         break;
 
                     case "testSuiteFinished":
-                        Assert.AreEqual(_messages.Count, 1, "testSuiteFinished should close testSuiteStarted");
+                        AreEqual(_messages.Count, 1, "testSuiteFinished should close testSuiteStarted");
                         var testSuiteStarted = _messages.Pop();
-                        Assert.AreEqual(testSuiteStarted.Name, "testSuiteStarted", "testSuiteFinished should close testSuiteStarted");
-                        Assert.AreEqual(testSuiteStarted.FlowIdAttr, message.FlowIdAttr, "Invalid FlowId attribute");
-                        Assert.AreEqual(testSuiteStarted.NameAttr, message.NameAttr, "Invalid Name attribute");
+                        AreEqual(testSuiteStarted.Name, "testSuiteStarted", "testSuiteFinished should close testSuiteStarted");
+                        AreEqual(testSuiteStarted.FlowIdAttr, message.FlowIdAttr, "Invalid FlowId attribute");
+                        AreEqual(testSuiteStarted.NameAttr, message.NameAttr, "Invalid Name attribute");
                         break;
 
                     case "flowStarted":
-                        Assert.IsNotEmpty(message.FlowIdAttr, "Invalid FlowId attribute");
-                        Assert.AreEqual(message.ParentAttr, FlowId, "Invalid Parent attribute");
+                        IsNotEmpty(message.FlowIdAttr, "Invalid FlowId attribute");
+                        AreEqual(message.ParentAttr, FlowId, "Invalid Parent attribute");
                         FlowId = message.FlowIdAttr;
                         _messages.Push(message);
                         break;
 
                     case "flowFinished":
-                        Assert.AreEqual(message.FlowIdAttr, FlowId, "Invalid FlowId attribute");
-                        Assert.Greater(_messages.Count, 1, "flowFinished should close flowStarted");
+                        AreEqual(message.FlowIdAttr, FlowId, "Invalid FlowId attribute");
+                        Greater(_messages.Count, 1, "flowFinished should close flowStarted");
                         var flowStarted = _messages.Pop();
-                        Assert.AreEqual(flowStarted.Name, "flowStarted", "flowFinished should close flowStarted");
+                        AreEqual(flowStarted.Name, "flowStarted", "flowFinished should close flowStarted");
                         FlowId = flowStarted.ParentAttr;
                         break;
 
                     case "testStarted":
-                        Assert.AreEqual(message.FlowIdAttr, FlowId, "Invalid FlowId attribute");
-                        Assert.IsNotEmpty(message.NameAttr, "Name attribute is empty");
+                        AreEqual(message.FlowIdAttr, FlowId, "Invalid FlowId attribute");
+                        IsNotEmpty(message.NameAttr, "Name attribute is empty");
                         if (message.CaptureStandardOutputAttr != null)
-                            Assert.AreEqual(message.CaptureStandardOutputAttr, "false", "Invalid CaptureStandardOutput attribute");
+                            AreEqual(message.CaptureStandardOutputAttr, "false", "Invalid CaptureStandardOutput attribute");
 
                         _messages.Push(message);
                         break;
 
                     case "testFinished":
-                        Assert.AreEqual(message.FlowIdAttr, FlowId, "Invalid FlowId attribute");
-                        Assert.IsNotEmpty(message.NameAttr, "Name attribute is empty");
-                        Assert.Greater(_messages.Count, 1, "testFinished should close testStarted");
+                        AreEqual(message.FlowIdAttr, FlowId, "Invalid FlowId attribute");
+                        IsNotEmpty(message.NameAttr, "Name attribute is empty");
+                        Greater(_messages.Count, 1, "testFinished should close testStarted");
                         var testStarted = _messages.Pop();
-                        Assert.AreEqual(testStarted.Name, "testStarted", "testFinished should close testStarted");
-                        Assert.AreEqual(testStarted.NameAttr, message.NameAttr, "Invalid Name attribute");
-                        Assert.IsNotEmpty(message.DurationAttr, "Duration attribute is empty");
+                        AreEqual(testStarted.Name, "testStarted", "testFinished should close testStarted");
+                        AreEqual(testStarted.NameAttr, message.NameAttr, "Invalid Name attribute");
+                        IsNotEmpty(message.DurationAttr, "Duration attribute is empty");
                         break;
 
                     case "testStdOut":
-                        Assert.AreEqual(message.FlowIdAttr, FlowId, "Invalid FlowId attribute");
-                        Assert.IsNotEmpty(message.NameAttr, "Name attribute is empty");
-                        Assert.Greater(_messages.Count, 1, "testStdOut should be within testStarted and testFinished");
+                        AreEqual(message.FlowIdAttr, FlowId, "Invalid FlowId attribute");
+                        IsNotEmpty(message.NameAttr, "Name attribute is empty");
+                        Greater(_messages.Count, 1, "testStdOut should be within testStarted and testFinished");
                         var testStartedForStdOut = _messages.Peek();
-                        Assert.AreEqual(testStartedForStdOut.Name, "testStarted", "testStdOut should be within testStarted and testFinished");
-                        Assert.AreEqual(testStartedForStdOut.NameAttr, message.NameAttr, "Invalid Name attribute");
-                        Assert.IsNotEmpty(message.OutAttr, "Out attribute is empty");
-                        Assert.IsNotEmpty(message.TcTagsAttr, "tc:tags should be tc:parseServiceMessagesInside");
+                        AreEqual(testStartedForStdOut.Name, "testStarted", "testStdOut should be within testStarted and testFinished");
+                        AreEqual(testStartedForStdOut.NameAttr, message.NameAttr, "Invalid Name attribute");
+                        IsNotEmpty(message.OutAttr, "Out attribute is empty");
+                        IsNotEmpty(message.TcTagsAttr, "tc:tags should be tc:parseServiceMessagesInside");
                         break;
 
                     case "testFailed":
-                        Assert.AreEqual(message.FlowIdAttr, FlowId, "Invalid FlowId attribute");
-                        Assert.IsNotEmpty(message.NameAttr, "Name attribute is empty");
-                        Assert.Greater(_messages.Count, 1, "testFailed should be within testStarted and testFinished");
+                        AreEqual(message.FlowIdAttr, FlowId, "Invalid FlowId attribute");
+                        IsNotEmpty(message.NameAttr, "Name attribute is empty");
+                        Greater(_messages.Count, 1, "testFailed should be within testStarted and testFinished");
                         var testStartedForTestFailed = _messages.Peek();
-                        Assert.AreEqual(testStartedForTestFailed.Name, "testStarted", "testFailed should be within testStarted and testFinished");
-                        Assert.AreEqual(testStartedForTestFailed.NameAttr, message.NameAttr, "Invalid Name attribute");
-                        Assert.IsNotEmpty(message.MessageAttr, "Message attribute is empty");
-                        Assert.IsNotNull(message.DetailsAttr, "Details attribute is empty");
+                        AreEqual(testStartedForTestFailed.Name, "testStarted", "testFailed should be within testStarted and testFinished");
+                        AreEqual(testStartedForTestFailed.NameAttr, message.NameAttr, "Invalid Name attribute");
+                        // IsNotEmpty(message.MessageAttr, "Message attribute is empty");
+                        IsNotNull(message.DetailsAttr, "Details attribute is empty");
                         break;
 
                     case "testIgnored":
-                        Assert.AreEqual(message.FlowIdAttr, FlowId, "Invalid FlowId attribute");
-                        Assert.IsNotEmpty(message.NameAttr, "Name attribute is empty");
-                        Assert.Greater(_messages.Count, 1, "testIgnored should be within testStarted and testFinished");
+                        AreEqual(message.FlowIdAttr, FlowId, "Invalid FlowId attribute");
+                        IsNotEmpty(message.NameAttr, "Name attribute is empty");
+                        Greater(_messages.Count, 1, "testIgnored should be within testStarted and testFinished");
                         var testStartedForTestIgnored = _messages.Peek();
-                        Assert.AreEqual(testStartedForTestIgnored.Name, "testStarted", "testIgnored should be within testStarted and testFinished");
-                        Assert.AreEqual(testStartedForTestIgnored.NameAttr, message.NameAttr, "Invalid Name attribute");
-                        Assert.IsNotEmpty(message.MessageAttr, "Message attribute is empty");
+                        AreEqual(testStartedForTestIgnored.Name, "testStarted", "testIgnored should be within testStarted and testFinished");
+                        AreEqual(testStartedForTestIgnored.NameAttr, message.NameAttr, "Invalid Name attribute");
+                        // IsNotEmpty(message.MessageAttr, "Message attribute is empty");
                         break;
 
                     default:
-                        Assert.Fail($"Unexpected message {message.Name}");
+                        Fail($"Unexpected message {message.Name}");
                         break;
                 }
             }
+        }
+
+        private static void Fail(string message)
+        {
+            throw new Exception(message);
+        }
+
+        private static void IsNotNull(string str, string message)
+        {
+            str.ShouldNotBeNull(message);
+        }
+
+        private static void Greater(int val1, int val2, string message)
+        {
+            val1.ShouldBeGreaterThan(val2, message);
+        }
+
+        private static void IsNotEmpty(string str, string message = "")
+        {
+            str.ShouldNotBeNullOrEmpty(message);
+        }
+
+        private static void AreEqual<T>(T val1, T val2, string message)
+        {
+            val1.ShouldBe(val2, message);
         }
     }
 }

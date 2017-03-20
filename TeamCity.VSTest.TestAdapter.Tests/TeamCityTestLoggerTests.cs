@@ -9,15 +9,14 @@
     using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
     using Moq;
-    using NUnit.Framework;
     using Shouldly;
+    using Xunit;
 
-    [TestFixture]
     [SuppressMessage("ReSharper", "ImplicitlyCapturedClosure")]
     public class TeamCityTestLoggerTests
     {
-        [SetUp]
-        public void SetUp()
+        
+        public TeamCityTestLoggerTests()
         {
             _lines.Clear();
             _events = new Events();
@@ -72,7 +71,7 @@
                 TimeSpan.FromMinutes(1));
         }
 
-        [Test]
+        [Fact]
         public void ShouldNotProduceAnyMessagesWhenTestCaseFilterFiltersAllMessages()
         {
             // Given
@@ -87,7 +86,7 @@
             _lines.ShouldNotBeEmpty();
         }
 
-        [Test]
+        [Fact]
         public void ShouldRegisterOutputMessageInTestCaseFilterWhenReceiveTestRunMessageEventArgs()
         {
             // Given
@@ -107,7 +106,7 @@
             _testCaseFilter.Verify(i => i.RegisterOutputMessage("warn"), Times.Never);
         }
 
-        [Test]
+        [Fact]
         public void ShouldProcessWhenFailedTest()
         {
             // Given
@@ -130,7 +129,7 @@
             });
         }
 
-        [Test]
+        [Fact]
         public void ShouldProcessWhenPassedTest()
         {
             // Given
@@ -152,7 +151,7 @@
             });
         }
 
-        [Test]
+        [Fact]
         public void ShouldProcessWhenPassedTestWithMessages()
         {
             // Given
@@ -184,7 +183,7 @@
             });
         }
 
-        [Test]
+        [Fact]
         public void ShouldProcessWhenSeveralPassedTests()
         {
             // Given
@@ -210,7 +209,7 @@
             });
         }
 
-        [Test]
+        [Fact]
         public void ShouldProcessWhenSeveralPassedTestsInDifferentSuites()
         {
             // Given
@@ -246,7 +245,7 @@
             });
         }
 
-        [Test]
+        [Fact]
         public void ShouldProcessWhenSkippedTest()
         {
             // Given
@@ -269,9 +268,9 @@
             });
         }
 
-        [Test]
-        [TestCase(null)]
-        [TestCase("")]
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
         public void ShouldProcessWhenSkippedTestWithoutReason(string reason)
         {
             // Given
@@ -294,7 +293,7 @@
             });
         }
 
-        [Test]
+        [Fact]
         public void ShouldProduceMessagesWhenTestCaseFilterFiltersNotAllMessages()
         {
             // Given
@@ -322,7 +321,7 @@
             });
         }
 
-        [Test]
+        [Fact]
         public void ShouldUseSuiteNameProvider()
         {
             // Given

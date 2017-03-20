@@ -5,6 +5,7 @@
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Text;
 
     public class CommandLine
@@ -31,8 +32,7 @@
 
         public bool TryExecute(out CommandLineResult result)
         {
-            var locationUri = new Uri(GetType().Assembly.CodeBase);
-            var baseDir = Path.GetFullPath(Path.Combine(locationUri.AbsolutePath, "../../../../"));
+            var baseDir = Path.GetFullPath(Path.Combine(GetType().GetTypeInfo().Assembly.Location, "../../../../../"));
             var process = new Process
             {
                 StartInfo = new ProcessStartInfo
@@ -43,8 +43,7 @@
                     RedirectStandardError = true,
                     RedirectStandardOutput = true,
                     CreateNoWindow = true,
-                    UseShellExecute = false,
-                    WindowStyle = ProcessWindowStyle.Hidden
+                    UseShellExecute = false
                 }
             };
 
@@ -52,11 +51,11 @@
             {
                 if (envVar.Value == null)
                 {
-                    process.StartInfo.EnvironmentVariables.Remove(envVar.Key);
+                    process.StartInfo.Environment.Remove(envVar.Key);
                 }
                 else
                 {
-                    process.StartInfo.EnvironmentVariables[envVar.Key] = envVar.Value;
+                    process.StartInfo.Environment[envVar.Key] = envVar.Value;
                 }
             }
 

@@ -1,27 +1,18 @@
 ﻿namespace TeamCity.VSTest.TestAdapter.Tests
 {
     using Helpers;
-    using NUnit.Framework;
     using Shouldly;
+    using Xunit;
 
-    [TestFixture]
-    [Category("Integration")]
     public class IntegrationTests
     {
-        public static object[] TestProjects =
-        {
-            new object[] { @"IntegrationTests\dotNetCore.XUnit.Tests\dotNetCore.XUnit.Tests.csproj" },
-            new object[] { @"IntegrationTests\dotNet.XUnit.Tests\dotNet.XUnit.Tests.csproj" },
-            new object[] { @"IntegrationTests\dotNetCore.MS.Tests\dotNetCore.MS.Tests.csproj" },
-            new object[] { @"IntegrationTests\dotNet.MS.Tests\dotNet.MS.Tests.csproj" }
-        };
+        
+        [Theory]
+        [InlineData(@"IntegrationTests\dotNetCore.XUnit.Tests\dotNetCore.XUnit.Tests.csproj")]
+        [InlineData(@"IntegrationTests\dotNet.XUnit.Tests\dotNet.XUnit.Tests.csproj")]
+        [InlineData(@"IntegrationTests\dotNetCore.MS.Tests\dotNetCore.MS.Tests.csproj")]
+        [InlineData(@"IntegrationTests\dotNet.MS.Tests\dotNet.MS.Tests.csproj")]
 
-        [SetUp]
-        public void SetUp()
-        {
-        }
-
-        [Test, TestCaseSource(nameof(TestProjects))]
         public void ShouldProduceServiceMessages(string projectName)
         {
             // Given

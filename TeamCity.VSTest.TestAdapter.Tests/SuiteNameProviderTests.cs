@@ -3,10 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using NUnit.Framework;
     using Shouldly;
+    using Xunit;
 
-    [TestFixture]
     public class SuiteNameProviderTests
     {
         public const string Null = "null";
@@ -62,15 +61,15 @@
             }
         }
 
-        [Test]
-        [TestCase(@"c:\dir" + Br + @"c:\dir\abc.dll" + Br + @"abc.dll")]
-        [TestCase(@"c:\dir" + Br + @"somePath\abc.dll" + Br + @"abc.dll")]
-        [TestCase(@"c:\dir" + Br + @"abc.dll" + Br + @"abc.dll")]
-        [TestCase(Null + Br + @"c:\dir\abc.dll" + Br + @"abc.dll")]
-        [TestCase(Null + Br + @"somePath\abc.dll" + Br + @"abc.dll")]
-        [TestCase(Null + Br + @"abc.dll" + Br + @"abc.dll")]
-        [TestCase(Null + Br + Null + Br + SuiteNameProvider.DefaultSuiteName)]
-        [TestCase("" + Br + "" + Br + SuiteNameProvider.DefaultSuiteName)]
+        [Theory]
+        [InlineData(@"c:\dir" + Br + @"c:\dir\abc.dll" + Br + @"abc.dll")]
+        [InlineData(@"c:\dir" + Br + @"somePath\abc.dll" + Br + @"abc.dll")]
+        [InlineData(@"c:\dir" + Br + @"abc.dll" + Br + @"abc.dll")]
+        [InlineData(Null + Br + @"c:\dir\abc.dll" + Br + @"abc.dll")]
+        [InlineData(Null + Br + @"somePath\abc.dll" + Br + @"abc.dll")]
+        [InlineData(Null + Br + @"abc.dll" + Br + @"abc.dll")]
+        [InlineData(Null + Br + Null + Br + SuiteNameProvider.DefaultSuiteName)]
+        [InlineData("" + Br + "" + Br + SuiteNameProvider.DefaultSuiteName)]
         public void ShouldProvideSuiteName(string descriptions)
         {
             // Given

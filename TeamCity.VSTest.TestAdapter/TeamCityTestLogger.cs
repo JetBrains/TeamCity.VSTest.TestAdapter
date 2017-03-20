@@ -19,13 +19,20 @@
         [CanBeNull] private string _testRunDirectory;
         [CanBeNull] private string _testSuiteSource;
         [CanBeNull] private ITeamCityTestsSubWriter _testSuiteWriter;
+        private readonly bool _initialized;
 
         public TeamCityTestLogger()
-            : this(
-                ServiceLocator.GetTeamCityWriter(),
-                ServiceLocator.GetTestCaseFilter(),
-                ServiceLocator.GetSuiteNameProvider())
         {
+            _initialized = ServiceLocator.Initialize();
+            if (_initialized)
+            {
+                _rootWriter = ServiceLocator.GetTeamCityWriter();
+                _testCaseFilter = ServiceLocator.GetTestCaseFilter();
+                _suiteNameProvider = ServiceLocator.GetSuiteNameProvider();
+                if (_rootWriter == null) throw new InvalidOperationException();
+                if (_testCaseFilter == null) throw new InvalidOperationException();
+                if (_suiteNameProvider == null) throw new InvalidOperationException();
+            }
         }
 
         internal TeamCityTestLogger(
@@ -39,12 +46,18 @@
             _rootWriter = rootWriter;
             _testCaseFilter = testCaseFilter;
             _suiteNameProvider = suiteNameProvider;
+            _initialized = true;
         }
 
         public void Initialize([NotNull] TestLoggerEvents events, [CanBeNull] string testRunDirectory)
         {
             if (events == null) throw new ArgumentNullException(nameof(events));
             _testRunDirectory = testRunDirectory;
+            if (!_initialized)
+            {
+                return;
+            }
+
             SubscribeToEvets(events);
         }
 

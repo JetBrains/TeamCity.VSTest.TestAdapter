@@ -5,11 +5,29 @@
 
     internal class ServiceLocator
     {
-        private static readonly ITeamCityWriter SharedTeamCityWriter = new TeamCityServiceMessages().CreateWriter(Console.WriteLine);
-        
+        [CanBeNull] private static ITeamCityWriter _sharedTeamCityWriter = new TeamCityServiceMessages().CreateWriter(Console.WriteLine);
+
+        public static bool Initialize()
+        {
+            try
+            {
+                _sharedTeamCityWriter = new TeamCityServiceMessages().CreateWriter(Console.WriteLine);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public static ITeamCityWriter GetTeamCityWriter()
         {
-            return SharedTeamCityWriter;
+            if (_sharedTeamCityWriter == null)
+            {
+                throw new InvalidOperationException("Not initialized");
+            }
+
+            return _sharedTeamCityWriter;
         }
 
         public static ITestCaseFilter GetTestCaseFilter()

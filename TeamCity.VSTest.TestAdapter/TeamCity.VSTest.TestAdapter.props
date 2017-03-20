@@ -15,32 +15,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>False</Visible>
     </Content>
-
-	<Content Include="$(MSBuildThisFileDirectory)..\_common\TeamCity.VSTest.IDE14.TestAdapter.dll">
-      <Link>TeamCity.VSTest.IDE14.TestAdapter.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Visible>False</Visible>
-    </Content>
-	<Content Include="$(MSBuildThisFileDirectory)..\_common\TeamCity.VSTest.IDE14.TestAdapter.dll.config">
-      <Link>TeamCity.VSTest.IDE14.TestAdapter.dll.config</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Visible>False</Visible>
-    </Content>
-
-	<Content Include="$(MSBuildThisFileDirectory)..\_common\TeamCity.VSTest.IDE15.TestAdapter.dll">
-      <Link>TeamCity.VSTest.IDE15.TestAdapter.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Visible>False</Visible>
-    </Content>
-	<Content Include="$(MSBuildThisFileDirectory)..\_common\TeamCity.VSTest.IDE15.TestAdapter.dll.config">
-      <Link>TeamCity.VSTest.IDE15.TestAdapter.dll.config</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Visible>False</Visible>
-    </Content>
-
-
-	<Content Include="$(MSBuildThisFileDirectory)..\_common\net35\TeamCity.ServiceMessages.dll">
-      <Link>net35\TeamCity.ServiceMessages.dll</Link>
+	<Content Include="$(MSBuildThisFileDirectory)..\_common\TeamCity.VSTest.net35.TestAdapter.dll">
+      <Link>TeamCity.VSTest.net35.TestAdapter.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>False</Visible>
     </Content>

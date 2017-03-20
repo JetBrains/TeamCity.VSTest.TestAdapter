@@ -2,19 +2,18 @@
 {
     using System;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-    using NUnit.Framework;
     using Shouldly;
+    using Xunit;
 
-    [TestFixture]
     public class TestCaseFilterTests
     {
-        [Test]
-        [TestCase("executor://some", "", true)]
-        [TestCase("abc://some", "", true)]
-        [TestCase("executor://xunit/VsTestRunner2", "", true)]
-        [TestCase("executor://xunit/VsTestRunner2", TestCaseFilter.TeamcityPrefix + " abc", false)]
-        [TestCase("executor://xunit/VsTestRunner2", "   " + TestCaseFilter.TeamcityPrefix + " abc", false)]
-        [TestCase("executor://xunit/VsTestRunner2", "[xUnit.net 00:00:00.8998020] " + TestCaseFilter.TeamcityPrefix + "testSuiteFinished name", false)]
+        [Theory]
+        [InlineData("executor://some", "", true)]
+        [InlineData("abc://some", "", true)]
+        [InlineData("executor://xunit/VsTestRunner2", "", true)]
+        [InlineData("executor://xunit/VsTestRunner2", TestCaseFilter.TeamcityPrefix + " abc", false)]
+        [InlineData("executor://xunit/VsTestRunner2", "   " + TestCaseFilter.TeamcityPrefix + " abc", false)]
+        [InlineData("executor://xunit/VsTestRunner2", "[xUnit.net 00:00:00.8998020] " + TestCaseFilter.TeamcityPrefix + "testSuiteFinished name", false)]
 
         public void ShouldFilter(string executorUri, string messagesStr, bool expectedIsSupported)
         {
