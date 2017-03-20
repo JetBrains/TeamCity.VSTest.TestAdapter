@@ -39,7 +39,7 @@ Supported platforms:
 
 	<file src="TeamCity.VSTest.TestAdapter.props" target="build\net20" />
 	<file src="TeamCity.VSTest.TestAdapter.props" target="build\portable-net45+win8+wpa81+wp8" />
-	<file src="TeamCity.VSTest.TestAdapter.props" target="build\netcore" />
+	<file src="TeamCity.VSTest.TestAdapter.props" target="build\netcore1.0" />
 	<file src="TeamCity.VSTest.TestAdapter.props" target="build\netcoreapp1.0" />
 	<file src="TeamCity.VSTest.TestAdapter.props" target="build\uap" />
 	<file src="TeamCity.VSTest.TestAdapter.props" target="build\netstandard1.0" />
