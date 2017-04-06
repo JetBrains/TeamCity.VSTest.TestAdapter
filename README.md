@@ -5,7 +5,7 @@ Provides the TeamCity integration with test frameworks via Visual Studio Test Pl
 [<img src="http://teamcity.jetbrains.com/app/rest/builds/buildType:(id:TeamCityPluginsByJetBrains_TeamCityVSTestTestAdapter_Build)/statusIcon.svg"/>](http://teamcity.jetbrains.com/viewType.html?buildTypeId=TeamCityPluginsByJetBrains_TeamCityVSTestTestAdapter_Build) [<img src="https://www.nuget.org/Content/Logos/nugetlogo.png" height="18">](https://www.nuget.org/packages/TeamCity.VSTest.TestAdapter)
 
 ## Supported platforms:
-* VSTest 14, 15
+* IDE VSTest
 * Visual Studio Test Platform 15.0.0
 
 ## IDE VSTest
@@ -57,14 +57,14 @@ To support the TeamCity integration:
 
 [This](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/tree/master/Samples) solution contains 2 projects:
 
-* [.net 4.5 XUnit tests](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/tree/master/Samples/dotNet.XUnit.Tests), to run run tests do the [following](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/blob/master/Samples/dotNet.XUnit.Tests/test.cmd):
+* [net45 XUnit tests](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/tree/master/Samples/dotNet.XUnit.Tests), to run run tests do the [following](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/blob/master/Samples/dotNet.XUnit.Tests/test.cmd):
 
 ```
 nuget restore Samples.sln
 dotnet test
 ```
 
-* [netcoreapp 1.0 MS tests](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/tree/master/Samples/dotNetCore.MS.Tests), to run run tests the [following](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/blob/master/Samples/dotNetCore.MS.Tests/test.cmd):
+* [net45/netcoreapp1.0 MS tests](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/tree/master/Samples/dotNetCore.MS.Tests), to run run tests the [following](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/blob/master/Samples/dotNetCore.MS.Tests/test.cmd):
 
 ```
 dotnet restore
