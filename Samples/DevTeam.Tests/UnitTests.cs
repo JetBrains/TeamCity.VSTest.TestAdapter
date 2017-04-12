@@ -1,23 +1,22 @@
-namespace dotNetCore.MS.Tests
+namespace DevTeam.Tests
 {
     using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using DevTeam.TestFramework;
 
-    [TestClass]
     public class UnitTests
     {
-        [TestMethod]
+        [Test]
         public void TestFailed()
         {
-            Assert.IsTrue(false, "error details");
+			throw new Exception("error");
         }
 
-        [TestMethod, Ignore]
+        [Test.Ignore("reason")]
         public void TestIgnored()
         {
         }
 
-        [TestMethod]
+        [Test]
         public void TestPassed()
         {
             Console.WriteLine("some text");

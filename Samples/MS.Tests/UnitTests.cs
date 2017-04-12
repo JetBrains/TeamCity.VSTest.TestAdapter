@@ -1,22 +1,23 @@
-namespace dotNet.XUnit.Tests
+namespace MS.Tests
 {
     using System;
-    using Xunit;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    [TestClass]
     public class UnitTests
     {
-        [Fact]
+        [TestMethod]
         public void TestFailed()
         {
-            Assert.True(false, "error details");
+            Assert.IsTrue(false, "error details");
         }
 
-        [Fact(Skip = "skip reason")]
+        [TestMethod, Ignore]
         public void TestIgnored()
         {
         }
 
-        [Fact]
+        [TestMethod]
         public void TestPassed()
         {
             Console.WriteLine("some text");
