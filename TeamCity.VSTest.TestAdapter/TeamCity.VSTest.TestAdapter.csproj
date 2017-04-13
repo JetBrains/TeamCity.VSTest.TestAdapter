@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net35' or '$(TargetFramework)' == 'net45'">
-	<PackageReference Include="Microsoft.VisualStudio.TestPlatform.ObjectModel" Version="14.0.0" />
+	<PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="11.0.0" />
   </ItemGroup>
 
 </Project>

@@ -1,14 +1,14 @@
 namespace DevTeam.Tests
 {
     using System;
-    using DevTeam.TestFramework;
+    using TestFramework;
 
     public class UnitTests
     {
         [Test]
         public void TestFailed()
         {
-			throw new Exception("error");
+            throw new Exception("error");
         }
 
         [Test.Ignore("reason")]

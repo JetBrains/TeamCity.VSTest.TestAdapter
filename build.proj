@@ -34,7 +34,7 @@
 
 	<Target Name="CopyDependencies">
 		<ItemGroup>
-			<Dependency Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\netstandard1.5\*.*"/>
+			<Dependency Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\net462\*.*"/>
 			<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNet.MS.Tests\bin\$(Configuration)</Path></TestOutputDirectory> 
 			<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNetCore.MS.Tests\bin\$(Configuration)\netcoreapp1.0</Path></TestOutputDirectory> 
 			<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNet.XUnit.Tests\bin\$(Configuration)</Path></TestOutputDirectory> 

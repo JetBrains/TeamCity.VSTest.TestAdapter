@@ -8,10 +8,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DevTeam.TestAdapter\**" />
+    <EmbeddedResource Remove="DevTeam.TestAdapter\**" />
+    <None Remove="DevTeam.TestAdapter\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
     <PackageReference Include="DevTeam.TestAdapter" Version="1.0.6-beta" />
     <PackageReference Include="DevTeam.TestFramework" Version="1.0.6-beta" />
     <PackageReference Include="TeamCity.VSTest.TestAdapter" Version="1.0.0.50-beta" />    
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DevTeam.TestAdapter\" Visible="False" />
   </ItemGroup>
 
 </Project>
