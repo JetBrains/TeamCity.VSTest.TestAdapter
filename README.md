@@ -10,9 +10,9 @@ Provides the TeamCity integration with test frameworks via Visual Studio Test Pl
 
 ## IDE VSTest
 
-To support the TeamCity integration add the NuGet reference to the [TeamCity Test Adapter](https://www.nuget.org/packages/TeamCity.VSTest.TestAdapter)
+To support the TeamCity integrationб add the NuGet reference to the [TeamCity Test Adapter](https://www.nuget.org/packages/TeamCity.VSTest.TestAdapter)
 
-To run tests from the command line use additional command line arguments `/TestAdapterPath:. /Logger:teamcity`
+To run tests from the command lineб use additional command line arguments `/TestAdapterPath:. /Logger:teamcity`
 * The first argument points to find the path where the runner might find the assembly of TeamCity logger (the directory of testing aseembly).
 * The second argument specifies to use [TeamCity service messages](http://confluence.jetbrains.net/display/TCDL/Build+Script+Interaction+with+TeamCity#BuildScriptInteractionwithTeamCity-ServiceMessages) logger.
   
@@ -37,17 +37,17 @@ For each test project:
 
 * Add the NuGet reference to the [Visual Studio Test Platform](https://www.nuget.org/packages/Microsoft.NET.Test.Sdk/).
 
-or just create the a test project from the command line using the specified [template](https://docs.microsoft.com/en-us/dotnet/articles/core/tools/dotnet-new):
+   Alternatively, just create the a test project from the command line using the specified [template](https://docs.microsoft.com/en-us/dotnet/articles/core/tools/dotnet-new):
 
-```
-dotnet new mstest
-```
+   ```
+   dotnet new mstest
+   ```
 
-or
+   or
 
-```
-dotnet new xunit
-```
+   ```
+   dotnet new xunit
+   ```
 
 To support the TeamCity integration:
 
@@ -58,20 +58,20 @@ To support the TeamCity integration:
 [This](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/tree/master/Samples) solution contains 2 projects:
 
 * [net45 XUnit tests](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/tree/master/Samples/dotNet.XUnit.Tests), to run run tests do the [following](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/blob/master/Samples/dotNet.XUnit.Tests/test.cmd):
-
-```
-nuget restore Samples.sln
-dotnet test
-```
+ 
+   ```
+   nuget restore Samples.sln
+   dotnet test
+   ```
 
 * [net45/netcoreapp1.0 MS tests](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/tree/master/Samples/dotNetCore.MS.Tests), to run run tests the [following](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/blob/master/Samples/dotNetCore.MS.Tests/test.cmd):
 
-```
-dotnet restore
-dotnet test
-```
+   ```
+   dotnet restore
+   dotnet test
+   ```
 
-The project file for this test project looks like:
+The project file for this test project looks as follows:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
