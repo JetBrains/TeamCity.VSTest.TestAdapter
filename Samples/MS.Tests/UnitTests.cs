@@ -6,12 +6,6 @@ namespace MS.Tests
     [TestClass]
     public class UnitTests
     {
-        [TestMethod]
-        public void TestFailed()
-        {
-            Assert.IsTrue(false, "error details");
-        }
-
         [TestMethod, Ignore]
         public void TestIgnored()
         {

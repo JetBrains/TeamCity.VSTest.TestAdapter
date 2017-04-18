@@ -5,12 +5,6 @@ namespace DevTeam.Tests
 
     public class UnitTests
     {
-        [Test]
-        public void TestFailed()
-        {
-            throw new Exception("error");
-        }
-
         [Test.Ignore("reason")]
         public void TestIgnored()
         {
