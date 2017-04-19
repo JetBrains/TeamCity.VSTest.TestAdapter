@@ -10,16 +10,18 @@ Provides the TeamCity integration with test frameworks via Visual Studio Test Pl
 
 ## IDE VSTest
 
-To support the TeamCity integrationб add the NuGet reference to the [TeamCity Test Adapter](https://www.nuget.org/packages/TeamCity.VSTest.TestAdapter)
+* To support the TeamCity integration, add the NuGet reference to the [TeamCity Test Adapter](https://www.nuget.org/packages/TeamCity.VSTest.TestAdapter)
 
-To run tests from the command lineб use additional command line arguments `/TestAdapterPath:. /Logger:teamcity`
-* The first argument points to find the path where the runner might find the assembly of TeamCity logger (the directory of testing aseembly).
-* The second argument specifies to use [TeamCity service messages](http://confluence.jetbrains.net/display/TCDL/Build+Script+Interaction+with+TeamCity#BuildScriptInteractionwithTeamCity-ServiceMessages) logger.
+* To run tests from the command line, use additional command line arguments `/TestAdapterPath:. /Logger:teamcity` 
+
+   (1) The first argument points to find the path where the runner might find the assembly of TeamCity logger (the directory of testing aseembly).
+   
+   (2) The second argument specifies to use [TeamCity service messages](http://confluence.jetbrains.net/display/TCDL/Build+Script+Interaction+with+TeamCity#BuildScriptInteractionwithTeamCity-ServiceMessages) logger.
   
-For example:
-```
-"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" dotNet.XUnit.Tests.dll /Logger:teamcity /TestAdapterPath:.
-```
+   For example:
+   ```
+   "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" dotNet.XUnit.Tests.dll /Logger:teamcity /TestAdapterPath:.
+   ```
  
 ## Visual Studio Test Platform 15.0.0
 
@@ -57,14 +59,16 @@ To support the TeamCity integration:
 
 [This](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/tree/master/Samples) solution contains 2 projects:
 
-* [net45 XUnit tests](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/tree/master/Samples/dotNet.XUnit.Tests), to run run tests do the [following](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/blob/master/Samples/dotNet.XUnit.Tests/test.cmd):
+* [net45 XUnit tests](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/tree/master/Samples/dotNet.XUnit.Tests).
+To run run tests, do the [following](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/blob/master/Samples/dotNet.XUnit.Tests/test.cmd):
  
    ```
    nuget restore Samples.sln
    dotnet test
    ```
 
-* [net45/netcoreapp1.0 MS tests](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/tree/master/Samples/dotNetCore.MS.Tests), to run run tests the [following](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/blob/master/Samples/dotNetCore.MS.Tests/test.cmd):
+* [net45/netcoreapp1.0 MS tests](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/tree/master/Samples/dotNetCore.MS.Tests).
+to run run tests the [following](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/blob/master/Samples/dotNetCore.MS.Tests/test.cmd):
 
    ```
    dotnet restore
