@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net35;net462;netstandard1.5</TargetFrameworks>
+    <TargetFrameworks>net35;net45;net462;netstandard1.5</TargetFrameworks>
     <AssemblyName>TeamCity.VSTest.TestAdapter</AssemblyName>
     <PackageId>TeamCity.VSTest.TestAdapter</PackageId>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>

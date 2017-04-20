@@ -49,6 +49,16 @@
 
             foreach (var envVar in _envitonmentVariables)
             {
+#if NET45
+                if (envVar.Value == null)
+                {
+                    process.StartInfo.EnvironmentVariables.Remove(envVar.Key);
+                }
+                else
+                {
+                    process.StartInfo.EnvironmentVariables[envVar.Key] = envVar.Value;
+                }
+#else
                 if (envVar.Value == null)
                 {
                     process.StartInfo.Environment.Remove(envVar.Key);
@@ -57,6 +67,7 @@
                 {
                     process.StartInfo.Environment[envVar.Key] = envVar.Value;
                 }
+#endif
             }
 
             var stdOut = new StringBuilder();

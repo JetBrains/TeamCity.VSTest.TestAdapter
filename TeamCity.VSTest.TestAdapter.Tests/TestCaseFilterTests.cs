@@ -19,7 +19,7 @@
         {
             // Given
             var filter = CreateInstance();
-            var testCase = new TestCase {ExecutorUri = new Uri(executorUri)};
+            var testCase = new TestCase("abc", new Uri(executorUri), "aaa.dll");
             var messages = messagesStr.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
 
             // When

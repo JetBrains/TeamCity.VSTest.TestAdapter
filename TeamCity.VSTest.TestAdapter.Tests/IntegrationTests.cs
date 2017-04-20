@@ -4,16 +4,16 @@
     using Shouldly;
     using Xunit;
 
+#if NETCOREAPP1_0
     public class IntegrationTests
     {
-        
         [Theory]
-        [InlineData(@"IntegrationTests\dotNetCore.XUnit.Tests\dotNetCore.XUnit.Tests.csproj")]
-        [InlineData(@"IntegrationTests\dotNet.XUnit.Tests\dotNet.XUnit.Tests.csproj")]
-        [InlineData(@"IntegrationTests\dotNetCore.MS.Tests\dotNetCore.MS.Tests.csproj")]
-        [InlineData(@"IntegrationTests\dotNet.MS.Tests\dotNet.MS.Tests.csproj")]
+        [InlineData(@"IntegrationTests\dotNetCore.XUnit.Tests\dotNetCore.XUnit.Tests.csproj", 30)]
+        [InlineData(@"IntegrationTests\dotNet.XUnit.Tests\dotNet.XUnit.Tests.csproj", 10)]
+        [InlineData(@"IntegrationTests\dotNetCore.MS.Tests\dotNetCore.MS.Tests.csproj", 30)]
+        [InlineData(@"IntegrationTests\dotNet.MS.Tests\dotNet.MS.Tests.csproj", 10)]
 
-        public void ShouldProduceServiceMessages(string projectName)
+        public void ShouldProduceServiceMessages(string projectName, int expectedMessageCount)
         {
             // Given
             var testCommandLine = new CommandLine(
@@ -35,8 +35,9 @@
             // Then
             result.ExitCode.ShouldBe(1);
             result.StdError.Trim().ShouldBe(string.Empty);
-            ServiceMessages.GetNumberServiceMessage(result.StdOut).ShouldBe(10);
+            ServiceMessages.GetNumberServiceMessage(result.StdOut).ShouldBe(expectedMessageCount);
             ServiceMessages.ResultShouldContainCorrectStructureAndSequence(result.StdOut);
         }
     }
+#endif
 }
