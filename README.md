@@ -57,42 +57,4 @@ To support the TeamCity integration:
 
 <img src="https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/blob/master/Samples/MS.Tests/Docs/NewTest.gif"/>
 
-## Example of test solution
-
-[This](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/tree/master/Samples) solution contains 2 projects:
-
-* [net45 XUnit tests](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/tree/master/Samples/dotNet.XUnit.Tests).
-To run run tests, do the [following](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/blob/master/Samples/dotNet.XUnit.Tests/test.cmd):
- 
-   ```
-   nuget restore Samples.sln
-   dotnet test
-   ```
-
-* [net45/netcoreapp1.0 MS tests](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/tree/master/Samples/dotNetCore.MS.Tests).
-to run run tests the [following](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/blob/master/Samples/dotNetCore.MS.Tests/test.cmd):
-
-   ```
-   dotnet restore
-   dotnet test
-   ```
-
-The project file for this test project looks as follows:
-
-```xml
-<Project Sdk="Microsoft.NET.Sdk">
-...
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="..." />
-    <PackageReference Include="MSTest.TestFramework" Version="..." />
-    <PackageReference Include="TeamCity.VSTest.TestAdapter" Version="..." />    
-  </ItemGroup>
-...
-</Project>
-
-```
-
-## Example of build project
-
-[<img src="http://teamcity.jetbrains.com/app/rest/builds/buildType:(id:TeamCityPluginsByJetBrains_TeamCityVSTestTestAdapter_Samples)/statusIcon.svg"/>](http://teamcity.jetbrains.com/viewType.html?buildTypeId=TeamCityPluginsByJetBrains_TeamCityVSTestTestAdapter_Samples)
+See more details in [Wiki](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/wiki).
