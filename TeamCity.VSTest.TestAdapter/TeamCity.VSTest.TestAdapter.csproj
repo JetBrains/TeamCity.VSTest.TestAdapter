@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net35;net45;net462;netstandard1.5</TargetFrameworks>
+    <TargetFrameworks>net35;net45;net462;netstandard1.5;netcoreapp1.0</TargetFrameworks>
     <AssemblyName>TeamCity.VSTest.TestAdapter</AssemblyName>
     <PackageId>TeamCity.VSTest.TestAdapter</PackageId>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
@@ -25,10 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="TeamCity.ServiceMessages" Version="3.0.7" />	
+    <PackageReference Include="TeamCity.ServiceMessages" Version="3.0.8"/>	
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.5' or '$(TargetFramework)' == 'net462'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.5' or '$(TargetFramework)' == 'net462' or '$(TargetFramework)' == 'netcoreapp1.0'">
 	<PackageReference Include="Microsoft.NETCore.Portable.Compatibility" Version="1.0.1" />
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="15.0.0" />
   </ItemGroup>

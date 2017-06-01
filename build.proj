@@ -28,13 +28,32 @@
 			Pattern='(\[assembly:\s(AssemblyVersion|AssemblyFileVersion)\()"(\d+\.\d+\.\d+\.\d+)"(\)\])'
 			Replacement='$1"$(AssemblyVersion)"$4'/>
 		<Exec Command="packages\nuget.exe restore -ConfigFile packages\NuGet.config TeamCity.VSTest.TestAdapter.sln"/>
+		<Exec Command="packages\nuget.exe install TeamCity.ServiceMessages -o packages -version 3.0.8"/>
 		<Exec Command="dotnet restore TeamCity.VSTest.TestAdapter.sln"/>
 		<MSBuild Projects="TeamCity.VSTest.TestAdapter.sln" Targets="Build" Properties="Configuration=$(Configuration)"/>		
 	</Target>
 
 	<Target Name="CopyDependencies">
+		<RemoveDir Directories="$(SolutionDir)packages\output" />
+
 		<ItemGroup>
-			<Dependency Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\net462\*.*"/>
+			<Dependency Include="$(SolutionDir)packages\TeamCity.ServiceMessages.*\lib\netstandard1.3\TeamCity.ServiceMessages.dll"/>
+			<Dependency Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\net35\TeamCity.VSTest.TestAdapter.dll"/>
+			<TestOutputDirectory Include="."><Path>$(SolutionDir)packages\output</Path></TestOutputDirectory> 			
+		</ItemGroup>
+
+		<MakeDir Directories="$(TestOutputDirectory)"/>  
+		<Copy SourceFiles="@(Dependency)" DestinationFolder="%(TestOutputDirectory.Path)"/> 
+		<Move SourceFiles="$(SolutionDir)packages\output\TeamCity.VSTest.TestAdapter.dll" DestinationFiles="$(SolutionDir)packages\output\TeamCity.VSTest.net35.TestAdapter.dll" />
+
+		<ItemGroup>
+			<Dependency Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\netstandard1.5\TeamCity.VSTest.TestAdapter.dll"/>
+			<TestOutputDirectory Include="."><Path>$(SolutionDir)packages\output</Path></TestOutputDirectory> 			
+		</ItemGroup>		
+		<Copy SourceFiles="@(Dependency)" DestinationFolder="%(TestOutputDirectory.Path)"/> 
+
+		<ItemGroup>
+			<Dependency Include="$(SolutionDir)packages\output\*.*"/>
 			<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNet.MS.Tests\bin\$(Configuration)</Path></TestOutputDirectory> 
 			<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNetCore.MS.Tests\bin\$(Configuration)\netcoreapp1.0</Path></TestOutputDirectory> 
 			<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNet.XUnit.Tests\bin\$(Configuration)</Path></TestOutputDirectory> 
@@ -43,13 +62,13 @@
 
 		<MakeDir Directories="$(TestOutputDirectory)"/>  
 		<Copy SourceFiles="@(Dependency)" DestinationFolder="%(TestOutputDirectory.Path)"/> 
-    </Target>	
+    </Target>
 
 	<Target Name="Test" DependsOnTargets="CopyDependencies">
 		<Exec Command="dotnet test TeamCity.VSTest.TestAdapter.Tests\TeamCity.VSTest.TestAdapter.Tests.csproj -c:$(Configuration)"/>
     </Target>	
   
-	<Target Name="CreatePackages" DependsOnTargets="Build;Test;GetNuGet">
+	<Target Name="CreatePackages" DependsOnTargets="Build;Test;CopyDependencies;GetNuGet">
 		<Exec Command="packages\nuget.exe pack %(Package.Identity)\package.nuspec -Version $(Version) -OutputDirectory $(PackagesDirectory)"/>
 		<Message Text="##teamcity[publishArtifacts '$(PackagesDirectory)\%(Package.FileName)%(Package.Extension).$(Version).nupkg=>$(PackagesDirectory)']" />
 	</Target>

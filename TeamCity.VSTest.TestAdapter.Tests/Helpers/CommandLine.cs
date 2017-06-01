@@ -88,5 +88,10 @@
             result = new CommandLineResult(this, process.ExitCode, stdOut.ToString(), stdError.ToString());
             return true;
         }
+
+        public override string ToString()
+        {
+            return string.Join(" ", Enumerable.Repeat(ExecutableFile, 1).Concat(Args).Select(i => $"\"{i}\""));
+        }
     }
 }

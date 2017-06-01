@@ -29,6 +29,9 @@
 #endif
                 );
 
+            // testCommandLine.AddEnvitonmentVariable("VSTEST_HOST_DEBUG", "1");
+            // testCommandLine.AddEnvitonmentVariable("VSTEST_RUNNER_DEBUG", "1");
+
             // When
             testCommandLine.TryExecute(out CommandLineResult result).ShouldBe(true);
 
