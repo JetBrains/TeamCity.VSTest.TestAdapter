@@ -10,6 +10,7 @@
 		<Version>$(PackageVersion).$(Build_Number)-rc</Version>
 		<Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
 		<PackagesDirectory>packages</PackagesDirectory>	
+		<ExtenionsDirectory>extensions</ExtenionsDirectory>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -37,31 +38,43 @@
 		<RemoveDir Directories="$(SolutionDir)packages\output" />
 
 		<ItemGroup>
-			<Dependency Include="$(SolutionDir)packages\TeamCity.ServiceMessages.*\lib\netstandard1.3\TeamCity.ServiceMessages.dll"/>
-			<Dependency Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\net35\TeamCity.VSTest.TestAdapter.dll"/>
-			<TestOutputDirectory Include="."><Path>$(SolutionDir)packages\output</Path></TestOutputDirectory> 			
+			<DependencyNet35 Include="$(SolutionDir)packages\TeamCity.ServiceMessages.*\lib\netstandard1.3\TeamCity.ServiceMessages.dll"/>
+			<DependencyNet35 Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\net35\TeamCity.VSTest.TestAdapter.dll"/>
+			<OutputDirectoryNet35 Include="."><Path>$(SolutionDir)packages\output</Path></OutputDirectoryNet35> 			
 		</ItemGroup>
-
-		<MakeDir Directories="$(TestOutputDirectory)"/>  
-		<Copy SourceFiles="@(Dependency)" DestinationFolder="%(TestOutputDirectory.Path)"/> 
+		<Copy SourceFiles="@(DependencyNet35)" DestinationFolder="%(OutputDirectoryNet35.Path)"/> 
 		<Move SourceFiles="$(SolutionDir)packages\output\TeamCity.VSTest.TestAdapter.dll" DestinationFiles="$(SolutionDir)packages\output\TeamCity.VSTest.net35.TestAdapter.dll" />
 
 		<ItemGroup>
-			<Dependency Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\netstandard1.5\TeamCity.VSTest.TestAdapter.dll"/>
-			<TestOutputDirectory Include="."><Path>$(SolutionDir)packages\output</Path></TestOutputDirectory> 			
+			<DependencyNetstandard Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\netstandard1.5\TeamCity.VSTest.TestAdapter.dll"/>
+			<OutputDirectoryNetstandard Include="."><Path>$(SolutionDir)packages\output</Path></OutputDirectoryNetstandard> 			
 		</ItemGroup>		
-		<Copy SourceFiles="@(Dependency)" DestinationFolder="%(TestOutputDirectory.Path)"/> 
+		<Copy SourceFiles="@(DependencyNetstandard)" DestinationFolder="%(OutputDirectoryNetstandard.Path)"/> 
 
 		<ItemGroup>
-			<Dependency Include="$(SolutionDir)packages\output\*.*"/>
+			<TestDependency Include="$(SolutionDir)packages\output\*.*"/>
 			<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNet.MS.Tests\bin\$(Configuration)</Path></TestOutputDirectory> 
 			<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNetCore.MS.Tests\bin\$(Configuration)\netcoreapp1.0</Path></TestOutputDirectory> 
 			<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNet.XUnit.Tests\bin\$(Configuration)</Path></TestOutputDirectory> 
 			<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNetCore.XUnit.Tests\bin\$(Configuration)\netcoreapp1.0</Path></TestOutputDirectory> 
 		</ItemGroup>
+		<Copy SourceFiles="@(TestDependency)" DestinationFolder="%(TestOutputDirectory.Path)"/> 
 
-		<MakeDir Directories="$(TestOutputDirectory)"/>  
-		<Copy SourceFiles="@(Dependency)" DestinationFolder="%(TestOutputDirectory.Path)"/> 
+		<RemoveDir Directories="$(SolutionDir)packages\extensions" />
+
+		<ItemGroup>
+			<Bin35 Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\net35\TeamCity.*.dll"/>
+			<OutputDirectoryBin35 Include="."><Path>$(SolutionDir)packages\extensions\net35</Path></OutputDirectoryBin35>
+		</ItemGroup>
+		<Copy SourceFiles="@(Bin35)" DestinationFolder="%(OutputDirectoryBin35.Path)"/>
+		<Message Text="##teamcity[publishArtifacts '$(SolutionDir)packages\extensions\net35\*.*=>$(ExtenionsDirectory)\TeamCityAdapter.net35.zip']" />
+
+		<ItemGroup>
+			<Bin40 Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\net40\TeamCity.*.dll"/>
+			<OutputDirectoryBin40 Include="."><Path>$(SolutionDir)packages\extensions\net40</Path></OutputDirectoryBin40>
+		</ItemGroup>
+		<Copy SourceFiles="@(Bin40)" DestinationFolder="%(OutputDirectoryBin40.Path)"/> 
+		<Message Text="##teamcity[publishArtifacts '$(SolutionDir)packages\extensions\net40\*.*=>$(ExtenionsDirectory)\TeamCityAdapter.net40.zip']" />
     </Target>
 
 	<Target Name="Test" DependsOnTargets="CopyDependencies">
