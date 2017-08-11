@@ -24,7 +24,8 @@ Usage:
   <files>
 	<file src="TeamCity.VSTest.TestAdapter.props" target="build\net35" />
 	<file src="TeamCity.VSTest.TestAdapter.props" target="build\netcoreapp1.0" />
-	<file src="..\packages\output\*.dll" target="build\_common" />
+	<file src="..\bin\publish\vstest15\*.dll" target="build\_common" />
+	<file src="..\bin\publish\vstest12\TeamCity.VSTest.TestAdapter.dll" target="build\_common\TeamCity.VSTest.net35.TestAdapter.dll" />
     <file src="..\LICENSE" target="LICENSE" />
   </files>
 </package>

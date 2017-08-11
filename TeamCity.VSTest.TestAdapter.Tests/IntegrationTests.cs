@@ -8,7 +8,7 @@
     public class IntegrationTests
     {
         [Theory]
-        [InlineData(@"IntegrationTests\dotNetCore.XUnit.Tests\dotNetCore.XUnit.Tests.csproj", 30)]
+        [InlineData(@"IntegrationTests\dotNetCore.XUnit.Tests\dotNetCore.XUnit.Tests.csproj", 20)]
         [InlineData(@"IntegrationTests\dotNet.XUnit.Tests\dotNet.XUnit.Tests.csproj", 10)]
         [InlineData(@"IntegrationTests\dotNetCore.MS.Tests\dotNetCore.MS.Tests.csproj", 30)]
         [InlineData(@"IntegrationTests\dotNet.MS.Tests\dotNet.MS.Tests.csproj", 10)]

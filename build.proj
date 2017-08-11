@@ -1,93 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<Import Project="Utils.targets" />  
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+        <PublishPath>bin\publish</PublishPath>
+    </PropertyGroup>
 
-	<PropertyGroup>
-		<PackageVersion Condition=" '$(PackageVersion)' == '' ">1.0.0</PackageVersion>
-
-		<Build_Number Condition=" '$(Build_Number)' == '' ">0</Build_Number>		
-		<AssemblyVersion>$(PackageVersion).$(Build_Number)</AssemblyVersion>
-		<Version>$(PackageVersion).$(Build_Number)-rc</Version>
-		<Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
-		<PackagesDirectory>packages</PackagesDirectory>	
-		<ExtenionsDirectory>extensions</ExtenionsDirectory>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<Package Include="TeamCity.VSTest.TestAdapter"/>
-	</ItemGroup>
-	
-	<Target Name="GetNuGet">
-		<DownloadFile
-	    	Url="https://dist.nuget.org/win-x86-commandline/v3.5.0/NuGet.exe"
-	    	LocalFilePath="packages\nuget.exe"/>
-	</Target>
-
-	<Target Name="Build" DependsOnTargets="GetNuGet">
-		<Replace
-	    	FilePath='TeamCity.VSTest.TestAdapter\Properties\AssemblyInfo.cs'
-			Pattern='(\[assembly:\s(AssemblyVersion|AssemblyFileVersion)\()"(\d+\.\d+\.\d+\.\d+)"(\)\])'
-			Replacement='$1"$(AssemblyVersion)"$4'/>
-		<Exec Command="packages\nuget.exe restore -ConfigFile packages\NuGet.config TeamCity.VSTest.TestAdapter.sln"/>
-		<Exec Command="packages\nuget.exe install TeamCity.ServiceMessages -o packages -version 3.0.8"/>
-		<Exec Command="dotnet restore TeamCity.VSTest.TestAdapter.sln"/>
-		<MSBuild Projects="TeamCity.VSTest.TestAdapter.sln" Targets="Build" Properties="Configuration=$(Configuration)"/>		
-	</Target>
-
-	<Target Name="CopyDependencies">
-		<RemoveDir Directories="$(SolutionDir)packages\output" />
-
-		<ItemGroup>
-			<DependencyNet35 Include="$(SolutionDir)packages\TeamCity.ServiceMessages.*\lib\netstandard1.3\TeamCity.ServiceMessages.dll"/>
-			<DependencyNet35 Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\net35\TeamCity.VSTest.TestAdapter.dll"/>
-			<OutputDirectoryNet35 Include="."><Path>$(SolutionDir)packages\output</Path></OutputDirectoryNet35> 			
-		</ItemGroup>
-		<Copy SourceFiles="@(DependencyNet35)" DestinationFolder="%(OutputDirectoryNet35.Path)"/> 
-		<Move SourceFiles="$(SolutionDir)packages\output\TeamCity.VSTest.TestAdapter.dll" DestinationFiles="$(SolutionDir)packages\output\TeamCity.VSTest.net35.TestAdapter.dll" />
-
-		<ItemGroup>
-			<DependencyNetstandard Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\netstandard1.5\TeamCity.VSTest.TestAdapter.dll"/>
-			<OutputDirectoryNetstandard Include="."><Path>$(SolutionDir)packages\output</Path></OutputDirectoryNetstandard> 			
-		</ItemGroup>		
-		<Copy SourceFiles="@(DependencyNetstandard)" DestinationFolder="%(OutputDirectoryNetstandard.Path)"/> 
-
-		<ItemGroup>
-			<TestDependency Include="$(SolutionDir)packages\output\*.*"/>
-			<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNet.MS.Tests\bin\$(Configuration)</Path></TestOutputDirectory> 
-			<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNetCore.MS.Tests\bin\$(Configuration)\netcoreapp1.0</Path></TestOutputDirectory> 
-			<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNet.XUnit.Tests\bin\$(Configuration)</Path></TestOutputDirectory> 
-			<TestOutputDirectory Include="."><Path>$(SolutionDir)IntegrationTests\dotNetCore.XUnit.Tests\bin\$(Configuration)\netcoreapp1.0</Path></TestOutputDirectory> 
-		</ItemGroup>
-		<Copy SourceFiles="@(TestDependency)" DestinationFolder="%(TestOutputDirectory.Path)"/> 
-
-		<RemoveDir Directories="$(SolutionDir)packages\extensions" />
-
-		<ItemGroup>
-			<Bin35 Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\net35\TeamCity.*.dll"/>
-			<OutputDirectoryBin35 Include="."><Path>$(SolutionDir)packages\extensions\net35</Path></OutputDirectoryBin35>
-		</ItemGroup>
-		<Copy SourceFiles="@(Bin35)" DestinationFolder="%(OutputDirectoryBin35.Path)"/>
-		<Message Text="##teamcity[publishArtifacts '$(SolutionDir)packages\extensions\net35\*.*=>$(ExtenionsDirectory)\TeamCityAdapter.net35.zip']" />
-
-		<ItemGroup>
-			<Bin40 Include="$(SolutionDir)TeamCity.VSTest.TestAdapter\bin\$(Configuration)\net40\TeamCity.*.dll"/>
-			<OutputDirectoryBin40 Include="."><Path>$(SolutionDir)packages\extensions\net40</Path></OutputDirectoryBin40>
-		</ItemGroup>
-		<Copy SourceFiles="@(Bin40)" DestinationFolder="%(OutputDirectoryBin40.Path)"/> 
-		<Message Text="##teamcity[publishArtifacts '$(SolutionDir)packages\extensions\net40\*.*=>$(ExtenionsDirectory)\TeamCityAdapter.net40.zip']" />
+    <Target Name="Build">
+        <PropertyGroup>
+            <PackageVersion Condition=" '$(PackageVersion)' == '' ">1.0.0</PackageVersion>
+            <Build_Number Condition=" '$(Build_Number)' == '' ">0</Build_Number>
+            <AssemblyVersion>$(PackageVersion).$(Build_Number)</AssemblyVersion>
+        </PropertyGroup>
+        
+        <MSBuild Projects="TeamCity.VSTest.TestAdapter.sln" Targets="Restore;Rebuild" Properties="Configuration=$(Configuration);AssemblyVersion=$(AssemblyVersion)"/>
     </Target>
 
-	<Target Name="Test" DependsOnTargets="CopyDependencies">
-		<Exec Command="dotnet test TeamCity.VSTest.TestAdapter.Tests\TeamCity.VSTest.TestAdapter.Tests.csproj -c:$(Configuration)"/>
-    </Target>	
-  
-	<Target Name="CreatePackages" DependsOnTargets="Build;Test;CopyDependencies;GetNuGet">
-		<Exec Command="packages\nuget.exe pack %(Package.Identity)\package.nuspec -Version $(Version) -OutputDirectory $(PackagesDirectory)"/>
-		<Message Text="##teamcity[publishArtifacts '$(PackagesDirectory)\%(Package.FileName)%(Package.Extension).$(Version).nupkg=>$(PackagesDirectory)']" />
-	</Target>
+    <Target Name="Test">
+        <Exec Command="dotnet test TeamCity.VSTest.TestAdapter.Tests\TeamCity.VSTest.TestAdapter.Tests.csproj -c $(Configuration)"/>
+    </Target>
 
-	<Target Name="PushPackagesToNuGet" DependsOnTargets="GetNuGet">
-		<Exec Command="packages\nuget.exe push $(PackagesDirectory)\%(Package.FileName)%(Package.Extension).$(Version).nupkg -ApiKey $(NuGetApiKey) -Source https://nuget.org/"/>
-	</Target>
+    <Target Name="Publish">
+        <ItemGroup>
+            <VSTestVersion Include="net35">
+                <VSTestLoggerPath>vstest12</VSTestLoggerPath>
+            </VSTestVersion>
+            <VSTestVersion Include="net40">
+                <VSTestLoggerPath>vstest14</VSTestLoggerPath>
+            </VSTestVersion>
+            <VSTestVersion Include="netcoreapp1.0">
+                <VSTestLoggerPath>vstest15</VSTestLoggerPath>
+            </VSTestVersion>
+        </ItemGroup>
+
+        <MSBuild Projects="$(MSBuildProjectFile)" Targets="PublishForFramework" Properties="Configuration=$(Configuration);Framework=%(VSTestVersion.Identity);VSTestLoggerPath=%(VSTestVersion.VSTestLoggerPath)"/>
+        <Message Text="##teamcity[publishArtifacts '$(PublishPath)\**\*.dll=>TeamCity.VSTest.TestAdapter.zip']" />
+    </Target>
+
+    <Target Name="PublishForFramework">
+        <PropertyGroup>
+            <FullPublishPath>$(PublishPath)\$(VSTestLoggerPath)</FullPublishPath>
+            <BinPath>TeamCity.VSTest.TestAdapter\bin\$(Configuration)\$(Framework)\publish</BinPath>
+            <OutputPath>TeamCity.VSTest.TestAdapter\bin\$(Configuration)\$(Framework)</OutputPath>
+        </PropertyGroup>
+
+        <RemoveDir Directories="$(FullPublishPath)" />
+        <MSBuild Projects="TeamCity.VSTest.TestAdapter\TeamCity.VSTest.TestAdapter.csproj" Targets="Publish" Properties="Configuration=$(Configuration);TargetFramework=$(Framework)"/>
+
+        <ItemGroup>
+            <VSTestLoggerFiles Include="$(BinPath)\TeamCity.ServiceMessages.dll;$(BinPath)\TeamCity.VSTest.TestAdapter.dll"/>
+        </ItemGroup>
+
+        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="$(OutputPath)"/>
+        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="$(FullPublishPath)"/>
+        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="IntegrationTests\dotNet.MS.Tests\bin\$(Configuration)" Condition=" '$(Framework)' == 'netcoreapp1.0' "/>
+        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="IntegrationTests\dotNet.XUnit.Tests\bin\$(Configuration)" Condition=" '$(Framework)' == 'netcoreapp1.0' "/>
+        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="IntegrationTests\dotNetCore.MS.Tests\bin\$(Configuration)\$(Framework)" Condition=" '$(Framework)' == 'netcoreapp1.0' "/>
+        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="IntegrationTests\dotNetCore.XUnit.Tests\bin\$(Configuration)\$(Framework)" Condition=" '$(Framework)' == 'netcoreapp1.0' "/>
+        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="IntegrationTests\dotNetCore.MS.Tests\bin\$(Configuration)\net45" Condition=" '$(Framework)' == 'netcoreapp1.0' "/>
+        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="IntegrationTests\dotNetCore.XUnit.Tests\bin\$(Configuration)\net45" Condition=" '$(Framework)' == 'netcoreapp1.0' "/>
+        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="IntegrationTests\dotNetCore.MS.Tests\bin\$(Configuration)\net462" Condition=" '$(Framework)' == 'netcoreapp1.0' "/>
+        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="IntegrationTests\dotNetCore.XUnit.Tests\bin\$(Configuration)\net462" Condition=" '$(Framework)' == 'netcoreapp1.0' "/>
+    </Target>
 
 </Project>

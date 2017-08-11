@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='net45'">
-	<PackageReference Include="xunit" Version="1.9.2" />	    
+	<PackageReference Include="xunit" Version="2.2.0" />	    
   </ItemGroup>
 
   <ItemGroup>

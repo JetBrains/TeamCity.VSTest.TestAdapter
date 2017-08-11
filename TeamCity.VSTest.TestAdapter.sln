@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.9
+VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{E9EECA36-7BB3-4D65-BCF7-90A98B6DA2E5}"
 EndProject
@@ -14,7 +14,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotNet.MS.Tests", "Integrat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotNet.XUnit.Tests", "IntegrationTests\dotNet.XUnit.Tests\dotNet.XUnit.Tests.csproj", "{91D202D1-AD5F-4792-9A99-759B0789EF09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamCity.VSTest.TestAdapter.Tests", "TeamCity.VSTest.TestAdapter.Tests\TeamCity.VSTest.TestAdapter.Tests.csproj", "{0BDF08BA-1DB3-4C55-A596-4EE1DCBF4E5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeamCity.VSTest.TestAdapter.Tests", "TeamCity.VSTest.TestAdapter.Tests\TeamCity.VSTest.TestAdapter.Tests.csproj", "{0BDF08BA-1DB3-4C55-A596-4EE1DCBF4E5D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E7F43C72-213E-49E4-937F-FA8F1BDC5601}"
+	ProjectSection(SolutionItems) = preProject
+		build.proj = build.proj
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
