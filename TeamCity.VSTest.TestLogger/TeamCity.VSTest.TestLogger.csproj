@@ -1,28 +1,70 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net35;net40;netcoreapp1.0</TargetFrameworks>
-    <AssemblyName>TeamCity.VSTest.TestLogger</AssemblyName>
+    <TargetFrameworks>net35;net40;netstandard1.5</TargetFrameworks>
+
+    <GenerateAssemblyCompanyAttribute>true</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyConfigurationAttribute>true</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCopyrightAttribute>true</GenerateAssemblyCopyrightAttribute>
+    <GenerateAssemblyDescriptionAttribute>true</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyFileVersionAttribute>true</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyInformationalVersionAttribute>true</GenerateAssemblyInformationalVersionAttribute>
+    <GenerateAssemblyProductAttribute>true</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyTitleAttribute>true</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
+    <GenerateNeutralResourcesLanguageAttribute>true</GenerateNeutralResourcesLanguageAttribute>
+
+    <AssemblyName Condition="'$(AssemblyName)' == ''">TeamCity.VSTest.TestLogger</AssemblyName>
+    <Version>$(Version)</Version>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
+    <FileVersion>$(Version)</FileVersion>
+
     <PackageId>TeamCity.VSTest.TestAdapter</PackageId>
+    <Title>TeamCity VSTest Adapter</Title>
+    <Authors>NikolayP</Authors>
+    <PackageLicenseUrl>https://github.com/NikolayPianikov/TeamCity.VSTest.TestAdapter/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/NikolayPianikov/TeamCity.VSTest.TestAdapter</PackageProjectUrl>
+    <PackageIconUrl>https://www.jetbrains.com/_assets//shared/favicons/jetbrains.ico</PackageIconUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Copyright>JetBrains</Copyright>
+    <PackageIconUrl>https://www.jetbrains.com/_assets//shared/favicons/jetbrains.ico</PackageIconUrl>
+    <Description>Provides an integration TeamCity and test frameworks.
+
+Usage:
+
+  - Create a test project, for example using the command line: dotnet new xunit
+  - Add the NuGet reference to this package</Description>
+    <PackageTags>TeamCity VSTest message</PackageTags>
+
+    <IncludeAssets>All</IncludeAssets>    
+    <IncludeBuildOutput>false</IncludeBuildOutput>
     <SignAssembly>False</SignAssembly>
     <AssemblyOriginatorKeyFile>TeamCity.snk</AssemblyOriginatorKeyFile>
-    <PrivateAssets>all</PrivateAssets>
+    <Company>JetBrains</Company>    
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TeamCity.ServiceMessages" Version="3.0.9" />	
+    <Content Include="TeamCity.VSTest.TestAdapter.props">
+      <PackagePath>build\net35;build\netcoreapp1.0</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+
+    <Content Include="$(MSBuildProjectDirectory)\..\bin\$(Configuration)\out\**">
+      <PackagePath>build\_common</PackagePath>
+      <Pack>true</Pack>
+    </Content>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp1.0'">
+  <ItemGroup>
+    <PackageReference Include="TeamCity.ServiceMessages" Version="3.0.9" />	    
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.5'">
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="15.0.0" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
+  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard1.5'">
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="11.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net35'">
-   <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="11.0.0" />
   </ItemGroup>
 
 </Project>

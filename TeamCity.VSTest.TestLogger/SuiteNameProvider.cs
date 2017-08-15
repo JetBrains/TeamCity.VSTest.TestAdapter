@@ -8,7 +8,7 @@
 
         public string GetSuiteName(string baseDirectory, string source)
         {
-            if (source.IsNullOrWhiteSpace())
+            if (Strings.IsNullOrWhiteSpace(source))
             {
                 return DefaultSuiteName;
             }

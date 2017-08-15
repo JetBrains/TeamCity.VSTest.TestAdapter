@@ -2,7 +2,7 @@
 {
     internal static class Strings
     {
-        public static bool IsNullOrWhiteSpace(this string str)
+        public static bool IsNullOrWhiteSpace(string str)
         {
             if (str == null)
             {

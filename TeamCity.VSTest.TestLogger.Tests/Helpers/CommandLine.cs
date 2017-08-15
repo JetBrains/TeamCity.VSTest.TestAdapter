@@ -12,17 +12,27 @@
     {
         private readonly Dictionary<string, string> _envitonmentVariables = new Dictionary<string, string>();
 
+        public CommandLine(CommandLine commandLine, params string[] additionalArgs)
+            :this(
+                 commandLine?.ExecutableFile ?? throw new ArgumentNullException(nameof(commandLine)),
+                 commandLine.Args.Concat(additionalArgs ?? throw new ArgumentNullException(nameof(additionalArgs))).ToArray())
+        {
+        }
+
         public CommandLine(string executableFile, params string[] args)
         {
-            if (executableFile == null) throw new ArgumentNullException(nameof(executableFile));
-            if (args == null) throw new ArgumentNullException(nameof(args));
-            ExecutableFile = executableFile;
-            Args = args;
+            ExecutableFile = executableFile ?? throw new ArgumentNullException(nameof(executableFile));
+            Args = args ?? throw new ArgumentNullException(nameof(args));
         }
 
         public string ExecutableFile { [NotNull] get; }
 
         public string[] Args { [NotNull] get; }
+
+        public static string WorkingDirectory
+        {
+            [NotNull] get => Path.GetFullPath(Path.Combine(typeof(CommandLine).GetTypeInfo().Assembly.Location, "../../../../../"));
+        }
 
         public void AddEnvitonmentVariable([NotNull] string name, [CanBeNull] string value)
         {
@@ -32,12 +42,11 @@
 
         public bool TryExecute(out CommandLineResult result)
         {
-            var baseDir = Path.GetFullPath(Path.Combine(GetType().GetTypeInfo().Assembly.Location, "../../../../../"));
             var process = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    WorkingDirectory = baseDir,
+                    WorkingDirectory = WorkingDirectory,
                     FileName = ExecutableFile,
                     Arguments = string.Join(" ", Args.Select(i => $"\"{i}\"").ToArray()),
                     RedirectStandardError = true,

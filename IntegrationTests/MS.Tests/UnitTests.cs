@@ -1,4 +1,4 @@
-namespace dotNetCore.MS.Tests
+namespace MS.Tests
 {
     using System;
     using Microsoft.VisualStudio.TestTools.UnitTesting;

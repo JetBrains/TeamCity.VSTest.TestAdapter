@@ -1,65 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
-        <PublishPath>bin\publish</PublishPath>
+        <PackageVersion Condition=" '$(PackageVersion)' == '' ">1.0.2</PackageVersion>
+        <Build_Number Condition=" '$(Build_Number)' == '' ">0</Build_Number>
+        <Version>$(PackageVersion).$(Build_Number)</Version>
     </PropertyGroup>
 
-    <Target Name="Build">
-        <PropertyGroup>
-            <PackageVersion Condition=" '$(PackageVersion)' == '' ">1.0.2</PackageVersion>
-            <Build_Number Condition=" '$(Build_Number)' == '' ">0</Build_Number>
-            <AssemblyVersion>$(PackageVersion).$(Build_Number)</AssemblyVersion>
-        </PropertyGroup>
-        
-        <MSBuild Projects="TeamCity.VSTest.TestAdapter.sln" Targets="Restore;Rebuild" Properties="Configuration=$(Configuration);AssemblyVersion=$(AssemblyVersion)"/>
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+        <BinPath>$(MSBuildThisFileDirectory)bin\$(Configuration)</BinPath>
+        <OutPath>$(BinPath)\out</OutPath>
+        <PackagePath>$(BinPath)\package</PackagePath>
+        <PackageCachePath>$(BinPath)\cache</PackageCachePath>
+        <IntegrationTestResults>$(BinPath)\IntegrationTestResults.txt</IntegrationTestResults>
+    </PropertyGroup>
+
+    <Target Name="Test" DependsOnTargets="IntegrationTest">
+        <Exec Command='dotnet restore $(MSBuildThisFileDirectory)TeamCity.VSTest.TestLogger.Tests\TeamCity.VSTest.TestLogger.Tests.csproj'/>
+        <Exec Command='dotnet test $(MSBuildThisFileDirectory)TeamCity.VSTest.TestLogger.Tests\TeamCity.VSTest.TestLogger.Tests.csproj -c $(Configuration)'/>
     </Target>
 
-    <Target Name="Test">
-        <Exec Command="dotnet test TeamCity.VSTest.TestLogger.Tests\TeamCity.VSTest.TestLogger.Tests.csproj -c $(Configuration)"/>
+    <Target Name="Pack" DependsOnTargets="Build">
+        <MSBuild Projects="$(MSBuildThisFileDirectory)TeamCity.VSTest.TestLogger\TeamCity.VSTest.TestLogger.csproj" Targets="Pack" Properties="Configuration=$(Configuration);PackageVersion=$(PackageVersion);PublishDir=$(PackagePath)"/>
+
+        <ItemGroup>
+            <PackageFiles Include="$(MSBuildThisFileDirectory)TeamCity.VSTest.TestLogger\bin\$(configuration)\*.nupkg"/>
+        </ItemGroup>
+        <Copy SourceFiles="@(PackageFiles)" DestinationFolder="$(PackagePath)"/>
+        <Message Text="##teamcity[publishArtifacts '$(PackagePath)\TeamCity.VSTest.TestAdapter.*.nupkg=>.']" />
+    </Target>
+
+    <Target Name="Build">
+        <MSBuild Projects="TeamCity.VSTest.TestAdapter.sln" Targets="Restore"/>
+
+        <ItemGroup>
+            <VSTestVersion Include="vstest15.3">
+                <TargetFramework>netstandard1.5</TargetFramework>
+                <VSTestLoggerPath>vstest15</VSTestLoggerPath>
+                <AssemblyName>TeamCity.VSTest.TestLogger</AssemblyName>
+            </VSTestVersion>
+
+            <VSTestVersion Include="vstest15">
+                <TargetFramework>netstandard1.5</TargetFramework>
+                <VSTestLoggerPath>vstest15</VSTestLoggerPath>
+                <AssemblyName>TeamCity.VSTest.TestAdapter</AssemblyName>
+            </VSTestVersion>
+
+            <VSTestVersion Include="vstest14">
+                <TargetFramework>net40</TargetFramework>
+                <VSTestLoggerPath>vstest14</VSTestLoggerPath>
+                <AssemblyName>TeamCity.VSTest.TestAdapter</AssemblyName>
+            </VSTestVersion>
+
+            <VSTestVersion Include="vstest12">
+                <TargetFramework>net35</TargetFramework>
+                <VSTestLoggerPath>vstest12</VSTestLoggerPath>
+                <AssemblyName>TeamCity.VSTest.TestAdapter</AssemblyName>
+            </VSTestVersion>
+        </ItemGroup>
+
+        <RemoveDir Directories="$(BinPath)" />
+        <MSBuild Projects="$(MSBuildProjectFile)" Targets="Publish" Properties="Configuration=$(Configuration);TargetFramework=%(VSTestVersion.TargetFramework);VSTestLoggerPath=%(VSTestVersion.VSTestLoggerPath);Version=$(Version);AssemblyName=%(VSTestVersion.AssemblyName)"/>
+        <Message Text="##teamcity[publishArtifacts '$(OutPath)\**\*.dll=>TeamCity.VSTest.TestLogger.zip']" />
     </Target>
 
     <Target Name="Publish">
-        <ItemGroup>
-            <VSTestVersion Include="net35">
-                <VSTestLoggerPath>vstest12</VSTestLoggerPath>
-            </VSTestVersion>
-            <VSTestVersion Include="net40">
-                <VSTestLoggerPath>vstest14</VSTestLoggerPath>
-            </VSTestVersion>
-            <VSTestVersion Include="netcoreapp1.0">
-                <VSTestLoggerPath>vstest15</VSTestLoggerPath>
-            </VSTestVersion>
-        </ItemGroup>
-
-        <MSBuild Projects="$(MSBuildProjectFile)" Targets="PublishForFramework" Properties="Configuration=$(Configuration);Framework=%(VSTestVersion.Identity);VSTestLoggerPath=%(VSTestVersion.VSTestLoggerPath)"/>
-        <Message Text="##teamcity[publishArtifacts '$(PublishPath)\**\*.dll=>TeamCity.VSTest.TestLogger.zip']" />
-    </Target>
-
-    <Target Name="PublishForFramework">
         <PropertyGroup>
-            <FullPublishPath>$(PublishPath)\$(VSTestLoggerPath)</FullPublishPath>
-            <BinPath>TeamCity.VSTest.TestLogger\bin\$(Configuration)\$(Framework)\publish</BinPath>
-            <OutputPath>TeamCity.VSTest.TestLogger\bin\$(Configuration)\$(Framework)</OutputPath>
+            <PublishPath>$(BinPath)\$(VSTestLoggerPath)</PublishPath>
+            <OutPath>$(OutPath)\$(VSTestLoggerPath)</OutPath>
         </PropertyGroup>
 
-        <RemoveDir Directories="$(FullPublishPath)" />
-        <MSBuild Projects="TeamCity.VSTest.TestLogger\TeamCity.VSTest.TestLogger.csproj" Targets="Publish" Properties="Configuration=$(Configuration);TargetFramework=$(Framework)"/>
+        <MSBuild
+            Projects="$(MSBuildThisFileDirectory)TeamCity.VSTest.TestLogger\TeamCity.VSTest.TestLogger.csproj"
+            Targets="Publish"
+            Properties="Configuration=$(Configuration);Version=$(Version);TargetFramework=$(TargetFramework);PublishDir=$(PublishPath)"/>
 
         <ItemGroup>
-            <VSTestLoggerFiles Include="$(BinPath)\TeamCity.ServiceMessages.dll;$(BinPath)\TeamCity.VSTest.TestLogger.dll"/>
+            <AdapterFiles Include="$(PublishPath)\TeamCity.*.dll"/>
         </ItemGroup>
 
-        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="$(OutputPath)"/>
-        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="$(FullPublishPath)"/>
-        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="IntegrationTests\dotNet.MS.Tests\bin\$(Configuration)" Condition=" '$(Framework)' == 'netcoreapp1.0' "/>
-        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="IntegrationTests\dotNet.XUnit.Tests\bin\$(Configuration)" Condition=" '$(Framework)' == 'netcoreapp1.0' "/>
-        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="IntegrationTests\dotNetCore.MS.Tests\bin\$(Configuration)\$(Framework)" Condition=" '$(Framework)' == 'netcoreapp1.0' "/>
-        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="IntegrationTests\dotNetCore.XUnit.Tests\bin\$(Configuration)\$(Framework)" Condition=" '$(Framework)' == 'netcoreapp1.0' "/>
-        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="IntegrationTests\dotNetCore.MS.Tests\bin\$(Configuration)\net45" Condition=" '$(Framework)' == 'netcoreapp1.0' "/>
-        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="IntegrationTests\dotNetCore.XUnit.Tests\bin\$(Configuration)\net45" Condition=" '$(Framework)' == 'netcoreapp1.0' "/>
-        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="IntegrationTests\dotNetCore.MS.Tests\bin\$(Configuration)\net462" Condition=" '$(Framework)' == 'netcoreapp1.0' "/>
-        <Copy SourceFiles="@(VSTestLoggerFiles)" DestinationFolder="IntegrationTests\dotNetCore.XUnit.Tests\bin\$(Configuration)\net462" Condition=" '$(Framework)' == 'netcoreapp1.0' "/>
+        <Move SourceFiles="@(AdapterFiles)" DestinationFolder="$(OutPath)"/>
+        <RemoveDir Directories="$(PublishPath)" />
     </Target>
 
+    <Target Name="IntegrationTest" DependsOnTargets="Pack">
+        <Exec Command='"$(MSBuildToolsPath)\msbuild.exe" "$(MSBuildThisFileFullPath)" /t:DispatchIntegrationTest /p:Configuration=$(Configuration) > "$(IntegrationTestResults)"' WorkingDirectory="$(MSBuildThisFileDirectory)"/>
+    </Target>
+
+    <Target Name="DispatchIntegrationTest">
+        <ItemGroup>
+            <DotnetTool Include="dotnet"/>
+            <DotnetTool Include="C:\dotnet\*\dotnet.exe"/>
+        </ItemGroup>
+
+        <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=MS.Tests'/>
+        <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=XUnit.Tests'/>
+    </Target>
+
+    <Target Name="DotnetIntegrationTest">
+        <PropertyGroup>
+            <DotnetDir>$([System.IO.Path]::GetDirectoryName("$(DotnetPath)"))</DotnetDir>
+            <DotnetVersion>$([System.IO.Path]::GetFileName("$(DotnetDir)"))</DotnetVersion>
+            <DotnetVersionName>$(DotnetVersion)</DotnetVersionName>
+            <DotnetVersionName Condition=" '$(DotnetVersionName)' == '' ">Default</DotnetVersionName>
+            <TestProject>IntegrationTests\$(TestProjectName)\$(TestProjectName).csproj</TestProject>
+            <TestAssembly>IntegrationTests\$(TestProjectName)\bin\$(Configuration)\net452\$(TestProjectName).dll</TestAssembly>
+            <CleanCommand>$(DotnetPath) clean $(TestProject) -c $(Configuration)</CleanCommand>
+            <RestoreCommand>$(DotnetPath) restore "$(TestProject)" --packages "$(PackageCachePath)" "/p:RestoreAdditionalProjectSources=$(PackagePath)"</RestoreCommand>
+            <BuildCommand>$(DotnetPath) build "$(TestProject)" -c $(Configuration) "/p:RestoreAdditionalProjectSources=$(PackagePath)"</BuildCommand>
+            <TestCommand>$(DotnetPath) test $(TestProject) -c $(Configuration) --no-build</TestCommand>
+            <MSBuildTestCommand>"C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" "$(TestAssembly)" /Logger:logger://teamcity /TestAdapterPath:. /Framework:Framework45</MSBuildTestCommand>
+        </PropertyGroup>
+
+        <Message Text="!!!Start" />
+
+        <Message Text="Dotnet: $(DotnetVersionName), TestProject: $(TestProjectName)" />
+
+        <Message Text="!!!Commands" />
+
+        <Message Text="$(CleanCommand)" />
+        <Message Text="$(RestoreCommand)" />
+        <Message Text="$(BuildCommand)" />
+        <Message Text="$(TestCommand)" />
+        <Message Text="$(MSBuildTestCommand)" Condition=" '$(DotnetVersion)' == '' "/>
+
+        <Message Text="!!!Results" />
+
+        <Exec Command='$(CleanCommand)'/>
+        <Exec Command='$(RestoreCommand)'/>
+        <Exec Command='$(BuildCommand)'/>
+
+        <Message Text="!!!Messages:20" />
+        <Exec IgnoreExitCode="true" IgnoreStandardErrorWarningFormat="true" Command='$(TestCommand)'/>
+
+        <Message Text="!!!Messages:10" Condition=" '$(DotnetVersion)' == '' "/>
+        <Exec IgnoreExitCode="true" IgnoreStandardErrorWarningFormat="true" Condition=" '$(DotnetVersion)' == '' " Command='$(MSBuildTestCommand)'/>
+
+        <Message Text="!!!Finish" />
+    </Target>
 </Project>

@@ -10,9 +10,19 @@ For each test project:
 
 * Choose a test framework which supports [Visual Studio Test Platform](https://github.com/Microsoft/vstest).
 
-* Add a NuGet reference to the NuGet package of the selected test framework. For example, [MSTest](https://www.nuget.org/packages/MSTest.TestFramework/), or [XUnit](https://www.nuget.org/packages/xunit/), or others.
+* Add a NuGet reference to the NuGet package of the selected test framework. For example:
+   * [MSTest](https://www.nuget.org/packages/MSTest.TestFramework/)
+   * [XUnit](https://www.nuget.org/packages/xunit/)
+   * [NUnit](https://www.nuget.org/packages/NUnit/)
 
-* Add a NuGet reference to the NuGet package of the appropriate test adapter. For example, the [MSTest adapter](https://www.nuget.org/packages/MSTest.TestAdapter/), or the [XUnit adapter](https://www.nuget.org/packages/xunit.runner.visualstudio/), or others.
+  or others.
+
+* Add a NuGet reference to the NuGet package of the appropriate test adapter. For example:
+   * [MSTest adapter](https://www.nuget.org/packages/MSTest.TestAdapter/)
+   * [XUnit adapter](https://www.nuget.org/packages/xunit.runner.visualstudio/)
+   * [NUnit adapter](https://www.nuget.org/packages/NUnit3TestAdapter/)
+
+  or others.
 
 * Add a NuGet reference to the [Visual Studio Test Platform](https://www.nuget.org/packages/Microsoft.NET.Test.Sdk/).
 
@@ -58,13 +68,13 @@ Presently, Visual Studio has an open and extensible [test platform](https://gith
 
 ## IDE VSTest extensions
 
-* Download the [custom logger](http://teamcity.jetbrains.com/httpAuth/app/rest/builds/buildType:TeamCityPluginsByJetBrains_TeamCityVSTestTestAdapter_Build,pinned:true,status:SUCCESS,branch:master,tags:release/artifacts/content/extensions/TeamCityAdapter.net40.zip)
+* Download the [custom logger](http://teamcity.jetbrains.com/httpAuth/app/rest/builds/buildType:TeamCityPluginsByJetBrains_TeamCityVSTestTestAdapter_Build,pinned:true,status:SUCCESS,branch:master,tags:release/artifacts/content/TeamCity.VSTest.TestLogger.zip)
 * Extract the contents of the downloaded archive on the agent machine:
   * for VisualStudio 2017 - to PROGRAM_FILES(x86)\Microsoft Visual Studio\2017\<Edition>\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Extensions
   * for VisualStudio 2015 - to PROGRAM_FILES\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Extensions
   * for VisualStudio 2013 - to PROGRAM_FILES\Microsoft Visual Studio 12.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Extensions
   * for VisualStudio 2012 - to PROGRAM_FILES\Microsoft Visual Studio 11.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Extensions
-* Check that the custom logger was installed correctly by executing vstest.console.exe /ListLoggers in the console on the agent machine. If the logger was installed correctly, you will see the logger with FriendlyName TeamCity listed: `TeamCity.VSTest.TestAdapter.TeamCityTestLogger URI: logger://teamcity`
+* Check that the custom logger was installed correctly by executing vstest.console.exe /ListLoggers in the console on the agent machine. If the logger was installed correctly, you will see the logger with FriendlyName TeamCity listed: `TeamCity.VSTest.TestLogger.TeamCityTestLogger URI: logger://teamcity`
 
 See more details in the [Wiki](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/wiki).
 
