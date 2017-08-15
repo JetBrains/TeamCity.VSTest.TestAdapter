@@ -30,7 +30,7 @@ SOFTWARE. */
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable InconsistentNaming
 
-namespace TeamCity.VSTest.TestAdapter
+namespace TeamCity.VSTest.TestLogger
 {
     using System;
 

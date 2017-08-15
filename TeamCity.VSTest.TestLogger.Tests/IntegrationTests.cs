@@ -1,4 +1,4 @@
-﻿namespace TeamCity.VSTest.TestAdapter.Tests
+﻿namespace TeamCity.VSTest.TestLogger.Tests
 {
     using Helpers;
     using Shouldly;
@@ -37,7 +37,7 @@
 
             // Then
             result.ExitCode.ShouldBe(1);
-            result.StdError.Trim().ShouldBe(string.Empty);
+            result.StdError.ShouldNotBeNullOrEmpty();
             ServiceMessages.GetNumberServiceMessage(result.StdOut).ShouldBe(expectedMessageCount);
             ServiceMessages.ResultShouldContainCorrectStructureAndSequence(result.StdOut);
         }

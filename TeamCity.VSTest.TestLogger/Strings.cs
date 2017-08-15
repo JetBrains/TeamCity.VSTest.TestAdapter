@@ -1,4 +1,4 @@
-﻿namespace TeamCity.VSTest.TestAdapter
+﻿namespace TeamCity.VSTest.TestLogger
 {
     internal static class Strings
     {

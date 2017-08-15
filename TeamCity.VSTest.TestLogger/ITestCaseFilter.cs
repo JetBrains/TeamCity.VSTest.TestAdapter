@@ -1,4 +1,4 @@
-﻿namespace TeamCity.VSTest.TestAdapter
+﻿namespace TeamCity.VSTest.TestLogger
 {
     using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 

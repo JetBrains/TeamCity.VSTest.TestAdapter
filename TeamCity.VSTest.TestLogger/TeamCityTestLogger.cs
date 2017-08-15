@@ -1,4 +1,4 @@
-﻿namespace TeamCity.VSTest.TestAdapter
+﻿namespace TeamCity.VSTest.TestLogger
 {
     using System;
     using JetBrains.TeamCity.ServiceMessages.Write.Special;

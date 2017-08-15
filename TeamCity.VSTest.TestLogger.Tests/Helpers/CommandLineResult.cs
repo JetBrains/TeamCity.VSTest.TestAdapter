@@ -1,4 +1,4 @@
-﻿namespace TeamCity.VSTest.TestAdapter.Tests.Helpers
+﻿namespace TeamCity.VSTest.TestLogger.Tests.Helpers
 {
     using System;
 

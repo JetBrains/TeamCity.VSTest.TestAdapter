@@ -8,8 +8,8 @@
         <VSTestTestAdapterPath Condition=" '$(VSTestTestAdapterPath)' == '' ">.</VSTestTestAdapterPath>
     </PropertyGroup>
     <ItemGroup Condition="'$(IsUnderTeamCity)' == 'true'">
-        <Content Include="$(MSBuildThisFileDirectory)..\_common\TeamCity.VSTest.TestAdapter.dll">
-            <Link>TeamCity.VSTest.TestAdapter.dll</Link>
+        <Content Include="$(MSBuildThisFileDirectory)..\_common\TeamCity.VSTest.TestLogger.dll">
+            <Link>TeamCity.VSTest.TestLogger.dll</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <Visible>False</Visible>
         </Content>
@@ -18,8 +18,8 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <Visible>False</Visible>
         </Content>
-        <Content Include="$(MSBuildThisFileDirectory)..\_common\TeamCity.VSTest.net35.TestAdapter.dll">
-            <Link>TeamCity.VSTest.net35.TestAdapter.dll</Link>
+        <Content Include="$(MSBuildThisFileDirectory)..\_common\TeamCity.VSTest.net35.TestLogger.dll">
+            <Link>TeamCity.VSTest.net35.TestLogger.dll</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <Visible>False</Visible>
         </Content>

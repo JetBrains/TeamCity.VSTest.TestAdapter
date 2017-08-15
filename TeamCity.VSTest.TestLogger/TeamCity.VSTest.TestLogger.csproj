@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net35;net40;netcoreapp1.0</TargetFrameworks>
+    <AssemblyName>TeamCity.VSTest.TestLogger</AssemblyName>
+    <PackageId>TeamCity.VSTest.TestAdapter</PackageId>
+    <SignAssembly>False</SignAssembly>
+    <AssemblyOriginatorKeyFile>TeamCity.snk</AssemblyOriginatorKeyFile>
+    <PrivateAssets>all</PrivateAssets>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TeamCity.ServiceMessages" Version="3.0.9" />	
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp1.0'">
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="15.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="11.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net35'">
+   <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="11.0.0" />
+  </ItemGroup>
+
+</Project>

@@ -1,4 +1,4 @@
-﻿namespace TeamCity.VSTest.TestAdapter.Tests
+﻿namespace TeamCity.VSTest.TestLogger.Tests
 {
     using System;
     using System.Collections.Generic;
@@ -10,6 +10,7 @@
     using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
     using Moq;
     using Shouldly;
+    using TestLogger;
     using Xunit;
 
     [SuppressMessage("ReSharper", "ImplicitlyCapturedClosure")]
