@@ -64,6 +64,17 @@
         <Message Text="##teamcity[publishArtifacts '$(OutPath)\**\*.dll=>TeamCity.VSTest.TestLogger.zip']" />
     </Target>
 
+    <Target Name="ClearNugetCache">
+        <Exec Command="dotnet nuget locals global-packages --list" ConsoleToMsBuild="true">
+                <Output TaskParameter="ConsoleOutput" ItemName="GlobaPackagesInfo" />
+	</Exec>
+	<PropertyGroup>
+            <CachePath>@(GlobaPackagesInfo->Replace("info : global-packages:", "")->Trim())</CachePath>
+        </PropertyGroup>
+	<Message Text='CachePath=$(CachePath)' />
+	<RemoveDir Directories="$(CachePath)teamcity.vstest.testadapter\$(PackageVersion)" />
+    </Target>
+
     <Target Name="Publish">
         <PropertyGroup>
             <PublishPath>$(BinPath)\$(VSTestLoggerPath)</PublishPath>
@@ -83,7 +94,7 @@
         <RemoveDir Directories="$(PublishPath)" />
     </Target>
 
-    <Target Name="IntegrationTest" DependsOnTargets="Pack">
+    <Target Name="IntegrationTest" DependsOnTargets="Pack;ClearNugetCache">
         <Exec Command='"$(MSBuildToolsPath)\msbuild.exe" "$(MSBuildThisFileFullPath)" /t:DispatchIntegrationTest /p:Configuration=$(Configuration) > "$(IntegrationTestResults)"' WorkingDirectory="$(MSBuildThisFileDirectory)"/>
     </Target>
 
