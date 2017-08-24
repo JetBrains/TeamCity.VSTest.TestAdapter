@@ -10,17 +10,10 @@ For each test project:
 
 * Choose a test framework which supports [Visual Studio Test Platform](https://github.com/Microsoft/vstest).
 
-* Add a NuGet reference to the NuGet package of the selected test framework. For example:
-   * [MSTest](https://www.nuget.org/packages/MSTest.TestFramework/)
-   * [XUnit](https://www.nuget.org/packages/xunit/)
-   * [NUnit](https://www.nuget.org/packages/NUnit/)
-
-  or others.
-
-* Add a NuGet reference to the NuGet package of the appropriate test adapter. For example:
-   * [MSTest adapter](https://www.nuget.org/packages/MSTest.TestAdapter/)
-   * [XUnit adapter](https://www.nuget.org/packages/xunit.runner.visualstudio/)
-   * [NUnit adapter](https://www.nuget.org/packages/NUnit3TestAdapter/)
+* Add a NuGet reference to the NuGet packages of the selected test framework and test adapter. For example:
+   * MSTest [Framework](https://www.nuget.org/packages/MSTest.TestFramework/) and [Adapter](https://www.nuget.org/packages/MSTest.TestAdapter/)
+   * XUnit [Framework](https://www.nuget.org/packages/xunit/) and [Adapter](https://www.nuget.org/packages/xunit.runner.visualstudio/)
+   * NUnit [Framework](https://www.nuget.org/packages/NUnit/) and [Adapter](https://www.nuget.org/packages/NUnit3TestAdapter/)
 
   or others.
 
