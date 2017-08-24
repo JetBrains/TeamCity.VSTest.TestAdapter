@@ -5,24 +5,28 @@
 
     internal class TestCaseFilter : ITestCaseFilter
     {
-        internal const string TeamcityPrefix = "##teamcity";
-        private bool _alreadyProducesTeamCityServiceMessages;
+        private const string TeamcityPrefix = "##teamcity[";
+        private const string XUnitPrefix = "[xunit.net";
+        private const string XUnut2LoggerName = "executor://xunit/vstestrunner2";
+        private bool _alreadyProducesTeamCityServiceMessagesFromXUnit;
 
         public void RegisterOutputMessage(string outputLine)
         {
             if (outputLine == null) throw new ArgumentNullException(nameof(outputLine));
-            if (_alreadyProducesTeamCityServiceMessages)
+            if (_alreadyProducesTeamCityServiceMessagesFromXUnit)
             {
                 return;
             }
 
-            _alreadyProducesTeamCityServiceMessages = outputLine.Trim().ToLowerInvariant().Contains(TeamcityPrefix);
+            var message = outputLine.Trim().ToLowerInvariant();
+            _alreadyProducesTeamCityServiceMessagesFromXUnit = message.Contains(TeamcityPrefix) && message.StartsWith(XUnitPrefix);
         }
 
         public bool IsSupported(TestCase testCase)
         {
             if (testCase == null) throw new ArgumentNullException(nameof(testCase));
-            return !_alreadyProducesTeamCityServiceMessages;
+            var isXUnit = XUnut2LoggerName == testCase.ExecutorUri.ToString().ToLowerInvariant();
+            return !(isXUnit && _alreadyProducesTeamCityServiceMessagesFromXUnit);
         }
     }
 }

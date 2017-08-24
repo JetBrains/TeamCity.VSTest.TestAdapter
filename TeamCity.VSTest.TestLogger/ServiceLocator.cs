@@ -1,9 +1,11 @@
 ﻿namespace TeamCity.VSTest.TestLogger
 {
     using System;
+    using JetBrains.TeamCity.ServiceMessages.Write;
     using JetBrains.TeamCity.ServiceMessages.Write.Special;
+    using JetBrains.TeamCity.ServiceMessages.Write.Special.Impl.Updater;
 
-    internal class ServiceLocator
+    internal static class ServiceLocator
     {
         [CanBeNull] private static ITeamCityWriter _sharedTeamCityWriter = new TeamCityServiceMessages().CreateWriter(Console.WriteLine);
 
@@ -11,7 +13,11 @@
         {
             try
             {
-                _sharedTeamCityWriter = new TeamCityServiceMessages().CreateWriter(Console.WriteLine);
+                _sharedTeamCityWriter = new TeamCityServiceMessages(
+                    new ServiceMessageFormatter(),
+                    new FlowIdGenerator(),
+                    new IServiceMessageUpdater[] { new TimestampUpdater(() => DateTime.Now) }).CreateWriter(Console.WriteLine);
+
                 return true;
             }
             catch

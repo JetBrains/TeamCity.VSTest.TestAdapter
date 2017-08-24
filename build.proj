@@ -93,8 +93,9 @@
             <DotnetTool Include="C:\dotnet\*\dotnet.exe"/>
         </ItemGroup>
 
-        <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=MS.Tests'/>
-        <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=XUnit.Tests'/>
+        <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=MS.Tests;DotnetMessagesCount=20;MSBuildMessagesCount=10'/>
+        <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=XUnit.Tests;DotnetMessagesCount=20;MSBuildMessagesCount=10'/>
+	<MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=Dual.Tests;DotnetMessagesCount=22;MSBuildMessagesCount=10'/>
     </Target>
 
     <Target Name="DotnetIntegrationTest">
@@ -106,7 +107,7 @@
             <TestProject>IntegrationTests\$(TestProjectName)\$(TestProjectName).csproj</TestProject>
             <TestAssembly>IntegrationTests\$(TestProjectName)\bin\$(Configuration)\net452\$(TestProjectName).dll</TestAssembly>
             <CleanCommand>$(DotnetPath) clean "$(TestProject)" -c $(Configuration)</CleanCommand>
-            <RestoreCommand>$(DotnetPath) restore "$(TestProject)" --packages "$(PackageCachePath)" "/p:RestoreAdditionalProjectSources=$(PackagePath)"</RestoreCommand>
+            <RestoreCommand>$(DotnetPath) restore "$(TestProject)" --packages "$(PackageCachePath)" --no-cache "/p:RestoreAdditionalProjectSources=$(PackagePath)"</RestoreCommand>
             <BuildCommand>$(DotnetPath) build "$(TestProject)" -c $(Configuration) "/p:RestoreAdditionalProjectSources=$(PackagePath)"</BuildCommand>
             <TestCommand>$(DotnetPath) test "$(TestProject)" -c $(Configuration) --no-build</TestCommand>
             <MSBuildTestCommand>"C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" "$(TestAssembly)" /Logger:logger://teamcity /TestAdapterPath:. /Framework:Framework45</MSBuildTestCommand>
@@ -130,10 +131,10 @@
         <Exec Command='$(RestoreCommand)'/>
         <Exec Command='$(BuildCommand)'/>
 
-        <Message Text="!!!Messages:20" />
+        <Message Text="!!!Messages:$(DotnetMessagesCount)" />
         <Exec IgnoreExitCode="true" IgnoreStandardErrorWarningFormat="true" Command='$(TestCommand)'/>
 
-        <Message Text="!!!Messages:10" Condition=" '$(DotnetVersion)' == '' "/>
+        <Message Text="!!!Messages:$(MSBuildMessagesCount)" Condition=" '$(DotnetVersion)' == '' "/>
         <Exec IgnoreExitCode="true" IgnoreStandardErrorWarningFormat="true" Condition=" '$(DotnetVersion)' == '' " Command='$(MSBuildTestCommand)'/>
 
         <Message Text="!!!Finish" />

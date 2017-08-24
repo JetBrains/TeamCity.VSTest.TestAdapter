@@ -8,12 +8,24 @@
     public class TestCaseFilterTests
     {
         [Theory]
-        [InlineData("executor://some", "", true)]
-        [InlineData("abc://some", "", true)]
+        // Some messages from some executor
+        [InlineData("executor://some", "aaa", true)]
+        [InlineData("abc://some", "bbb", true)]
+        // Empty message from XUnit
         [InlineData("executor://xunit/VsTestRunner2", "", true)]
-        [InlineData("executor://xunit/VsTestRunner2", TestCaseFilter.TeamcityPrefix + " abc", false)]
-        [InlineData("executor://xunit/VsTestRunner2", "   " + TestCaseFilter.TeamcityPrefix + " abc", false)]
-        [InlineData("executor://xunit/VsTestRunner2", "[xUnit.net 00:00:00.8998020] " + TestCaseFilter.TeamcityPrefix + "testSuiteFinished name", false)]
+        // Service message from XUnit but without xUnit prefix
+        [InlineData("executor://xunit/VsTestRunner2", "##teamcity[abc", true)]
+        // Service message from XUnit but without xUnit prefix
+        [InlineData("executor://xunit/VsTestRunner2", "   ##teamcity[ abc", true)]
+        // Service message from XUnit with xUnit prefix
+        [InlineData("executor://xunit/VsTestRunner2", "[xUnit.net 00:00:00.8998020] ##teamcity[testSuiteFinished name", false)]
+        // Service message from XUnit but from some executor
+        [InlineData("abc://some", "[xUnit.net 00:00:00.8998020] ##teamcity[testSuiteFinished name", true)]
+        // Service message from XUnit with invalid position of xUnit prefix
+        [InlineData("executor://xunit/VsTestRunner2", "abc[xUnit.net 00:00:00.8998020] ##teamcity[testSuiteFinished name", true)]
+        [InlineData("executor://xunit/vstestrunner2", "abc[xUnit.net 00:00:00.8998020] ##teamcity[testSuiteFinished name", true)]
+        [InlineData("executor://xunit/VsTestRunner2", "abc[xunit.net 00:00:00.8998020] ##teamcity[testSuiteFinished name", true)]
+        [InlineData("executor://Xunit/vstestRunner2", "abc[XUNIT.net 00:00:00.8998020] ##TeamCity[abc", true)]
 
         public void ShouldFilter(string executorUri, string messagesStr, bool expectedIsSupported)
         {
