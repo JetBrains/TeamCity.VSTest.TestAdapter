@@ -1,8 +1,8 @@
-# TeamCity Test Adapter
-
-Provides the TeamCity integration with test frameworks via the Visual Studio Test Platform or VSTest IDE tools.
+## [<img src="http://jb.gg/badges/official.svg" height="20" align="center"/>](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub) Test Adapter for [<img src="https://cdn.worldvectorlogo.com/logos/teamcity.svg" height="20" align="center"/>](https://www.jetbrains.com/teamcity/)
 
 [<img src="http://teamcity.jetbrains.com/app/rest/builds/buildType:(id:TeamCityPluginsByJetBrains_TeamCityVSTestTestAdapter_Build)/statusIcon.svg"/>](http://teamcity.jetbrains.com/viewType.html?buildTypeId=TeamCityPluginsByJetBrains_TeamCityVSTestTestAdapter_Build) [<img src="https://www.nuget.org/Content/Logos/nugetlogo.png" height="18">](https://www.nuget.org/packages/TeamCity.VSTest.TestAdapter)
+
+Provides the TeamCity integration with test frameworks via the Visual Studio Test Platform or VSTest IDE tools.
 
 <img src="https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/blob/master/Samples/MS.Tests/Docs/NewTest.gif"/>
 
@@ -84,7 +84,7 @@ Thus, the final project file could look like the following:
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.1.18" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.1.18" />
-    <PackageReference Include="TeamCity.VSTest.TestAdapter" Version="1.0.2" />    
+    <PackageReference Include="TeamCity.VSTest.TestAdapter" Version="1.0.3" />    
   </ItemGroup>  
 </Project>
 ```
@@ -122,3 +122,11 @@ For example:
 See more details in the [Wiki](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/wiki).
 
 See the [article](https://blogs.msdn.microsoft.com/visualstudioalm/2016/11/29/evolving-the-test-platform-part-3-net-core-convergence-and-cross-plat/) for details on how to create tests using the [Visual Studio Test Platform](https://github.com/Microsoft/vstest).
+
+## License
+
+It is under the [Apache License](LICENSE).
+
+## Contributors
+
+* [Nikolay Pianikov](https://github.com/NikolayPianikov)
