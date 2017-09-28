@@ -56,7 +56,7 @@ Usage:
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="TeamCity.ServiceMessages" Version="3.0.9" />	    
+    <PackageReference Include="TeamCity.ServiceMessages" Version="3.0.10" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.5'">
