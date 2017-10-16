@@ -26,6 +26,7 @@
         [InlineData("executor://xunit/vstestrunner2", "abc[xUnit.net 00:00:00.8998020] ##teamcity[testSuiteFinished name", true)]
         [InlineData("executor://xunit/VsTestRunner2", "abc[xunit.net 00:00:00.8998020] ##teamcity[testSuiteFinished name", true)]
         [InlineData("executor://Xunit/vstestRunner2", "abc[XUNIT.net 00:00:00.8998020] ##TeamCity[abc", true)]
+        [InlineData("executor://xunit/VsTestRunner2/netcoreapp", "[xUnit.net 00:00:00.4057175] ##teamcity[]", false)]
 
         public void ShouldFilter(string executorUri, string messagesStr, bool expectedIsSupported)
         {

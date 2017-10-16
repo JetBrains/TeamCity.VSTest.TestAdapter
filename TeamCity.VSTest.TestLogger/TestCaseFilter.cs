@@ -25,7 +25,7 @@
         public bool IsSupported(TestCase testCase)
         {
             if (testCase == null) throw new ArgumentNullException(nameof(testCase));
-            var isXUnit = XUnut2LoggerName == testCase.ExecutorUri.ToString().ToLowerInvariant();
+            var isXUnit = testCase.ExecutorUri.ToString().ToLowerInvariant().StartsWith(XUnut2LoggerName);
             return !(isXUnit && _alreadyProducesTeamCityServiceMessagesFromXUnit);
         }
     }
