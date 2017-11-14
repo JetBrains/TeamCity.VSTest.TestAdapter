@@ -22,12 +22,11 @@
     <PackageId>TeamCity.VSTest.TestAdapter</PackageId>
     <Title>TeamCity VSTest Adapter</Title>
     <Authors>NikolayP</Authors>
-    <PackageLicenseUrl>https://github.com/NikolayPianikov/TeamCity.VSTest.TestAdapter/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/NikolayPianikov/TeamCity.VSTest.TestAdapter</PackageProjectUrl>
-    <PackageIconUrl>https://www.jetbrains.com/_assets//shared/favicons/jetbrains.ico</PackageIconUrl>
+    <PackageLicenseUrl>https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/raw/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/JetBrains/TeamCity.VSTest.TestAdapter</PackageProjectUrl>
+    <PackageIconUrl>https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/raw/master/icon.png</PackageIconUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Copyright>JetBrains</Copyright>
-    <PackageIconUrl>https://www.jetbrains.com/_assets//shared/favicons/jetbrains.ico</PackageIconUrl>
     <Description>Provides an integration TeamCity and test frameworks.
 
 Usage:
