@@ -6,7 +6,6 @@
 
     <PropertyGroup Condition=" '$(IsUnderTeamCity)' == 'true' ">
         <VSTestLogger Condition=" '$(VSTestLogger)' == '' ">logger://teamcity</VSTestLogger>
-        <VSTestTestAdapterPath Condition=" '$(VSTestTestAdapterPath)' == '' And !$(VSTestFramework.StartsWith('.NETFramework', StringComparison.OrdinalIgnoreCase)) ">.</VSTestTestAdapterPath>
     </PropertyGroup>
 
     <ItemGroup Condition=" '$(IsUnderTeamCity)' == 'true' and '$(MSBuildToolsVersion)' == '15.0' ">
