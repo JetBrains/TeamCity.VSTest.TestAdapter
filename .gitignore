@@ -9,3 +9,4 @@ _ReSharper.Caches
 *.suo
 .vs/
 *.user
+IntegrationTests/global.json

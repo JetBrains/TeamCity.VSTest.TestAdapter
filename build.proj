@@ -66,13 +66,13 @@
 
     <Target Name="ClearNugetCache">
         <Exec Command="dotnet nuget locals global-packages --list" ConsoleToMsBuild="true">
-                <Output TaskParameter="ConsoleOutput" ItemName="GlobaPackagesInfo" />
-	</Exec>
-	<PropertyGroup>
+            <Output TaskParameter="ConsoleOutput" ItemName="GlobaPackagesInfo" />
+        </Exec>
+        <PropertyGroup>
             <CachePath>@(GlobaPackagesInfo->Replace("info : global-packages:", "")->Trim())</CachePath>
         </PropertyGroup>
-	<Message Text='CachePath=$(CachePath)' />
-	<RemoveDir Directories="$(CachePath)teamcity.vstest.testadapter\$(PackageVersion)" />
+        <Message Text='CachePath=$(CachePath)' />
+        <RemoveDir Directories="$(CachePath)teamcity.vstest.testadapter\$(PackageVersion)" />
     </Target>
 
     <Target Name="Publish">
@@ -100,13 +100,12 @@
 
     <Target Name="DispatchIntegrationTest">
         <ItemGroup>
-            <DotnetTool Include="dotnet"/>
-            <DotnetTool Include="C:\dotnet\*\dotnet.exe"/>
+            <DotnetTool Include='$(ProgramW6432)\dotnet\sdk\**\dotnet.dll'/>
         </ItemGroup>
 
         <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=MS.Tests;DotnetMessagesCount=20;MSBuildMessagesCount=10'/>
         <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=XUnit.Tests;DotnetMessagesCount=20;MSBuildMessagesCount=10'/>
-	<MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=Dual.Tests;DotnetMessagesCount=24;MSBuildMessagesCount=12'/>
+        <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=Dual.Tests;DotnetMessagesCount=24;MSBuildMessagesCount=12'/>
     </Target>
 
     <Target Name="DotnetIntegrationTest">
@@ -117,12 +116,29 @@
             <DotnetVersionName Condition=" '$(DotnetVersionName)' == '' ">Default</DotnetVersionName>
             <TestProject>IntegrationTests\$(TestProjectName)\$(TestProjectName).csproj</TestProject>
             <TestAssembly>IntegrationTests\$(TestProjectName)\bin\$(Configuration)\net452\$(TestProjectName).dll</TestAssembly>
-            <CleanCommand>$(DotnetPath) clean "$(TestProject)" -c $(Configuration)</CleanCommand>
-            <RestoreCommand>$(DotnetPath) restore "$(TestProject)" --packages "$(PackageCachePath)" --no-cache "/p:RestoreAdditionalProjectSources=$(PackagePath)"</RestoreCommand>
-            <BuildCommand>$(DotnetPath) build "$(TestProject)" -c $(Configuration) "/p:RestoreAdditionalProjectSources=$(PackagePath)"</BuildCommand>
-            <TestCommand>$(DotnetPath) test "$(TestProject)" -c $(Configuration) --no-build</TestCommand>
+            <CleanCommand>dotnet clean "$(TestProject)" -c $(Configuration)</CleanCommand>
+            <RestoreCommand>dotnet restore "$(TestProject)" --packages "$(PackageCachePath)" --no-cache "/p:RestoreAdditionalProjectSources=$(PackagePath)"</RestoreCommand>
+            <BuildCommand>dotnet build "$(TestProject)" -c $(Configuration) "/p:RestoreAdditionalProjectSources=$(PackagePath)"</BuildCommand>
+            <TestCommand>dotnet test "$(TestProject)" -c $(Configuration) --no-build</TestCommand>
             <MSBuildTestCommand>"C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" "$(TestAssembly)" /Logger:logger://teamcity /TestAdapterPath:. /Framework:Framework45</MSBuildTestCommand>
         </PropertyGroup>
+
+        <Message Text="Create global.json" />
+
+        <ItemGroup>
+            <GlobalJsonFile Include="IntegrationTests\global.json"/>
+            <GlobalJsonFileLine Include='{'/>
+            <GlobalJsonFileLine Include='  "sdk": {'/>
+            <GlobalJsonFileLine Include='    "version": "$(DotnetVersionName)"'/>
+            <GlobalJsonFileLine Include='  }'/>
+            <GlobalJsonFileLine Include='}'/>
+        </ItemGroup>
+
+        <WriteLinesToFile
+            File="@(GlobalJsonFile)"
+            Lines="@(GlobalJsonFileLine)"
+            Overwrite="true"
+            Encoding="Unicode"/>
 
         <Message Text="!!!Start" />
 
