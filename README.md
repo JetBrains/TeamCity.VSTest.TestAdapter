@@ -108,8 +108,10 @@ For example:
 * Download the [custom logger](http://teamcity.jetbrains.com/guestAuth/app/rest/builds/buildType:TeamCityPluginsByJetBrains_TeamCityVSTestTestAdapter_Build,pinned:true,status:SUCCESS,branch:master,tags:release/artifacts/content/TeamCity.VSTest.TestLogger.zip)
 
 * Extract the contents of the downloaded archive on the agent machine:
+  
+  * for VisualStudio 2017 update 5 onwards - to PROGRAM_FILES(x86)\Microsoft Visual Studio\2017\<Edition>\Common7\IDE\Extensions\TestPlatform\Extensions
 
-  * for VisualStudio 2017 - to PROGRAM_FILES(x86)\Microsoft Visual Studio\2017\<Edition>\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Extensions
+  * for VisualStudio 2017 till update 4 - to PROGRAM_FILES(x86)\Microsoft Visual Studio\2017\<Edition>\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Extensions
   
   * for VisualStudio 2015 - to PROGRAM_FILES\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Extensions
   
