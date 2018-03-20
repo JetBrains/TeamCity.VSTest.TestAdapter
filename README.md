@@ -125,6 +125,15 @@ See more details in the [Wiki](https://github.com/JetBrains/TeamCity.VSTest.Test
 
 See the [article](https://blogs.msdn.microsoft.com/visualstudioalm/2016/11/29/evolving-the-test-platform-part-3-net-core-convergence-and-cross-plat/) for details on how to create tests using the [Visual Studio Test Platform](https://github.com/Microsoft/vstest).
 
+## DOCKER CONTAINER
+
+To run tests from within a Docker container that is hosted on a machine running the TeamCity agent, the container must have an environment variable set to a/any value. Example...
+
+```
+ENV TEAMCITY_PROJECT_NAME=My Project
+RUN dotnet test
+```
+
 ## License
 
 It is under the [Apache License](LICENSE).
