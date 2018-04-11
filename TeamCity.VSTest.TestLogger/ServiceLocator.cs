@@ -27,23 +27,12 @@
         }
 
         public static ITeamCityWriter GetTeamCityWriter()
-        {
-            if (_sharedTeamCityWriter == null)
-            {
-                throw new InvalidOperationException("Not initialized");
-            }
-
-            return _sharedTeamCityWriter;
-        }
+            => _sharedTeamCityWriter ?? throw new InvalidOperationException("Not initialized");
 
         public static ITestCaseFilter GetTestCaseFilter()
-        {
-            return new TestCaseFilter();
-        }
+            => new TestCaseFilter();
 
         public static ISuiteNameProvider GetSuiteNameProvider()
-        {
-            return new SuiteNameProvider();
-        }
+            => new SuiteNameProvider();
     }
 }

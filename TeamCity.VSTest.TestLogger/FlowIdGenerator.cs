@@ -5,9 +5,6 @@
 
     internal class FlowIdGenerator : IFlowIdGenerator
     {
-        public string NewFlowId()
-        {
-            return Guid.NewGuid().ToString().Replace("-", string.Empty);
-        }
+        public string NewFlowId() => Guid.NewGuid().ToString().Replace("-", string.Empty);
     }
 }

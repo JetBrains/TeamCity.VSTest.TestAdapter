@@ -21,6 +21,7 @@
         [CanBeNull] private ITeamCityTestsSubWriter _testSuiteWriter;
         private readonly bool _initialized;
 
+        // ReSharper disable once UnusedMember.Global
         public TeamCityTestLogger()
         {
             _initialized = ServiceLocator.Initialize();
@@ -40,12 +41,9 @@
             [NotNull] ITestCaseFilter testCaseFilter,
             [NotNull] ISuiteNameProvider suiteNameProvider)
         {
-            if (rootWriter == null) throw new ArgumentNullException(nameof(rootWriter));
-            if (testCaseFilter == null) throw new ArgumentNullException(nameof(testCaseFilter));
-            if (suiteNameProvider == null) throw new ArgumentNullException(nameof(suiteNameProvider));
-            _rootWriter = rootWriter;
-            _testCaseFilter = testCaseFilter;
-            _suiteNameProvider = suiteNameProvider;
+            _rootWriter = rootWriter ?? throw new ArgumentNullException(nameof(rootWriter));
+            _testCaseFilter = testCaseFilter ?? throw new ArgumentNullException(nameof(testCaseFilter));
+            _suiteNameProvider = suiteNameProvider ?? throw new ArgumentNullException(nameof(suiteNameProvider));
             _initialized = true;
         }
 
@@ -93,12 +91,11 @@
                 testWriter.WriteDuration(result.Duration);
                 if (result.Messages != null && result.Messages.Count > 0)
                 {
-                    var messageWriter = testWriter as ITeamCityMessageWriter;
-                    if (messageWriter != null)
+                    if (testWriter is ITeamCityMessageWriter messageWriter)
+                    {
                         foreach (var message in result.Messages)
                         {
-                            if (
-                                TestResultMessage.StandardOutCategory.Equals(message.Category, StringComparison.CurrentCultureIgnoreCase)
+                            if (TestResultMessage.StandardOutCategory.Equals(message.Category, StringComparison.CurrentCultureIgnoreCase)
                                 || TestResultMessage.AdditionalInfoCategory.Equals(message.Category, StringComparison.CurrentCultureIgnoreCase)
                                 || TestResultMessage.DebugTraceCategory.Equals(message.Category, StringComparison.CurrentCultureIgnoreCase))
                             {
@@ -109,6 +106,7 @@
                             if (TestResultMessage.StandardErrorCategory.Equals(message.Category, StringComparison.CurrentCultureIgnoreCase))
                                 messageWriter.WriteError(message.Text);
                         }
+                    }
                 }
 
                 switch (result.Outcome)
