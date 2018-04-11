@@ -1,6 +1,6 @@
-## [<img src="http://jb.gg/badges/official.svg" height="20" align="center"/>](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub) Test Adapter for [<img src="https://cdn.worldvectorlogo.com/logos/teamcity.svg" height="20" align="center"/>](https://www.jetbrains.com/teamcity/)
+## Test Adapter for [<img src="https://cdn.worldvectorlogo.com/logos/teamcity.svg" height="20" align="center"/>](https://www.jetbrains.com/teamcity/)
 
-[<img src="http://teamcity.jetbrains.com/app/rest/builds/buildType:(id:TeamCityPluginsByJetBrains_TeamCityVSTestTestAdapter_Build)/statusIcon.svg"/>](http://teamcity.jetbrains.com/viewType.html?buildTypeId=TeamCityPluginsByJetBrains_TeamCityVSTestTestAdapter_Build&guest=1) [<img src="https://www.nuget.org/Content/Logos/nugetlogo.png" height="18">](https://www.nuget.org/packages/TeamCity.VSTest.TestAdapter)
+[<img src="http://jb.gg/badges/official.svg"/>](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub) [![NuGet TeamCity.VSTest.TestAdapter](https://buildstats.info/nuget/TeamCity.VSTest.TestAdapter?includePreReleases=false)](https://www.nuget.org/packages/TeamCity.VSTest.TestAdapter) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [<img src="http://teamcity.jetbrains.com/app/rest/builds/buildType:(id:TeamCityPluginsByJetBrains_TeamCityVSTestTestAdapter_Build)/statusIcon.svg"/>](http://teamcity.jetbrains.com/viewType.html?buildTypeId=TeamCityPluginsByJetBrains_TeamCityVSTestTestAdapter_Build&guest=1)
 
 Provides the TeamCity integration with test frameworks via the Visual Studio Test Platform or VSTest IDE tools.
 
@@ -37,6 +37,9 @@ For each test project:
    dotnet add package xunit   
    dotnet add package xunit.runner.visualstudio
    ```
+   
+   :warning: tests might not be reported correctly for .NET Core xunit test projects when logging verbosity levels is `minimal` or `quiet` because of [issue](https://github.com/xunit/xunit/issues/1706), you could add the argument `--verbosity normal` as workaround
+
    
    * NUnit [Framework](https://www.nuget.org/packages/NUnit/) and [Adapter](https://www.nuget.org/packages/NUnit3TestAdapter/)
    
@@ -125,7 +128,7 @@ See more details in the [Wiki](https://github.com/JetBrains/TeamCity.VSTest.Test
 
 See the [article](https://blogs.msdn.microsoft.com/visualstudioalm/2016/11/29/evolving-the-test-platform-part-3-net-core-convergence-and-cross-plat/) for details on how to create tests using the [Visual Studio Test Platform](https://github.com/Microsoft/vstest).
 
-## DOCKER CONTAINER
+## Docker Container Support
 
 To run tests from within a Docker container that is hosted on a machine running the TeamCity agent, the container must have an environment variable set to a/any value. Example...
 
@@ -133,11 +136,3 @@ To run tests from within a Docker container that is hosted on a machine running 
 ENV TEAMCITY_PROJECT_NAME=My Project
 RUN dotnet test
 ```
-
-## License
-
-It is under the [Apache License](LICENSE).
-
-## Contributors
-
-* [Nikolay Pianikov](https://github.com/NikolayPianikov)
