@@ -11,7 +11,7 @@
     public class TeamCityTestLogger : ITestLogger
     {
         internal const string ExtensionId = "logger://" + FriendlyName;
-        private const string FriendlyName = "teamcity";
+        private const string FriendlyName = "TeamCity";
 
         private readonly ITeamCityWriter _rootWriter;
         private readonly ISuiteNameProvider _suiteNameProvider;
