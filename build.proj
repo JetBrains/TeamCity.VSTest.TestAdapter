@@ -119,7 +119,7 @@
             <CleanCommand>dotnet clean "$(TestProject)" -c $(Configuration)</CleanCommand>
             <RestoreCommand>dotnet restore "$(TestProject)" --packages "$(PackageCachePath)" --no-cache "/p:RestoreAdditionalProjectSources=$(PackagePath)"</RestoreCommand>
             <BuildCommand>dotnet build "$(TestProject)" -c $(Configuration) "/p:RestoreAdditionalProjectSources=$(PackagePath)"</BuildCommand>
-            <TestCommand>dotnet test "$(TestProject)" -c $(Configuration) --no-build</TestCommand>
+            <TestCommand>dotnet test "$(TestProject)" -c $(Configuration) --no-build --verbosity normal</TestCommand>
             <MSBuildTestCommand>"C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" "$(TestAssembly)" /Logger:logger://teamcity /TestAdapterPath:. /Framework:Framework45</MSBuildTestCommand>
         </PropertyGroup>
 

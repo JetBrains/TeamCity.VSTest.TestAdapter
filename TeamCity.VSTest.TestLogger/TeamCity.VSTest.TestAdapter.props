@@ -6,6 +6,7 @@
 
     <PropertyGroup Condition=" '$(IsUnderTeamCity)' == 'true' ">
         <VSTestLogger Condition=" '$(VSTestLogger)' == '' ">logger://teamcity</VSTestLogger>
+        <VSTestVerbosity Condition=" '$(VSTestVerbosity)' == '' or '$(VSTestVerbosity)' == 'quiet' or '$(VSTestVerbosity)' == 'q' or '$(VSTestVerbosity)' == 'minimal' or '$(VSTestVerbosity)' == 'm' ">normal</VSTestVerbosity>
     </PropertyGroup>
 
     <ItemGroup Condition=" '$(IsUnderTeamCity)' == 'true' and '$(MSBuildToolsVersion)' == '15.0' ">

@@ -38,7 +38,7 @@ For each test project:
    dotnet add package xunit.runner.visualstudio
    ```
    
-   :warning: tests might not be reported correctly for .NET Core xunit test projects when logging verbosity levels is `minimal` or `quiet` because of [issue](https://github.com/xunit/xunit/issues/1706), you could add the argument `--verbosity normal` as workaround
+   :warning: tests might not be reported correctly for .NET Core xunit test projects when logging verbosity levels is `minimal` or `quiet` because of [issue](https://github.com/xunit/xunit/issues/1706), so try avoiding using these verbosity levels
 
    
    * NUnit [Framework](https://www.nuget.org/packages/NUnit/) and [Adapter](https://www.nuget.org/packages/NUnit3TestAdapter/)
