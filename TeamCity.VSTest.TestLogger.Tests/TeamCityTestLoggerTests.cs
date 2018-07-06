@@ -29,15 +29,14 @@
             _suiteNameProvider.Setup(i => i.GetSuiteName(It.IsAny<string>(), It.IsAny<string>())).Returns<string, string>((baseDir, source) => source);
 
             var root = new Root(_lines);
-            _logger = new TeamCityTestLogger(root, _testCaseFilter.Object, _suiteNameProvider.Object);
-            _logger.Initialize(_events, null);
+            var logger = new TeamCityTestLogger(root, _testCaseFilter.Object, _suiteNameProvider.Object);
+            logger.Initialize(_events, null);
         }
 
         private readonly List<string> _lines = new List<string>();
-        private Events _events;
-        private TeamCityTestLogger _logger;
-        private Mock<ITestCaseFilter> _testCaseFilter;
-        private Mock<ISuiteNameProvider> _suiteNameProvider;
+        private readonly Events _events;
+        private readonly Mock<ITestCaseFilter> _testCaseFilter;
+        private readonly Mock<ISuiteNameProvider> _suiteNameProvider;
 
         private static TestResultEventArgs CreateTestResult(
             TestOutcome outcome = TestOutcome.Passed,

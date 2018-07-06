@@ -103,7 +103,7 @@
             <DotnetTool Include='$(ProgramW6432)\dotnet\sdk\**\dotnet.dll'/>
         </ItemGroup>
 
-        <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=MS.Tests;DotnetMessagesCount=20;MSBuildMessagesCount=10'/>
+        <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=MS.Tests;DotnetMessagesCount=30;MSBuildMessagesCount=15'/>
         <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=XUnit.Tests;DotnetMessagesCount=20;MSBuildMessagesCount=10'/>
         <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=Dual.Tests;DotnetMessagesCount=24;MSBuildMessagesCount=12'/>
     </Target>

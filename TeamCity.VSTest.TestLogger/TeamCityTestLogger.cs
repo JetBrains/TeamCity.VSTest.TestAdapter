@@ -91,20 +91,27 @@
                 testWriter.WriteDuration(result.Duration);
                 if (result.Messages != null && result.Messages.Count > 0)
                 {
-                    if (testWriter is ITeamCityMessageWriter messageWriter)
+                    foreach (var message in result.Messages)
                     {
-                        foreach (var message in result.Messages)
+                        if (TestResultMessage.StandardOutCategory.Equals(message.Category, StringComparison.CurrentCultureIgnoreCase)
+                            || TestResultMessage.AdditionalInfoCategory.Equals(message.Category, StringComparison.CurrentCultureIgnoreCase)
+                            || TestResultMessage.DebugTraceCategory.Equals(message.Category, StringComparison.CurrentCultureIgnoreCase))
                         {
-                            if (TestResultMessage.StandardOutCategory.Equals(message.Category, StringComparison.CurrentCultureIgnoreCase)
-                                || TestResultMessage.AdditionalInfoCategory.Equals(message.Category, StringComparison.CurrentCultureIgnoreCase)
-                                || TestResultMessage.DebugTraceCategory.Equals(message.Category, StringComparison.CurrentCultureIgnoreCase))
-                            {
-                                messageWriter.WriteMessage(message.Text);
-                                continue;
-                            }
+                            testWriter.WriteStdOutput(message.Text);
+                            continue;
+                        }
 
-                            if (TestResultMessage.StandardErrorCategory.Equals(message.Category, StringComparison.CurrentCultureIgnoreCase))
-                                messageWriter.WriteError(message.Text);
+                        if (TestResultMessage.StandardErrorCategory.Equals(message.Category, StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            testWriter.WriteErrOutput(message.Text);
+                        }
+                    }
+
+                    foreach (var attachments in result.Attachments)
+                    {
+                        foreach (var attachment in attachments.Attachments)
+                        {
+                            testWriter.WriteStdOutput($"Attachment \"{attachment.Description}\"");
                         }
                     }
                 }

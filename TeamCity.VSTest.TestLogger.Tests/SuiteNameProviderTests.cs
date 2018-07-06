@@ -8,8 +8,8 @@
 
     public class SuiteNameProviderTests
     {
-        public const string Null = "null";
-        public const string Br = ";";
+        private const string Null = "null";
+        private const string Br = ";";
 
         private static SuiteNameProvider CreateInstance()
         {

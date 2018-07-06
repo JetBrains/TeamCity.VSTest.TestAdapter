@@ -2,11 +2,12 @@
   "profiles": {
     "TeamCity.VSTest.TestAdapter": {
       "commandName": "Executable",
-      "executablePath": "C:\\Program Files\\dotnet\\dotnet.exe",
-      "commandLineArgs": "test IntegrationTests\\dotNet.XUnit.Tests\\dotNet.XUnit.Tests.csproj /p:VSTestLogger=teamcity;VSTestTestAdapterPath=.",
-      "workingDirectory": "C:\\Projects\\TeamCity.VSTestAdapter",
+      "executablePath": "vstest.console.exe",
+      "commandLineArgs": "IntegrationTests\\MS.Tests\\bin\\Debug\\net452\\MS.Tests.dll /TestAdapterPath:. /logger:TeamCity",
+      "workingDirectory": "C:\\Projects\\TeamCity\\TeamCity.VSTest.TestAdapter",
       "environmentVariables": {
-        "VSTEST_HOST_DEBUG": "1"
+        "VSTEST_HOST_DEBUG": "1",
+        "VSTEST_RUNNER_DEBUG": "0"
       }
     }
   }

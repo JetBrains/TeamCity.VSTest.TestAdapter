@@ -38,12 +38,12 @@
 
         public void WriteStdOutput(string text)
         {
-            throw new NotImplementedException();
+            _lines.Add($"# test {_testName} message {text}");
         }
 
         public void WriteErrOutput(string text)
         {
-            throw new NotImplementedException();
+            _lines.Add($"# test {_testName} error {text}");
         }
 
         public void WriteIgnored(string ignoreReason)

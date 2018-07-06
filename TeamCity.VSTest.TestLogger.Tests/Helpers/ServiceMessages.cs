@@ -11,7 +11,7 @@
     {
         private static readonly IServiceMessageParser Parser = new ServiceMessageParser();
 
-        public static int GetNumberServiceMessage([NotNull] string text)
+        public static int GetNumberOfServiceMessages([NotNull] string text)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
             var actualMessages = Parser.ParseServiceMessages(text).ToList();
@@ -55,7 +55,7 @@
                 ParentAttr = message.GetValue("parent");
                 CaptureStandardOutputAttr = message.GetValue("captureStandardOutput");
                 DurationAttr = message.GetValue("duration");
-                OutAttr = message.GetValue("duration");
+                OutAttr = message.GetValue("out");
                 MessageAttr = message.GetValue("message");
                 DetailsAttr = message.GetValue("details");
                 TcTagsAttr = message.GetValue("tc:tags");
@@ -152,6 +152,7 @@
                         break;
 
                     case "testStdOut":
+                    case "testStdErr":
                         AreEqual(message.FlowIdAttr, FlowId, "Invalid FlowId attribute");
                         IsNotEmpty(message.NameAttr, "Name attribute is empty");
                         Greater(_messages.Count, 1, "testStdOut should be within testStarted and testFinished");

@@ -36,7 +36,7 @@
             {
                 foreach (var message in testResult.Messages)
                 {
-                    ServiceMessages.GetNumberServiceMessage(message.Item2).ShouldBe(message.Item1, testResult.ToString());
+                    ServiceMessages.GetNumberOfServiceMessages(message.Item2).ShouldBe(message.Item1, testResult.ToString());
                     ServiceMessages.ResultShouldContainCorrectStructureAndSequence(testResult.ToString());
                 }
             }
