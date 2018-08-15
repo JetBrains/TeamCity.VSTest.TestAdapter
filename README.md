@@ -130,9 +130,8 @@ See the [article](https://blogs.msdn.microsoft.com/visualstudioalm/2016/11/29/ev
 
 ## Docker Container Support
 
-To run tests from within a Docker container that is hosted on a machine running the TeamCity agent, the container must have an environment variable set to a/any value. Example...
+To run tests from within a Docker container that is hosted on a machine running the TeamCity agent, the container must have a `TEAMCITY_PROJECT_NAME` or `TEAMCITY_VERSION` environment variable set. Example:
 
 ```
-ENV TEAMCITY_PROJECT_NAME=My Project
-RUN dotnet test
+docker run --rm -v $PWD:/app -w /app -e TEAMCITY_VERSION microsoft/dotnet:2.1-sdk dotnet test
 ```
