@@ -126,17 +126,13 @@
                         break;
 
                     case TestOutcome.Skipped:
+                    case TestOutcome.None: // https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/issues/23
+                    case TestOutcome.NotFound:
                         if (string.IsNullOrEmpty(result.ErrorMessage))
                             testWriter.WriteIgnored();
                         else
                             testWriter.WriteIgnored(result.ErrorMessage);
 
-                        break;
-
-                    case TestOutcome.NotFound:
-                        break;
-
-                    case TestOutcome.None:
                         break;
 
                     default:

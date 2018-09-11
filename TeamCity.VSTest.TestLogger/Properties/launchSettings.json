@@ -3,7 +3,7 @@
     "TeamCity.VSTest.TestAdapter": {
       "commandName": "Executable",
       "executablePath": "vstest.console.exe",
-      "commandLineArgs": "IntegrationTests\\MS.Tests\\bin\\Debug\\net452\\MS.Tests.dll /TestAdapterPath:. /logger:TeamCity",
+      "commandLineArgs": "C:\\Projects\\nunit_core3\\PrimeServiceTests\\bin\\Debug\\net45\\PrimeServiceTests.dll /TestAdapterPath:. /logger:TeamCity",
       "workingDirectory": "C:\\Projects\\TeamCity\\TeamCity.VSTest.TestAdapter",
       "environmentVariables": {
         "VSTEST_HOST_DEBUG": "1",
