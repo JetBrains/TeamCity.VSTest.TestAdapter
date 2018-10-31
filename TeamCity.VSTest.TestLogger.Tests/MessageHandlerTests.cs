@@ -2,11 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Diagnostics.CodeAnalysis;
     using Helpers;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-    using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
     using Moq;
     using Shouldly;
@@ -14,13 +12,11 @@
     using Xunit;
 
     [SuppressMessage("ReSharper", "ImplicitlyCapturedClosure")]
-    public class TeamCityTestLoggerTests
+    public class MessageHandlerTests
     {
-        
-        public TeamCityTestLoggerTests()
+        public MessageHandlerTests()
         {
             _lines.Clear();
-            _events = new Events();
 
             _testCaseFilter = new Mock<ITestCaseFilter>();
             _testCaseFilter.Setup(i => i.IsSupported(It.IsAny<TestCase>())).Returns(true);
@@ -28,13 +24,14 @@
             _suiteNameProvider = new Mock<ISuiteNameProvider>();
             _suiteNameProvider.Setup(i => i.GetSuiteName(It.IsAny<string>(), It.IsAny<string>())).Returns<string, string>((baseDir, source) => source);
 
+            var options = new Mock<IOptions>();
+
             var root = new Root(_lines);
-            var logger = new TeamCityTestLogger(root, _testCaseFilter.Object, _suiteNameProvider.Object);
-            logger.Initialize(_events, null);
+            _events = new MessageHandler(root, _testCaseFilter.Object, _suiteNameProvider.Object, options.Object);
         }
 
         private readonly List<string> _lines = new List<string>();
-        private readonly Events _events;
+        private readonly IMessageHandler _events;
         private readonly Mock<ITestCaseFilter> _testCaseFilter;
         private readonly Mock<ISuiteNameProvider> _suiteNameProvider;
 
@@ -60,17 +57,6 @@
                 });
         }
 
-        private static TestRunCompleteEventArgs CreateComplete()
-        {
-            return new TestRunCompleteEventArgs(
-                Mock.Of<ITestRunStatistics>(),
-                false,
-                false,
-                null,
-                new Collection<AttachmentSet>(),
-                TimeSpan.FromMinutes(1));
-        }
-
         [Fact]
         public void ShouldNotProduceAnyMessagesWhenTestCaseFilterFiltersAllMessages()
         {
@@ -79,8 +65,8 @@
 
             // When
             _testCaseFilter.Setup(i => i.IsSupported(testResult.Result.TestCase)).Returns(false);
-            _events.SendTestResult(testResult);
-            _events.SendTestRunComplete(CreateComplete());
+            _events.OnTestResult(testResult);
+            _events.OnTestRunComplete();
 
             // Then
             _lines.ShouldNotBeEmpty();
@@ -94,11 +80,11 @@
 
             // When
             _testCaseFilter.Setup(i => i.IsSupported(testResult.Result.TestCase)).Returns(false);
-            _events.SendTestRunMessage(new TestRunMessageEventArgs(TestMessageLevel.Error, "err"));
-            _events.SendTestRunMessage(new TestRunMessageEventArgs(TestMessageLevel.Informational, "abc"));
-            _events.SendTestRunMessage(new TestRunMessageEventArgs(TestMessageLevel.Warning, "warn"));
-            _events.SendTestResult(testResult);
-            _events.SendTestRunComplete(CreateComplete());
+            _events.OnTestRunMessage(new TestRunMessageEventArgs(TestMessageLevel.Error, "err"));
+            _events.OnTestRunMessage(new TestRunMessageEventArgs(TestMessageLevel.Informational, "abc"));
+            _events.OnTestRunMessage(new TestRunMessageEventArgs(TestMessageLevel.Warning, "warn"));
+            _events.OnTestResult(testResult);
+            _events.OnTestRunComplete();
 
             // Then
             _testCaseFilter.Verify(i => i.RegisterOutputMessage("err"), Times.Never);
@@ -112,8 +98,8 @@
             // Given
 
             // When
-            _events.SendTestResult(CreateTestResult(TestOutcome.Failed, "test1", "assembly.dll", "errorInfo", "stackTrace"));
-            _events.SendTestRunComplete(CreateComplete());
+            _events.OnTestResult(CreateTestResult(TestOutcome.Failed, "test1", "assembly.dll", "errorInfo", "stackTrace"));
+            _events.OnTestRunComplete();
 
             // Then
             _lines.ShouldBe(new[]
@@ -135,8 +121,8 @@
             // Given
 
             // When
-            _events.SendTestResult(CreateTestResult());
-            _events.SendTestRunComplete(CreateComplete());
+            _events.OnTestResult(CreateTestResult());
+            _events.OnTestRunComplete();
 
             // Then
             _lines.ShouldBe(new[]
@@ -162,8 +148,8 @@
             testResult.Result.Messages.Add(new TestResultMessage(TestResultMessage.AdditionalInfoCategory, "additional text"));
             testResult.Result.Messages.Add(new TestResultMessage(TestResultMessage.DebugTraceCategory, "trace text"));
             testResult.Result.Messages.Add(new TestResultMessage(TestResultMessage.StandardErrorCategory, "error text"));
-            _events.SendTestResult(testResult);
-            _events.SendTestRunComplete(CreateComplete());
+            _events.OnTestResult(testResult);
+            _events.OnTestRunComplete();
 
 
             // Then
@@ -189,9 +175,9 @@
             // Given
 
             // When
-            _events.SendTestResult(CreateTestResult());
-            _events.SendTestResult(CreateTestResult(TestOutcome.Passed, "test2"));
-            _events.SendTestRunComplete(CreateComplete());
+            _events.OnTestResult(CreateTestResult());
+            _events.OnTestResult(CreateTestResult(TestOutcome.Passed, "test2"));
+            _events.OnTestRunComplete();
 
             // Then
             _lines.ShouldBe(new[]
@@ -215,11 +201,11 @@
             // Given
 
             // When
-            _events.SendTestResult(CreateTestResult());
-            _events.SendTestResult(CreateTestResult(TestOutcome.Passed, "test2"));
-            _events.SendTestResult(CreateTestResult(TestOutcome.Passed, "test3", "assembly2.dll"));
-            _events.SendTestResult(CreateTestResult(TestOutcome.Passed, "test4", "assembly2.dll"));
-            _events.SendTestRunComplete(CreateComplete());
+            _events.OnTestResult(CreateTestResult());
+            _events.OnTestResult(CreateTestResult(TestOutcome.Passed, "test2"));
+            _events.OnTestResult(CreateTestResult(TestOutcome.Passed, "test3", "assembly2.dll"));
+            _events.OnTestResult(CreateTestResult(TestOutcome.Passed, "test4", "assembly2.dll"));
+            _events.OnTestRunComplete();
 
             // Then
             _lines.ShouldBe(new[]
@@ -251,8 +237,8 @@
             // Given
 
             // When
-            _events.SendTestResult(CreateTestResult(TestOutcome.Skipped, "test1", "assembly.dll", "reason"));
-            _events.SendTestRunComplete(CreateComplete());
+            _events.OnTestResult(CreateTestResult(TestOutcome.Skipped, "test1", "assembly.dll", "reason"));
+            _events.OnTestRunComplete();
 
             // Then
             _lines.ShouldBe(new[]
@@ -276,8 +262,8 @@
             // Given
 
             // When
-            _events.SendTestResult(CreateTestResult(TestOutcome.Skipped, "test1", "assembly.dll", reason));
-            _events.SendTestRunComplete(CreateComplete());
+            _events.OnTestResult(CreateTestResult(TestOutcome.Skipped, "test1", "assembly.dll", reason));
+            _events.OnTestRunComplete();
 
             // Then
             _lines.ShouldBe(new[]
@@ -303,9 +289,9 @@
             // When
             _testCaseFilter.Setup(i => i.IsSupported(testResult1.Result.TestCase)).Returns(false);
             _testCaseFilter.Setup(i => i.IsSupported(testResult2.Result.TestCase)).Returns(true);
-            _events.SendTestResult(testResult1);
-            _events.SendTestResult(testResult2);
-            _events.SendTestRunComplete(CreateComplete());
+            _events.OnTestResult(testResult1);
+            _events.OnTestResult(testResult2);
+            _events.OnTestRunComplete();
 
             // Then
             // Then
@@ -327,8 +313,8 @@
             // Given
 
             // When
-            _events.SendTestResult(CreateTestResult());
-            _events.SendTestRunComplete(CreateComplete());
+            _events.OnTestResult(CreateTestResult());
+            _events.OnTestRunComplete();
 
             // Then
             _suiteNameProvider.Verify(i => i.GetSuiteName(null, "assembly.dll"), Times.Once);

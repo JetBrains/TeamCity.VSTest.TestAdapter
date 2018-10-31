@@ -16,6 +16,12 @@
             <Visible>False</Visible>
         </Content>
 
+        <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest15\IoC.dll">
+            <Link>IoC.dll</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Visible>False</Visible>
+        </Content>
+
         <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest15\TeamCity.VSTest.TestAdapter.dll">
             <Link>TeamCity.VSTest.TestAdapter.dll</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -32,6 +38,12 @@
     <ItemGroup Condition=" '$(IsUnderTeamCity)' == 'true' and '$(MSBuildToolsVersion)' == '14.0' ">
         <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest14\TeamCity.ServiceMessages.dll">
             <Link>TeamCity.ServiceMessages.dll</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Visible>False</Visible>
+        </Content>
+
+        <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest14\IoC.dll">
+            <Link>IoC.dll</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <Visible>False</Visible>
         </Content>

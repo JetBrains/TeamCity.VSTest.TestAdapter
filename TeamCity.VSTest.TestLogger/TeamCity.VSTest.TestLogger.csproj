@@ -60,9 +60,15 @@ Usage:
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.5'">
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="15.0.0" />
+    <PackageReference Include="IoC.Container" Version="1.1.11" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard1.5'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="11.0.0" />
+    <PackageReference Include="IoC.Container" Version="1.1.11" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net35'">
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="11.0.0" />
   </ItemGroup>
 

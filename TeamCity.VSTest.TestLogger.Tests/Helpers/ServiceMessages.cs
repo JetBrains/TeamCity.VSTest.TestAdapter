@@ -1,4 +1,6 @@
-﻿namespace TeamCity.VSTest.TestLogger.Tests.Helpers
+﻿// ReSharper disable MemberCanBePrivate.Local
+// ReSharper disable UnusedAutoPropertyAccessor.Local
+namespace TeamCity.VSTest.TestLogger.Tests.Helpers
 {
     using System;
     using System.Collections.Generic;
