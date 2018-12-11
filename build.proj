@@ -95,6 +95,8 @@
     </Target>
 
     <Target Name="IntegrationTest" DependsOnTargets="Pack;ClearNugetCache">
+	<Message Text='"$(MSBuildToolsPath)\msbuild.exe" "$(MSBuildThisFileFullPath)" /t:DispatchIntegrationTest /p:Configuration=$(Configuration) > "$(IntegrationTestResults)"' />
+	<Message Text='WorkingDirectory="$(MSBuildThisFileDirectory)"' />
         <Exec Command='"$(MSBuildToolsPath)\msbuild.exe" "$(MSBuildThisFileFullPath)" /t:DispatchIntegrationTest /p:Configuration=$(Configuration) > "$(IntegrationTestResults)"' WorkingDirectory="$(MSBuildThisFileDirectory)"/>
     </Target>
 
