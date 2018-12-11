@@ -58,7 +58,7 @@
 
         public void PublishArtifact(string rules)
         {
-            throw new NotImplementedException();
+            _lines.Add($"# publish {rules}");
         }
 
         public void WriteBuildNumber(string buildNumber)

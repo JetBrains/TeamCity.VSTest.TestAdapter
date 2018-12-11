@@ -10,3 +10,4 @@ _ReSharper.Caches
 .vs/
 *.user
 IntegrationTests/global.json
+.idea/

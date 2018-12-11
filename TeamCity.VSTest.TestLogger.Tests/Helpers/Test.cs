@@ -65,5 +65,30 @@
         {
             _lines.Add($"# test {_testName} duration {duration}");
         }
+
+        public void WriteImage(string teamCityArtifactUri, string description = "")
+        {
+            _lines.Add($"# test {_testName} image {teamCityArtifactUri} as {description}");
+        }
+
+        public void WriteFile(string teamCityArtifactUri, string description = "")
+        {
+            _lines.Add($"# test {_testName} artifact {teamCityArtifactUri} as {description}");
+        }
+
+        public void WriteValue(double value, string name)
+        {
+            _lines.Add($"# test {_testName} value {value}");
+        }
+
+        public void WriteValue(string value, string name)
+        {
+            _lines.Add($"# test {_testName} value \"{value}\"");
+        }
+
+        public void WriteLink(string linkUri, string name)
+        {
+            _lines.Add($"# test {_testName} link {linkUri}");
+        }
     }
 }

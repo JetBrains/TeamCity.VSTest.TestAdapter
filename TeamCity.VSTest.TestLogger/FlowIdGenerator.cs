@@ -5,6 +5,13 @@
 
     internal class FlowIdGenerator : IFlowIdGenerator
     {
-        public string NewFlowId() => Guid.NewGuid().ToString().Replace("-", string.Empty);
+        private readonly IIdGenerator _idGenerator;
+
+        public FlowIdGenerator(IIdGenerator idGenerator)
+        {
+            _idGenerator = idGenerator ?? throw new ArgumentNullException(nameof(idGenerator));
+        }
+
+        public string NewFlowId() => _idGenerator.NewId();
     }
 }

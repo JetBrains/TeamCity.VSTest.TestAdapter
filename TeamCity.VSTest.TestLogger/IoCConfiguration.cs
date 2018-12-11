@@ -20,6 +20,7 @@ namespace TeamCity.VSTest.TestLogger
             yield return container.Bind<ITeamCityServiceMessages>().To<TeamCityServiceMessages>();
             yield return container.Bind<IServiceMessageFormatter>().To<ServiceMessageFormatter>();
             yield return container.Bind<IFlowIdGenerator>().To<FlowIdGenerator>();
+            yield return container.Bind<IIdGenerator>().To<IdGenerator>();
             yield return container.Bind<IServiceMessageUpdater>().To(ctx => new TimestampUpdater(() => DateTime.Now));
             yield return container.Bind<ITeamCityWriter>().To(ctx => ctx.Container.Inject<ITeamCityServiceMessages>().CreateWriter(Console.WriteLine));
         }

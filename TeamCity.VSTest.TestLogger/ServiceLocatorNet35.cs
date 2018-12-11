@@ -6,23 +6,24 @@ namespace TeamCity.VSTest.TestLogger
     using JetBrains.TeamCity.ServiceMessages.Write.Special;
     using JetBrains.TeamCity.ServiceMessages.Write.Special.Impl.Updater;
 
-    internal class ServiceLocatorNet35: IOptions
+    internal class ServiceLocatorNet35: Options
     {
         public IMessageHandler CreateMessageHandler()
         {
+            var idGenerator = new IdGenerator();
+
             var teamCityWriter = new TeamCityServiceMessages(
                 new ServiceMessageFormatter(),
-                new FlowIdGenerator(),
+                new FlowIdGenerator(idGenerator),
                 new IServiceMessageUpdater[] {new TimestampUpdater(() => DateTime.Now)}).CreateWriter(Console.WriteLine);
 
             return new MessageHandler(
                 teamCityWriter,
                 new TestCaseFilter(),
                 new SuiteNameProvider(),
+                idGenerator,
                 this);
         }
-
-        public string TestRunDirectory { get; set; }
     }
 }
 #endif
