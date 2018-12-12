@@ -10,6 +10,8 @@
 
         bool AllowExperimental { get; }
 
+        bool MetadataEnable { get; }
+
         TeamCityVersion TestMetadataSupportVersion { get; }
     }
 }

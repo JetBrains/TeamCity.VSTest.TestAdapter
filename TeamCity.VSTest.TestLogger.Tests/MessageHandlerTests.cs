@@ -337,6 +337,38 @@
 
             // When
             _options.SetupGet(i => i.AllowExperimental).Returns(false);
+            _options.SetupGet(i => i.MetadataEnable).Returns(true);
+            _events.OnTestResult(testResult);
+            _events.OnTestRunComplete();
+
+            // Then
+            _lines.ShouldBe(new[]
+            {
+                "+ root"
+                , "+ suite assembly.dll"
+                , "+ test assembly.dll/test1"
+                , "# test assembly.dll/test1 duration 00:00:01"
+                , expectedMessage
+                , "- test assembly.dll/test1"
+                , "- suite assembly.dll"
+                , "- root"
+            });
+        }
+
+        [Theory]
+        [InlineData("file:///Images/My.jpg", "My image", "# test assembly.dll/test1 message Attachment \"My image\": \"file:///Images/My.jpg\"")]
+        [InlineData("file:///Images/My.txt", "My file", "# test assembly.dll/test1 message Attachment \"My file\": \"file:///Images/My.txt\"")]
+        public void ShouldNotPublishAttachedFilesAsTestMetadataWhenMetadataNotEnabled(string uri, string description, string expectedMessage)
+        {
+            // Given
+            var testResult = CreateTestResult();
+            var attachmentSet = new AttachmentSet(new Uri("file:///abc"), "attachments");
+            attachmentSet.Attachments.Add(new UriDataAttachment(new Uri(uri), description));
+            testResult.Result.Attachments.Add(attachmentSet);
+
+            // When
+            _options.SetupGet(i => i.AllowExperimental).Returns(true);
+            _options.SetupGet(i => i.MetadataEnable).Returns(false);
             _events.OnTestResult(testResult);
             _events.OnTestRunComplete();
 
@@ -367,6 +399,7 @@
 
             // When
             _options.SetupGet(i => i.AllowExperimental).Returns(true);
+            _options.SetupGet(i => i.MetadataEnable).Returns(true);
             _options.SetupGet(i => i.TestMetadataSupportVersion).Returns(new TeamCityVersion("2018.2"));
             _options.SetupGet(i => i.Version).Returns(new TeamCityVersion("2018.1"));
             _events.OnTestResult(testResult);
@@ -391,7 +424,7 @@
         [InlineData("file:///Data/My.txt", "My data", "# publish /Data/My.txt => .teamcity/VSTest/test1/id", "# test assembly.dll/test1 artifact .teamcity/VSTest/test1/id/My.txt as My data")]
         [InlineData("file:///Images/My.jpg", "/Images/My.jpg", "# publish /Images/My.jpg => .teamcity/VSTest/test1/id", "# test assembly.dll/test1 image .teamcity/VSTest/test1/id/My.jpg as ")]
         [InlineData("file:///c:/Images/My.jpg", "c:\\Images\\My.jpg", "# publish c:\\Images\\My.jpg => .teamcity/VSTest/test1/id", "# test assembly.dll/test1 image .teamcity/VSTest/test1/id/My.jpg as ")]
-        public void ShouldPublishAttachedFilesAsTestMetadataWhenAllowsExperimental(string uri, string description, string expectedPublishMessage, string expectedMetadataMessage)
+        public void ShouldPublishAttachedFilesAsTestMetadataWhenAllowsExperimentalAndMetadataEnabled(string uri, string description, string expectedPublishMessage, string expectedMetadataMessage)
         {
             // Given
             var testResult = CreateTestResult();
@@ -402,6 +435,7 @@
 
             // When
             _options.SetupGet(i => i.AllowExperimental).Returns(true);
+            _options.SetupGet(i => i.MetadataEnable).Returns(true);
             _options.SetupGet(i => i.TestMetadataSupportVersion).Returns(new TeamCityVersion("2018.2"));
             _options.SetupGet(i => i.Version).Returns(new TeamCityVersion("2018.3"));
             _events.OnTestResult(testResult);

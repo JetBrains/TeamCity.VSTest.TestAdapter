@@ -82,7 +82,7 @@
                 {
                     foreach (var attachment in attachments.Attachments)
                     {
-                        if (!_options.AllowExperimental || _options.Version.CompareTo(_options.TestMetadataSupportVersion) < 0)
+                        if (!_options.MetadataEnable ||!_options.AllowExperimental || _options.Version.CompareTo(_options.TestMetadataSupportVersion) < 0)
                         {
                             testWriter.WriteStdOutput($"Attachment \"{attachment.Description}\": \"{attachment.Uri}\"");
                             continue;
