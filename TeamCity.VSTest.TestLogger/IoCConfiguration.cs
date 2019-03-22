@@ -17,7 +17,7 @@ namespace TeamCity.VSTest.TestLogger
             yield return container.Bind<IOptions>().As(Singleton).To<Options>();
             yield return container.Bind<ITestCaseFilter>().To<TestCaseFilter>();
             yield return container.Bind<ISuiteNameProvider>().To<SuiteNameProvider>();
-            yield return container.Bind<ITeamCityServiceMessages>().To<TeamCityServiceMessages>();
+            yield return container.Bind<ITeamCityServiceMessages>().To<TeamCityServiceMessages>(ctx => new TeamCityServiceMessages(ctx.Container.Inject<IServiceMessageFormatter>(), ctx.Container.Inject<IFlowIdGenerator>(), ctx.Container.Inject<IEnumerable<IServiceMessageUpdater>>()));
             yield return container.Bind<IServiceMessageFormatter>().To<ServiceMessageFormatter>();
             yield return container.Bind<IFlowIdGenerator>().To<FlowIdGenerator>();
             yield return container.Bind<IIdGenerator>().To<IdGenerator>();
