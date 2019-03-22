@@ -87,7 +87,7 @@ Thus, the final project file could look like the following:
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.3.2" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.3.2" />
-    <PackageReference Include="TeamCity.VSTest.TestAdapter" Version="1.0.14" />    
+    <PackageReference Include="TeamCity.VSTest.TestAdapter" Version="1.0.15" />    
   </ItemGroup>  
 </Project>
 ```
