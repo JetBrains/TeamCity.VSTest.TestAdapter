@@ -1,72 +1,92 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <PropertyGroup Condition=" '$(IsUnderTeamCity)' == '' ">
-        <IsUnderTeamCity Condition=" '$(TEAMCITY_PROJECT_NAME)' != '' or '$(TEAMCITY_VERSION)' != '' ">true</IsUnderTeamCity>
-    </PropertyGroup>
+  <PropertyGroup Condition=" '$(IsUnderTeamCity)' == '' ">
+    <IsUnderTeamCity Condition=" '$(TEAMCITY_PROJECT_NAME)' != '' or '$(TEAMCITY_VERSION)' != '' ">true</IsUnderTeamCity>
+  </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(IsUnderTeamCity)' == 'true' ">
-        <VSTestLogger Condition=" '$(VSTestLogger)' == '' ">logger://teamcity</VSTestLogger>
-        <VSTestVerbosity Condition=" '$(VSTestVerbosity)' == '' or '$(VSTestVerbosity)' == 'quiet' or '$(VSTestVerbosity)' == 'q' or '$(VSTestVerbosity)' == 'minimal' or '$(VSTestVerbosity)' == 'm' ">normal</VSTestVerbosity>
-    </PropertyGroup>
+  <Choose>
+    <When Condition=" '$(MSBuildToolsVersion)' == '14.0' ">
+      <PropertyGroup Condition=" '$(IsUnderTeamCity)' == 'true' ">
+        <ToolsVersion>14</ToolsVersion>
+      </PropertyGroup>      
+    </When>
 
-    <ItemGroup Condition=" '$(IsUnderTeamCity)' == 'true' and '$(MSBuildToolsVersion)' == '15.0' ">
-        <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest15\TeamCity.ServiceMessages.dll">
-            <Link>TeamCity.ServiceMessages.dll</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <Visible>False</Visible>
-        </Content>
+    <When Condition=" '$(MSBuildToolsVersion)' == '15.0' ">
+      <PropertyGroup Condition=" '$(IsUnderTeamCity)' == 'true' ">
+        <ToolsVersion>15</ToolsVersion>
+      </PropertyGroup>
+    </When>
 
-        <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest15\IoC.dll">
-            <Link>IoC.dll</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <Visible>False</Visible>
-        </Content>
+    <Otherwise>
+      <PropertyGroup Condition=" '$(IsUnderTeamCity)' == 'true' ">
+        <ToolsVersion>15</ToolsVersion>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
 
-        <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest15\TeamCity.VSTest.TestAdapter.dll">
-            <Link>TeamCity.VSTest.TestAdapter.dll</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <Visible>False</Visible>
-        </Content>
+  <PropertyGroup Condition=" '$(IsUnderTeamCity)' == 'true' ">
+    <VSTestLogger Condition=" '$(VSTestLogger)' == '' ">logger://teamcity</VSTestLogger>
+    <VSTestVerbosity Condition=" '$(VSTestVerbosity)' == '' or '$(VSTestVerbosity)' == 'quiet' or '$(VSTestVerbosity)' == 'q' or '$(VSTestVerbosity)' == 'minimal' or '$(VSTestVerbosity)' == 'm' ">normal</VSTestVerbosity>
+  </PropertyGroup>
 
-        <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest15\TeamCity.VSTest.TestLogger.dll">
-            <Link>TeamCity.VSTest.TestLogger.dll</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <Visible>False</Visible>
-        </Content>
-    </ItemGroup>
+  <ItemGroup Condition=" '$(ToolsVersion)' == '15' ">
+    <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest15\TeamCity.ServiceMessages.dll">
+      <Link>TeamCity.ServiceMessages.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
 
-    <ItemGroup Condition=" '$(IsUnderTeamCity)' == 'true' and '$(MSBuildToolsVersion)' == '14.0' ">
-        <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest14\TeamCity.ServiceMessages.dll">
-            <Link>TeamCity.ServiceMessages.dll</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <Visible>False</Visible>
-        </Content>
+    <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest15\IoC.dll">
+      <Link>IoC.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
 
-        <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest14\IoC.dll">
-            <Link>IoC.dll</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <Visible>False</Visible>
-        </Content>
+    <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest15\TeamCity.VSTest.TestAdapter.dll">
+      <Link>TeamCity.VSTest.TestAdapter.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
 
-        <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest14\TeamCity.VSTest.TestAdapter.dll">
-            <Link>TeamCity.VSTest.TestAdapter.dll</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <Visible>False</Visible>
-        </Content>
-    </ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest15\TeamCity.VSTest.TestLogger.dll">
+      <Link>TeamCity.VSTest.TestLogger.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
+  </ItemGroup>
 
-    <ItemGroup Condition=" '$(IsUnderTeamCity)' == 'true' and '$(MSBuildToolsVersion)' == '12.0' ">
-        <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest12\TeamCity.ServiceMessages.dll">
-            <Link>TeamCity.ServiceMessages.dll</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <Visible>False</Visible>
-        </Content>
+  <ItemGroup Condition=" '$(ToolsVersion)' == '14' ">
+    <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest14\TeamCity.ServiceMessages.dll">
+      <Link>TeamCity.ServiceMessages.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
 
-        <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest12\TeamCity.VSTest.TestAdapter.dll">
-            <Link>TeamCity.VSTest.TestAdapter.dll</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <Visible>False</Visible>
-        </Content>
-    </ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest14\IoC.dll">
+      <Link>IoC.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
+
+    <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest14\TeamCity.VSTest.TestAdapter.dll">
+      <Link>TeamCity.VSTest.TestAdapter.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(ToolsVersion)' == '12' ">
+    <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest12\TeamCity.ServiceMessages.dll">
+      <Link>TeamCity.ServiceMessages.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
+
+    <Content Include="$(MSBuildThisFileDirectory)..\_common\vstest12\TeamCity.VSTest.TestAdapter.dll">
+      <Link>TeamCity.VSTest.TestAdapter.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>False</Visible>
+    </Content>
+  </ItemGroup>
 
 </Project>
