@@ -111,20 +111,26 @@ For example:
 * Download the [custom logger](http://teamcity.jetbrains.com/guestAuth/app/rest/builds/buildType:TeamCityPluginsByJetBrains_TeamCityVSTestTestAdapter_Build,pinned:true,status:SUCCESS,branch:master,tags:release/artifacts/content/TeamCity.VSTest.TestLogger.zip)
 
 * Extract the contents of the downloaded archive on the agent machine:
-  
-  * for VisualStudio 2019 - to PROGRAM_FILES(x86)\Microsoft Visual Studio\2019\<Edition>\Common7\IDE\Extensions\TestPlatform\Extensions
 
-  * for VisualStudio 2017 update 5 onwards - to PROGRAM_FILES(x86)\Microsoft Visual Studio\2017\<Edition>\Common7\IDE\Extensions\TestPlatform\Extensions
-
-  * for VisualStudio 2017 till update 4 - to PROGRAM_FILES(x86)\Microsoft Visual Studio\2017\<Edition>\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Extensions
+|Visual Studio|Content directory|Target directory|
+|--- | --- | --- |
+|2019|vstest15|PROGRAM_FILES(x86)\Microsoft Visual Studio\2019\<Edition>\Common7\IDE\Extensions\TestPlatform\Extensions|
+|2017 update 5 onwards|vstest15|PROGRAM_FILES(x86)\Microsoft Visual Studio\2017\<Edition>\Common7\IDE\Extensions\TestPlatform\Extensions|
+|2017 till update 4|vstest15|PROGRAM_FILES(x86)\Microsoft Visual Studio\2017\<Edition>\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Extensions|
+|2015|vstest14|PROGRAM_FILES\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Extensions|
+|2013|vstest12|PROGRAM_FILES\Microsoft Visual Studio 12.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Extensions|
+|2012|vstest12|PROGRAM_FILES\Microsoft Visual Studio 11.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Extensions|
   
-  * for VisualStudio 2015 - to PROGRAM_FILES\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Extensions
-  
-  * for VisualStudio 2013 - to PROGRAM_FILES\Microsoft Visual Studio 12.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Extensions
-  
-  * for VisualStudio 2012 - to PROGRAM_FILES\Microsoft Visual Studio 11.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\Extensions
-  
-* Check that the custom logger was installed correctly by executing vstest.console.exe /ListLoggers in the console on the agent machine. If the logger was installed correctly, you will see the logger with FriendlyName TeamCity listed: `TeamCity.VSTest.TestLogger.TeamCityTestLogger URI: logger://teamcity`
+* Check that the custom logger was installed correctly by executing vstest.console.exe /ListLoggers in the console on the agent machine. For instance: 
+```
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\IDE\Extensions\TestPlatform\vstest.console.exe /ListLoggers
+```
+If the logger was installed correctly, you will see the logger with FriendlyName TeamCity listed:
+```
+TeamCity.VSTest.TestLogger.TeamCityTestLogger
+   Uri: logger://TeamCity   
+   FriendlyName: TeamCity
+```
 
 See more details in the [Wiki](https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/wiki).
 
