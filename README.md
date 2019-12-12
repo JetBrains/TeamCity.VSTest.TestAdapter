@@ -6,6 +6,8 @@ Provides the TeamCity integration with test frameworks via the Visual Studio Tes
 
 <img src="https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/blob/master/Samples/MS.Tests/Docs/NewTest.gif"/>
 
+It is important to note that the above demo works from the command line when the environment variable `TEAMCITY_VERSION` exists with any value during `dotnet` commands. TeamCity automatically specifies this environment variable by the current TeamCity version for each build step.
+
 ## Supported platforms:
 
 * Visual Studio Test Platform
@@ -37,9 +39,6 @@ For each test project:
    dotnet add package xunit   
    dotnet add package xunit.runner.visualstudio
    ```
-   
-   :warning: tests might not be reported correctly for .NET Core xunit test projects when logging verbosity levels is `minimal` or `quiet` because of [issue](https://github.com/xunit/xunit/issues/1706), so try avoiding using these verbosity levels
-
    
    * NUnit [Framework](https://www.nuget.org/packages/NUnit/) and [Adapter](https://www.nuget.org/packages/NUnit3TestAdapter/)
    
@@ -143,3 +142,10 @@ To run tests from within a Docker container that is hosted on a machine running 
 ```
 docker run --rm -v $PWD:/app -w /app -e TEAMCITY_VERSION microsoft/dotnet:2.1-sdk dotnet test
 ```
+
+## Known issues
+
+* Tests are not reported for .NET Core xunit test projects when the logging verbosity level is `minimal` or `quiet` because of [issue](https://github.com/xunit/xunit/issues/1706), so try use the verbosity level `normal` or more detailed, for instance:
+  * `dotnet test --verbosity normal`
+  * `dotnet vstest mytests.dll /logger:console;verbosity=normal`
+ 
