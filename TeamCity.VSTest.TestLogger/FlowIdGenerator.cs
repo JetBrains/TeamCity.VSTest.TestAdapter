@@ -1,4 +1,5 @@
-﻿namespace TeamCity.VSTest.TestLogger
+﻿// ReSharper disable ClassNeverInstantiated.Global
+namespace TeamCity.VSTest.TestLogger
 {
     using System;
     using JetBrains.TeamCity.ServiceMessages.Write.Special;
@@ -7,10 +8,8 @@
     {
         private readonly IIdGenerator _idGenerator;
 
-        public FlowIdGenerator(IIdGenerator idGenerator)
-        {
+        public FlowIdGenerator(IIdGenerator idGenerator) =>
             _idGenerator = idGenerator ?? throw new ArgumentNullException(nameof(idGenerator));
-        }
 
         public string NewFlowId() => _idGenerator.NewId();
     }

@@ -9,8 +9,6 @@
         public string GetSuiteName(string baseDirectory, string source)
             => Strings.IsNullOrWhiteSpace(source) ? DefaultSuiteName : Path.GetFileName(source);
 
-        public void Reset()
-        {
-        }
+        public void Reset() { }
     }
 }

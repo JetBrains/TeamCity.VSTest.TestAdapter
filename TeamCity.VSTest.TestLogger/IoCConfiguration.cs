@@ -11,18 +11,20 @@ namespace TeamCity.VSTest.TestLogger
 
     internal class IoCConfiguration: IConfiguration
     {
-        public IEnumerable<IDisposable> Apply(IContainer container)
+        public IEnumerable<IToken> Apply(IContainer container)
         {
-            yield return container.Bind<IMessageHandler>().To<MessageHandler>();
-            yield return container.Bind<IOptions>().As(Singleton).To<Options>();
-            yield return container.Bind<ITestCaseFilter>().To<TestCaseFilter>();
-            yield return container.Bind<ISuiteNameProvider>().To<SuiteNameProvider>();
-            yield return container.Bind<ITeamCityServiceMessages>().To<TeamCityServiceMessages>(ctx => new TeamCityServiceMessages(ctx.Container.Inject<IServiceMessageFormatter>(), ctx.Container.Inject<IFlowIdGenerator>(), ctx.Container.Inject<IEnumerable<IServiceMessageUpdater>>()));
-            yield return container.Bind<IServiceMessageFormatter>().To<ServiceMessageFormatter>();
-            yield return container.Bind<IFlowIdGenerator>().To<FlowIdGenerator>();
-            yield return container.Bind<IIdGenerator>().To<IdGenerator>();
-            yield return container.Bind<IServiceMessageUpdater>().To(ctx => new TimestampUpdater(() => DateTime.Now));
-            yield return container.Bind<ITeamCityWriter>().To(ctx => ctx.Container.Inject<ITeamCityServiceMessages>().CreateWriter(Console.WriteLine));
+            yield return container
+                .Bind<IMessageHandler>().To<MessageHandler>()
+                .Bind<IOptions>().As(Singleton).To<Options>()
+                .Bind<ITestCaseFilter>().To<TestCaseFilter>()
+                .Bind<ISuiteNameProvider>().To<SuiteNameProvider>()
+                .Bind<ITeamCityServiceMessages>().To<TeamCityServiceMessages>()
+                .Bind<IServiceMessageFormatter>().To<ServiceMessageFormatter>()
+                .Bind<IFlowIdGenerator>().To<FlowIdGenerator>()
+                .Bind<IIdGenerator>().To<IdGenerator>()
+                .Bind<DateTime>().To(ctx => DateTime.Now)
+                .Bind<IServiceMessageUpdater>().To<TimestampUpdater>()
+                .Bind<ITeamCityWriter>().To(ctx => ctx.Container.Inject<ITeamCityServiceMessages>().CreateWriter(Console.WriteLine));
         }
     }
 }

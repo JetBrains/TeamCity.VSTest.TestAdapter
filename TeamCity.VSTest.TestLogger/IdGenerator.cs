@@ -1,4 +1,5 @@
-﻿namespace TeamCity.VSTest.TestLogger
+﻿// ReSharper disable ClassNeverInstantiated.Global
+namespace TeamCity.VSTest.TestLogger
 {
     using System;
     using System.Linq;

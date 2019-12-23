@@ -47,10 +47,13 @@
         public void OnTestResult(TestResultEventArgs ev)
         {
             if (ev == null) throw new ArgumentNullException(nameof(ev));
+
             var result = ev.Result;
             var testCase = result.TestCase;
             if (!_testCaseFilter.IsSupported(testCase))
+            {
                 return;
+            }
 
             var suiteName = _suiteNameProvider.GetSuiteName(_options.TestRunDirectory, testCase.Source);
             var testSuiteWriter = GetTestSuiteWriter(suiteName);
