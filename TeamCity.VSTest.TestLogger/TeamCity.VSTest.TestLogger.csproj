@@ -22,7 +22,7 @@
     <PackageId>TeamCity.VSTest.TestAdapter</PackageId>
     <Title>TeamCity VSTest Adapter</Title>
     <Authors>NikolayP</Authors>
-    <PackageLicenseUrl>https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/raw/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/JetBrains/TeamCity.VSTest.TestAdapter</PackageProjectUrl>
     <PackageIconUrl>https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/raw/master/icon.png</PackageIconUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
