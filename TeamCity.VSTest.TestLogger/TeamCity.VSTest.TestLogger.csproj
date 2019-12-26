@@ -64,7 +64,7 @@ Usage:
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.5'">
-    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="15.0.0" />
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="15.9.2" />
     <PackageReference Include="IoC.Container" Version="1.2.0" />
   </ItemGroup>
 
