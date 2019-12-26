@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="16.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <PackageVersion Condition=" '$(PackageVersion)' == '' ">1.0.17</PackageVersion>
         <Build_Number Condition=" '$(Build_Number)' == '' ">0</Build_Number>
@@ -156,15 +156,22 @@
 
         <Message Text="!!!Results" />
 
-        <Exec Command='$(CleanCommand)'/>
-        <Exec Command='$(RestoreCommand)'/>
-        <Exec Command='$(BuildCommand)'/>
+        <Exec Command='$(CleanCommand)'><Output TaskParameter="ExitCode" PropertyName="ErrorCode"/></Exec>
+        <Message Importance="high" Text="Exit code of $(CleanCommand): $(ErrorCode)"/>
+
+        <Exec Command='$(RestoreCommand)'><Output TaskParameter="ExitCode" PropertyName="ErrorCode"/></Exec>
+        <Message Importance="high" Text="Exit code of $(RestoreCommand): $(ErrorCode)"/>
+
+        <Exec Command='$(BuildCommand)'><Output TaskParameter="ExitCode" PropertyName="ErrorCode"/></Exec>
+        <Message Importance="high" Text="Exit code of $(BuildCommand): $(ErrorCode)"/>
 
         <Message Text="!!!Messages:$(DotnetMessagesCount)" />
-        <Exec IgnoreExitCode="true" IgnoreStandardErrorWarningFormat="true" Command='$(TestCommand)'/>
+        <Exec IgnoreExitCode="true" IgnoreStandardErrorWarningFormat="true" Command='$(TestCommand)'><Output TaskParameter="ExitCode" PropertyName="ErrorCode"/></Exec>
+        <Message Importance="high" Text="Exit code of $(TestCommand): $(ErrorCode)"/>
 
         <Message Text="!!!Messages:$(MSBuildMessagesCount)" Condition=" '$(DotnetVersion)' == '' "/>
-        <Exec IgnoreExitCode="true" IgnoreStandardErrorWarningFormat="true" Condition=" '$(DotnetVersion)' == '' " Command='$(MSBuildTestCommand)'/>
+        <Exec IgnoreExitCode="true" IgnoreStandardErrorWarningFormat="true" Condition=" '$(DotnetVersion)' == '' " Command='$(MSBuildTestCommand)'><Output TaskParameter="ExitCode" PropertyName="ErrorCode"/></Exec>
+        <Message Importance="high" Text="Exit code of $(MSBuildTestCommand): $(ErrorCode)"/>
 
         <Message Text="!!!Finish" />
     </Target>

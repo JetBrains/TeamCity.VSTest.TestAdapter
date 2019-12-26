@@ -1,9 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>    
-    <TargetFrameworks>netcoreapp1.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <SignAssembly>False</SignAssembly>    
     <AssemblyOriginatorKeyFile>TeamCity.snk</AssemblyOriginatorKeyFile>    
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
+    <WarningsAsErrors></WarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <OutputPath></OutputPath>
+    <NoWarn>1701;1702;0067</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

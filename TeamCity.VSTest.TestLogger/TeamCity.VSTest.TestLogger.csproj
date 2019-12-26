@@ -24,7 +24,7 @@
     <Authors>NikolayP</Authors>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/JetBrains/TeamCity.VSTest.TestAdapter</PackageProjectUrl>
-    <PackageIconUrl>https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/raw/master/icon.png</PackageIconUrl>
+    <PackageIcon>_common\icon.png</PackageIcon>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Copyright>JetBrains</Copyright>
     <Description>Provides an integration TeamCity and test frameworks.
@@ -52,6 +52,11 @@ Usage:
       <PackagePath>build\_common</PackagePath>
       <Pack>true</Pack>
     </Content>
+
+    <None Include="..\icon.png">      
+      <PackagePath>_common</PackagePath>
+      <Pack>true</Pack>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
