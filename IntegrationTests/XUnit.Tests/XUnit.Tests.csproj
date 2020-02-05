@@ -11,7 +11,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="TeamCity.VSTest.TestAdapter" Version="1.0.18" />
+    <PackageReference Include="TeamCity.VSTest.TestAdapter" Version="1.0.19" />
   </ItemGroup>
 
 </Project>
