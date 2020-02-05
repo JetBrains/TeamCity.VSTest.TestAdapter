@@ -1,22 +1,16 @@
 ﻿namespace TeamCity.VSTest.TestLogger
 {
     using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Text.RegularExpressions;
     using JetBrains.TeamCity.ServiceMessages.Write.Special;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
     internal class MessageHandler : IMessageHandler
     {
-        private static readonly Regex AttachmentDescriptionRegex = new Regex("(.*)=>(.+)", RegexOptions.Compiled);
-        private static readonly HashSet<char> InvalidPathChars = new HashSet<char>(new[] {'{', '}'}.Concat(Path.GetInvalidPathChars().Concat(Path.GetInvalidFileNameChars())));
         [NotNull] private readonly ITeamCityWriter _rootWriter;
         [NotNull] private readonly ISuiteNameProvider _suiteNameProvider;
-        private readonly IIdGenerator _idGenerator;
         [NotNull] private readonly IOptions _options;
+        private readonly IAttachments _attachments;
         [NotNull] private readonly ITestCaseFilter _testCaseFilter;
         [CanBeNull] private string _testSuiteSource;
         [CanBeNull] private ITeamCityTestsSubWriter _testSuiteWriter;
@@ -25,14 +19,14 @@
             [NotNull] ITeamCityWriter rootWriter,
             [NotNull] ITestCaseFilter testCaseFilter,
             [NotNull] ISuiteNameProvider suiteNameProvider,
-            [NotNull] IIdGenerator idGenerator,
-            [NotNull] IOptions options)
+            [NotNull] IOptions options,
+            [NotNull] IAttachments attachments)
         {
             _rootWriter = rootWriter ?? throw new ArgumentNullException(nameof(rootWriter));
             _testCaseFilter = testCaseFilter ?? throw new ArgumentNullException(nameof(testCaseFilter));
             _suiteNameProvider = suiteNameProvider ?? throw new ArgumentNullException(nameof(suiteNameProvider));
-            _idGenerator = idGenerator ?? throw new ArgumentNullException(nameof(idGenerator));
             _options = options;
+            _attachments = attachments ?? throw new ArgumentNullException(nameof(attachments));
         }
 
         public void OnTestRunMessage(TestRunMessageEventArgs ev)
@@ -85,75 +79,7 @@
                 {
                     foreach (var attachment in attachments.Attachments)
                     {
-                        if (!_options.MetadataEnable ||!_options.AllowExperimental || _options.Version.CompareTo(_options.TestMetadataSupportVersion) < 0)
-                        {
-                            testWriter.WriteStdOutput($"Attachment \"{attachment.Description}\": \"{attachment.Uri}\"");
-                            continue;
-                        }
-
-                        if (!attachment.Uri.IsFile)
-                        {
-                            continue;
-                        }
-
-                        var filePath = attachment.Uri.LocalPath;
-                        if (string.IsNullOrEmpty(filePath))
-                        {
-                            continue;
-                        }
-
-                        var description = attachment.Description ?? string.Empty;
-                        if (description == filePath)
-                        {
-                            description = string.Empty;
-                        }
-
-                        var fileName = Path.GetFileName(filePath);
-                        var fileExtension = Path.GetExtension(fileName).ToLowerInvariant();
-                        string artifactDir = null;
-                        if (!string.IsNullOrEmpty(description))
-                        {
-                            var match = AttachmentDescriptionRegex.Match(description);
-                            if (match.Success)
-                            {
-                                description = match.Groups[1].Value.Trim();
-                                artifactDir = match.Groups[2].Value.Trim();
-                            }
-                        }
-
-                        if (artifactDir == null)
-                        {
-                            var testDirName = new string(testName.Select(c => InvalidPathChars.Contains(c) ? '_' : c).ToArray());
-                            artifactDir = ".teamcity/VSTest/" + testDirName + "/" + _idGenerator.NewId();
-                        }
-
-                        _rootWriter.PublishArtifact(filePath + " => " + artifactDir);
-                        var artifact = artifactDir + "/" + fileName;
-                        switch (fileExtension)
-                        {
-                            case ".bmp":
-                            case ".gif":
-                            case ".ico":
-                            case ".jng":
-                            case ".jpeg":
-                            case ".jpg":
-                            case ".jfif":
-                            case ".jp2":
-                            case ".jps":
-                            case ".tga":
-                            case ".tiff":
-                            case ".tif":
-                            case ".svg":
-                            case ".wmf":
-                            case ".emf":
-                            case ".png":
-                                testWriter.WriteImage(artifact, description);
-                                break;
-
-                            default:
-                                testWriter.WriteFile(artifact, description);
-                                break;
-                        }
+                        _attachments.SendAttachment(testName, attachment, testWriter);
                     }
                 }
 
