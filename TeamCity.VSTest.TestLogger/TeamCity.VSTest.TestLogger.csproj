@@ -39,7 +39,7 @@ Usage:
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <SignAssembly>False</SignAssembly>
     <AssemblyOriginatorKeyFile>TeamCity.snk</AssemblyOriginatorKeyFile>
-    <Company>JetBrains</Company>    
+    <Company>JetBrains</Company>
   </PropertyGroup>
 
   <ItemGroup>
@@ -65,12 +65,12 @@ Usage:
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.5'">
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="15.9.2" />
-    <PackageReference Include="IoC.Container" Version="1.2.2" />
+    <PackageReference Include="IoC.Container" Version="1.3.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="11.0.0" />
-    <PackageReference Include="IoC.Container" Version="1.2.2" />
+    <PackageReference Include="IoC.Container" Version="1.3.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net35'">

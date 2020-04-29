@@ -11,7 +11,7 @@ namespace TeamCity.VSTest.TestLogger
 
     internal class IoCConfiguration: IConfiguration
     {
-        public IEnumerable<IToken> Apply(IContainer container)
+        public IEnumerable<IToken> Apply(IMutableContainer container)
         {
             yield return container
                 .Bind<IMessageHandler>().To<MessageHandler>()
