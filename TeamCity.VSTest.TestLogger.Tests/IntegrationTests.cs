@@ -9,7 +9,6 @@
     using Shouldly;
     using Xunit;
 
-#if NETCOREAPP1_0
     public class IntegrationTests
     {
         private readonly string _resultsPath;
@@ -28,7 +27,7 @@
         public void ShouldProduceServiceMessages()
         {
             // Given
-            
+
             // When
 
             // Then
@@ -170,5 +169,4 @@
             }
         }
     }
-#endif
 }

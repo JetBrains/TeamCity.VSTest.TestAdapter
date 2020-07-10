@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>    
-    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
-    <SignAssembly>False</SignAssembly>    
-    <AssemblyOriginatorKeyFile>TeamCity.snk</AssemblyOriginatorKeyFile>    
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <SignAssembly>False</SignAssembly>
+    <AssemblyOriginatorKeyFile>TeamCity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.0" />
-    <PackageReference Include="Moq" Version="4.13.1" />
+    <PackageReference Include="Moq" Version="4.7.145" />
     <PackageReference Include="Shouldly" Version="3.0.2" />
     <PackageReference Include="TeamCity.ServiceMessages" Version="3.0.13" />
     <PackageReference Include="xunit" Version="2.4.1" />
