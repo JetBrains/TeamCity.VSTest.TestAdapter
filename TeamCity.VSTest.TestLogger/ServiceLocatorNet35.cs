@@ -14,7 +14,7 @@ namespace TeamCity.VSTest.TestLogger
 
             var teamCityWriter = new TeamCityServiceMessages(
                 new ServiceMessageFormatter(),
-                new FlowIdGenerator(idGenerator),
+                new FlowIdGenerator(idGenerator, this),
                 new IServiceMessageUpdater[] {new TimestampUpdater(() => DateTime.Now)}).CreateWriter(Console.WriteLine);
 
             return new MessageHandler(
