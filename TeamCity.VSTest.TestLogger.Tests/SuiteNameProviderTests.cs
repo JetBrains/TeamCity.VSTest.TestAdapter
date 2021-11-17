@@ -62,12 +62,12 @@
         }
 
         [Theory]
-        [InlineData(@"c:\dir" + Br + @"c:\dir\abc.dll" + Br + @"abc.dll")]
-        [InlineData(@"c:\dir" + Br + @"somePath\abc.dll" + Br + @"abc.dll")]
-        [InlineData(@"c:\dir" + Br + @"abc.dll" + Br + @"abc.dll")]
-        [InlineData(Null + Br + @"c:\dir\abc.dll" + Br + @"abc.dll")]
-        [InlineData(Null + Br + @"somePath\abc.dll" + Br + @"abc.dll")]
-        [InlineData(Null + Br + @"abc.dll" + Br + @"abc.dll")]
+        [InlineData(@"c:\dir" + Br + @"c:\dir\abc.dll" + Br + @"abc")]
+        [InlineData(@"c:\dir" + Br + @"somePath\abc.dll" + Br + @"abc")]
+        [InlineData(@"c:\dir" + Br + @"abc.dll" + Br + @"abc")]
+        [InlineData(Null + Br + @"c:\dir\abc.dll" + Br + @"abc")]
+        [InlineData(Null + Br + @"somePath\abc.dll" + Br + @"abc")]
+        [InlineData(Null + Br + @"abc.dll" + Br + @"abc")]
         [InlineData(Null + Br + Null + Br + SuiteNameProvider.DefaultSuiteName)]
         [InlineData("" + Br + "" + Br + SuiteNameProvider.DefaultSuiteName)]
         public void ShouldProvideSuiteName(string descriptions)

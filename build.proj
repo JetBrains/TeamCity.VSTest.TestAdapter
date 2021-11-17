@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="16.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="17.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <PackageVersion Condition=" '$(PackageVersion)' == '' ">1.0.27</PackageVersion>
+        <PackageVersion Condition=" '$(PackageVersion)' == '' ">1.0.28</PackageVersion>
         <Build_Number Condition=" '$(Build_Number)' == '' ">0</Build_Number>
         <Version>$(PackageVersion).$(Build_Number)</Version>
     </PropertyGroup>
@@ -106,8 +106,8 @@
         </ItemGroup>
 
         <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=MS.Tests;DotnetMessagesCount=30;MSBuildMessagesCount=15'/>
-        <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=XUnit.Tests;DotnetMessagesCount=20;MSBuildMessagesCount=10'/>
-        <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=Dual.Tests;DotnetMessagesCount=24;MSBuildMessagesCount=12'/>
+        <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=XUnit.Tests;DotnetMessagesCount=22;MSBuildMessagesCount=10'/>
+        <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=Dual.Tests;DotnetMessagesCount=22;MSBuildMessagesCount=12'/>
     </Target>
 
     <Target Name="DotnetIntegrationTest">
@@ -122,7 +122,7 @@
             <RestoreCommand>dotnet restore "$(TestProject)" --packages "$(PackageCachePath)" --no-cache "/p:RestoreAdditionalProjectSources=$(PackagePath)"</RestoreCommand>
             <BuildCommand>dotnet build "$(TestProject)" -c $(Configuration) "/p:RestoreAdditionalProjectSources=$(PackagePath)"</BuildCommand>
             <TestCommand>dotnet test "$(TestProject)" -c $(Configuration) --no-build --verbosity normal</TestCommand>
-            <MSBuildTestCommand>"C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" "$(TestAssembly)" /Logger:logger://teamcity /TestAdapterPath:. /Framework:Framework45</MSBuildTestCommand>
+            <MSBuildTestCommand>"C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" "$(TestAssembly)" /Logger:logger://teamcity /TestAdapterPath:. /Framework:Framework45</MSBuildTestCommand>
         </PropertyGroup>
 
         <Message Text="Create global.json" />
