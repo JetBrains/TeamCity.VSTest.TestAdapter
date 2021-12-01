@@ -2,8 +2,8 @@
   "profiles": {
     "TeamCity.VSTest.TestAdapter": {
       "commandName": "Executable",
-      "executablePath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Professional\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow\\vstest.console.exe",
-      "commandLineArgs": "C:\\Projects\\UnitTestProject1\\UnitTestProject1\\bin\\Debug\\UnitTestProject1.dll /TestAdapterPath:. /logger:TeamCity",
+      "executablePath": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Professional\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow\\vstest.console.exe",
+      "commandLineArgs": "C:\\Projects\\_temp\\xu\\TestProject1\\bin\\Debug\\net6.0\\TestProject1.dll /TestAdapterPath:C:\\Projects\\TeamCity\\TeamCity.VSTest.TestAdapter\\TeamCity.VSTest.TestLogger\\bin\\Debug\\netstandard1.5 /logger:TeamCity",
       "workingDirectory": "C:\\Projects\\TeamCity\\TeamCity.VSTest.TestAdapter",
       "environmentVariables": {
         "VSTEST_HOST_DEBUG": "1",

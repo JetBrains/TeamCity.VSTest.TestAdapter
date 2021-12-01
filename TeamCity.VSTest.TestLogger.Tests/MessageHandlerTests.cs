@@ -21,6 +21,7 @@
         private readonly Mock<ISuiteNameProvider> _suiteNameProvider;
         private readonly Mock<IIdGenerator> _idGenerator;
         private readonly Mock<IAttachments> _attachments;
+        private readonly Mock<ITestNameFactory> _testNameFactory;
 
         public MessageHandlerTests()
         {
@@ -36,8 +37,11 @@
             var options = new Mock<IOptions>();
             _attachments = new Mock<IAttachments>();
 
+            _testNameFactory = new Mock<ITestNameFactory>();
+            _testNameFactory.Setup(i => i.Create(It.IsAny<string>(), It.IsAny<string>())).Returns<string, string>((fullyQualifiedName, displayName) => fullyQualifiedName);
+
             var root = new Root(_lines);
-            _events = new MessageHandler(root, _testCaseFilter.Object, _suiteNameProvider.Object, options.Object, _attachments.Object);
+            _events = new MessageHandler(root, _testCaseFilter.Object, _suiteNameProvider.Object, options.Object, _attachments.Object, _testNameFactory.Object);
         }
 
         private static TestResultEventArgs CreateTestResult(
