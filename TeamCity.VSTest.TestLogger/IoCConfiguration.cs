@@ -17,7 +17,7 @@ namespace TeamCity.VSTest.TestLogger
                 .Bind<IMessageHandler>().To<MessageHandler>()
                 .Bind<IOptions>().As(Singleton).To<Options>()
                 .Bind<ITestCaseFilter>().To<TestCaseFilter>()
-                .Bind<ITestNameFactory>().As(Singleton).To<TestNameFactory>()
+                .Bind<ITestNameProvider>().As(Singleton).To<TestNameProvider>()
                 .Bind<ISuiteNameProvider>().As(Singleton).To<SuiteNameProvider>()
                 .Bind<ITeamCityServiceMessages>().To<TeamCityServiceMessages>()
                 .Bind<IServiceMessageFormatter>().To<ServiceMessageFormatter>()

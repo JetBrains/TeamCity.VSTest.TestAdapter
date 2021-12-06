@@ -11,7 +11,7 @@
         [NotNull] private readonly ISuiteNameProvider _suiteNameProvider;
         [NotNull] private readonly IOptions _options;
         private readonly IAttachments _attachments;
-        private readonly ITestNameFactory _testNameFactory;
+        private readonly ITestNameProvider _testNameProvider;
         [NotNull] private readonly ITestCaseFilter _testCaseFilter;
         [CanBeNull] private string _testSuiteSource;
         [CanBeNull] private ITeamCityTestsSubWriter _testSuiteWriter;
@@ -22,14 +22,14 @@
             [NotNull] ISuiteNameProvider suiteNameProvider,
             [NotNull] IOptions options,
             [NotNull] IAttachments attachments,
-            [NotNull] ITestNameFactory testNameFactory)
+            [NotNull] ITestNameProvider testNameProvider)
         {
             _rootWriter = rootWriter ?? throw new ArgumentNullException(nameof(rootWriter));
             _testCaseFilter = testCaseFilter ?? throw new ArgumentNullException(nameof(testCaseFilter));
             _suiteNameProvider = suiteNameProvider ?? throw new ArgumentNullException(nameof(suiteNameProvider));
             _options = options;
             _attachments = attachments ?? throw new ArgumentNullException(nameof(attachments));
-            _testNameFactory = testNameFactory;
+            _testNameProvider = testNameProvider;
         }
 
         public void OnTestRunMessage(TestRunMessageEventArgs ev)
@@ -54,7 +54,7 @@
 
             var suiteName = _suiteNameProvider.GetSuiteName(_options.TestRunDirectory, testCase.Source);
             var testSuiteWriter = GetTestSuiteWriter(suiteName);
-            var testName = _testNameFactory.Create(testCase.FullyQualifiedName, testCase.DisplayName);
+            var testName = _testNameProvider.GetTestName(testCase.FullyQualifiedName, testCase.DisplayName);
             if (string.IsNullOrEmpty(testName))
             {
                 testName = testCase.Id.ToString();

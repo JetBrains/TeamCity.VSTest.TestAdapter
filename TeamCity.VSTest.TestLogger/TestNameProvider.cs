@@ -1,12 +1,13 @@
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable InvertIf
+// ReSharper disable ConvertIfStatementToReturnStatement
 namespace TeamCity.VSTest.TestLogger
 {
     using System;
 
-    internal class TestNameFactory : ITestNameFactory
+    internal class TestNameProvider : ITestNameProvider
     {
-        public string Create(string fullyQualifiedName, [CanBeNull]string displayName)
+        public string GetTestName(string fullyQualifiedName, string displayName)
         {
             fullyQualifiedName = fullyQualifiedName?.Trim() ?? string.Empty;
             displayName = displayName?.Trim() ?? string.Empty;
@@ -23,19 +24,26 @@ namespace TeamCity.VSTest.TestLogger
 
             if (!fullyQualifiedName.Contains(displayName))
             {
-                var parts = fullyQualifiedName.Split('.');
-                if (parts.Length > 0)
-                {
-                    var lastPart = parts[parts.Length - 1];
-                    if (lastPart.Length > 0 && displayName.StartsWith(lastPart) && displayName.Length > lastPart.Length + 1)
-                    {
-                        parts[parts.Length - 1] = lastPart + displayName.Substring(lastPart.Length, displayName.Length - lastPart.Length).Trim();
-                        return string.Join(".", parts);
-                    }
-                }
+                return fullyQualifiedName + GetArgs(displayName);
             }
 
             return fullyQualifiedName.Length > displayName.Length ? fullyQualifiedName : displayName;
+        }
+
+        private static string GetArgs(string name)
+        {
+            if (!name.TrimEnd().EndsWith(")"))
+            {
+                return string.Empty;
+            }
+
+            var argsPosition = name.IndexOf("(", StringComparison.Ordinal);
+            if (argsPosition < 0)
+            {
+                return string.Empty;
+            }
+
+            return name.Substring(argsPosition, name.Length - argsPosition);
         }
     }
 }

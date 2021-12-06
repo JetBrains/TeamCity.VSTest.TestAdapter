@@ -23,7 +23,7 @@ namespace TeamCity.VSTest.TestLogger
                 new SuiteNameProvider(),
                  this,
                 new Attachments(this, idGenerator, teamCityWriter),
-                new TestNameFactory());
+                new TestNameProvider());
         }
     }
 }
