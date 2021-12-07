@@ -32,18 +32,27 @@ namespace TeamCity.VSTest.TestLogger
 
         private static string GetArgs(string name)
         {
-            if (!name.TrimEnd().EndsWith(")"))
-            {
-                return string.Empty;
-            }
-
+            var typedArgsPosition = name.IndexOf("<", StringComparison.Ordinal);
+            var hasTypes = typedArgsPosition >= 0;
             var argsPosition = name.IndexOf("(", StringComparison.Ordinal);
-            if (argsPosition < 0)
+            var hasArgs = argsPosition >= 0;
+            if (!hasArgs && !hasTypes)
             {
                 return string.Empty;
             }
 
-            return name.Substring(argsPosition, name.Length - argsPosition);
+            if (!hasArgs || hasTypes && typedArgsPosition < argsPosition)
+            {
+                argsPosition = typedArgsPosition;
+            }
+
+            name = name.Substring(argsPosition, name.Length - argsPosition).Trim();
+            if (hasArgs && !name.EndsWith(")"))
+            {
+                name += ")";
+            }
+            
+            return name;
         }
     }
 }
