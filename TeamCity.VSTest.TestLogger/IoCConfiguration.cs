@@ -13,7 +13,11 @@ namespace TeamCity.VSTest.TestLogger
     {
         public IEnumerable<IToken> Apply(IMutableContainer container)
         {
+            var autowiringStrategy = AutowiringStrategies.AspectOriented()
+                .Tag<TagAttribute>(attribute => attribute.Tag);
+            
             yield return container
+                .Bind<IAutowiringStrategy>().To(ctx => autowiringStrategy)
                 .Bind<IMessageHandler>().To<MessageHandler>()
                 .Bind<IOptions>().As(Singleton).To<Options>()
                 .Bind<ITestCaseFilter>().To<TestCaseFilter>()
@@ -24,9 +28,13 @@ namespace TeamCity.VSTest.TestLogger
                 .Bind<IFlowIdGenerator>().To<FlowIdGenerator>()
                 .Bind<IIdGenerator>().To<IdGenerator>()
                 .Bind<DateTime>().To(ctx => DateTime.Now)
-                .Bind<IServiceMessageUpdater>().To<TimestampUpdater>()
+                .Bind<IServiceMessageUpdater>().Tag(typeof(TimestampUpdater)).As(Singleton).To<TimestampUpdater>()
+                .Bind<IServiceMessageUpdater>().Tag(typeof(MessageBackupUpdater)).As(Singleton).To<MessageBackupUpdater>()
                 .Bind<IAttachments>().As(Singleton).To<Attachments>()
-                .Bind<ITeamCityWriter>().To(ctx => ctx.Container.Inject<ITeamCityServiceMessages>().CreateWriter(Console.WriteLine));
+                .Bind<IBytesWriter>().Tag("Indices").To(ctx => new BytesWriter(ctx.Container.Inject<IOptions>().ServiceIndicesFile))
+                .Bind<IBytesWriter>().Tag("Messages").To(ctx => new BytesWriter(ctx.Container.Inject<IOptions>().ServiceMessagesFile))
+                .Bind<IMessageWriter>().As(Singleton).To<MessageWriter>()
+                .Bind<ITeamCityWriter>().To(ctx => ctx.Container.Inject<ITeamCityServiceMessages>().CreateWriter(message => ctx.Container.Inject<IMessageWriter>().Write(message)));
         }
     }
 }

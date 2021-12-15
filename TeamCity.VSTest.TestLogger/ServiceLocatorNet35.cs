@@ -11,11 +11,18 @@ namespace TeamCity.VSTest.TestLogger
         public IMessageHandler CreateMessageHandler()
         {
             var idGenerator = new IdGenerator();
+            var indicesWriter = new BytesWriter(ServiceIndicesFile);
+            var messagesWriter = new BytesWriter(ServiceMessagesFile);
+            var messageWriter = new MessageWriter(this, indicesWriter, messagesWriter);
 
             var teamCityWriter = new TeamCityServiceMessages(
                 new ServiceMessageFormatter(),
                 new FlowIdGenerator(idGenerator, this),
-                new IServiceMessageUpdater[] {new TimestampUpdater(() => DateTime.Now)}).CreateWriter(Console.WriteLine);
+                new IServiceMessageUpdater[]
+                {
+                    new TimestampUpdater(() => DateTime.Now),
+                    new MessageBackupUpdater(this)
+                }).CreateWriter(message => messageWriter.Write(message));
 
             return new MessageHandler(
                 teamCityWriter,

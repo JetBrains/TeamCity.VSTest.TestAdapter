@@ -1,4 +1,5 @@
-﻿namespace TeamCity.VSTest.TestLogger
+﻿// ReSharper disable ClassNeverInstantiated.Global
+namespace TeamCity.VSTest.TestLogger
 {
     using System;
 #if !NET35
@@ -16,11 +17,11 @@
 
 #if NET35
         private static readonly ServiceLocatorNet35 ServiceLocatorNet35 = new ServiceLocatorNet35();
-        [NotNull] private readonly IMessageHandler _messageHandler = ServiceLocatorNet35.CreateMessageHandler();
+        [NotNull] private readonly IMessageHandler _handler = ServiceLocatorNet35.CreateMessageHandler();
         [NotNull] private readonly IOptions _options = ServiceLocatorNet35;
 #else
-        private static readonly IContainer Container = IoC.Container.Create().Using<IoCConfiguration>();
-        [NotNull] private readonly IMessageHandler _messageHandler = Container.Resolve<IMessageHandler>();
+        private static readonly IMutableContainer Container = IoC.Container.Create().Using<IoCConfiguration>();
+        [NotNull] private readonly IMessageHandler _handler = Container.Resolve<IMessageHandler>();
         [NotNull] private readonly IOptions _options = Container.Resolve<IOptions>();
 #endif
 
@@ -28,9 +29,9 @@
         {
             if (events == null) throw new ArgumentNullException(nameof(events));
             _options.TestRunDirectory = testRunDirectory;
-            events.TestRunMessage += (sender, args) => _messageHandler.OnTestRunMessage(args);
-            events.TestResult += (sender, args) => _messageHandler.OnTestResult(args);
-            events.TestRunComplete += (sender, args) => _messageHandler.OnTestRunComplete();
+            events.TestRunMessage += (sender, args) => _handler.OnTestRunMessage(args);
+            events.TestResult += (sender, args) => _handler.OnTestResult(args);
+            events.TestRunComplete += (sender, args) => _handler.OnTestRunComplete();
         }
     }
 }

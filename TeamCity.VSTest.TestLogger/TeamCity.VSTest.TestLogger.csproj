@@ -40,6 +40,7 @@ Usage:
     <SignAssembly>False</SignAssembly>
     <AssemblyOriginatorKeyFile>TeamCity.snk</AssemblyOriginatorKeyFile>
     <Company>JetBrains</Company>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
