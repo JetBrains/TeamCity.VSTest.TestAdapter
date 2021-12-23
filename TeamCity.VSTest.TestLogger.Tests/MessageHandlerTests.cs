@@ -114,12 +114,14 @@
             _lines.ShouldBe(new[]
             {
                 "+ root"
+                , "+ flow"
                 , "+ suite assembly.dll"
                 , "+ test assembly.dll/test1"
                 , "# test assembly.dll/test1 duration 00:00:01"
                 , "! test assembly.dll/test1 errorInfo stackTrace"
                 , "- test assembly.dll/test1"
                 , "- suite assembly.dll"
+                , "- flow"
                 , "- root"
             });
         }
@@ -137,11 +139,13 @@
             _lines.ShouldBe(new[]
             {
                 "+ root"
+                , "+ flow"
                 , "+ suite assembly.dll"
                 , "+ test assembly.dll/test1"
                 , "# test assembly.dll/test1 duration 00:00:01"
                 , "- test assembly.dll/test1"
                 , "- suite assembly.dll"
+                , "- flow"
                 , "- root"
             });
         }
@@ -165,6 +169,7 @@
             _lines.ShouldBe(new[]
             {
                 "+ root"
+                , "+ flow"
                 , "+ suite assembly.dll"
                 , "+ test assembly.dll/test1"
                 , "# test assembly.dll/test1 duration 00:00:01"
@@ -174,6 +179,7 @@
                 , "# test assembly.dll/test1 error error text"
                 , "- test assembly.dll/test1"
                 , "- suite assembly.dll"
+                , "- flow"
                 , "- root"
             });
         }
@@ -192,6 +198,7 @@
             _lines.ShouldBe(new[]
             {
                 "+ root"
+                , "+ flow"
                 , "+ suite assembly.dll"
                 , "+ test assembly.dll/test1"
                 , "# test assembly.dll/test1 duration 00:00:01"
@@ -200,6 +207,7 @@
                 , "# test assembly.dll/test2 duration 00:00:01"
                 , "- test assembly.dll/test2"
                 , "- suite assembly.dll"
+                , "- flow"
                 , "- root"
             });
         }
@@ -220,6 +228,7 @@
             _lines.ShouldBe(new[]
             {
                 "+ root"
+                , "+ flow"
                 , "+ suite assembly.dll"
                 , "+ test assembly.dll/test1"
                 , "# test assembly.dll/test1 duration 00:00:01"
@@ -236,6 +245,7 @@
                 , "# test assembly2.dll/test4 duration 00:00:01"
                 , "- test assembly2.dll/test4"
                 , "- suite assembly2.dll"
+                , "- flow"
                 , "- root"
             });
         }
@@ -253,12 +263,14 @@
             _lines.ShouldBe(new[]
             {
                 "+ root"
+                , "+ flow"
                 , "+ suite assembly.dll"
                 , "+ test assembly.dll/test1"
                 , "# test assembly.dll/test1 duration 00:00:01"
                 , "? test assembly.dll/test1 reason"
                 , "- test assembly.dll/test1"
                 , "- suite assembly.dll"
+                , "- flow"
                 , "- root"
             });
         }
@@ -278,12 +290,14 @@
             _lines.ShouldBe(new[]
             {
                 "+ root"
+                , "+ flow"
                 , "+ suite assembly.dll"
                 , "+ test assembly.dll/test1"
                 , "# test assembly.dll/test1 duration 00:00:01"
                 , "? test assembly.dll/test1"
                 , "- test assembly.dll/test1"
                 , "- suite assembly.dll"
+                , "- flow"
                 , "- root"
             });
         }
@@ -307,11 +321,13 @@
             _lines.ShouldBe(new[]
             {
                 "+ root"
+                , "+ flow"
                 , "+ suite assembly.dll"
                 , "+ test assembly.dll/test2"
                 , "# test assembly.dll/test2 duration 00:00:01"
                 , "- test assembly.dll/test2"
                 , "- suite assembly.dll"
+                , "- flow"
                 , "- root"
             });
         }

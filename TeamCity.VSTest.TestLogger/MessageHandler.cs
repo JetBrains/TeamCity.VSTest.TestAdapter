@@ -14,6 +14,7 @@
         private readonly ITestNameProvider _testNameProvider;
         [NotNull] private readonly ITestCaseFilter _testCaseFilter;
         [CanBeNull] private string _testSuiteSource;
+        [CanBeNull] private ITeamCityWriter _flowWriter;
         [CanBeNull] private ITeamCityTestsSubWriter _testSuiteWriter;
 
         internal MessageHandler(
@@ -119,6 +120,7 @@
         public void OnTestRunComplete()
         {
             _testSuiteWriter?.Dispose();
+            _flowWriter?.Dispose();
             _rootWriter.Dispose();
             _suiteNameProvider.Reset();
         }
@@ -132,7 +134,9 @@
 
             _testSuiteWriter?.Dispose();
             _testSuiteSource = source;
-            var testSuiteWriter = _rootWriter.OpenTestSuite(source);
+
+            _flowWriter ??= _rootWriter.OpenFlow();
+            var testSuiteWriter = _flowWriter.OpenTestSuite(source);
             _testSuiteWriter = testSuiteWriter;
             return testSuiteWriter;
         }

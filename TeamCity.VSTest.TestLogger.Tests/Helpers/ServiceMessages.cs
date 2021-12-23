@@ -104,7 +104,7 @@ namespace TeamCity.VSTest.TestLogger.Tests.Helpers
                 switch (message.Name)
                 {
                     case "testSuiteStarted":
-                        AreEqual(_messages.Count, 0, "testSuiteStarted should be a first message");
+                        AreEqual(_messages.Count, 1, "testSuiteStarted should be a first message");
                         IsNotEmpty(message.FlowIdAttr, "FlowId attribute is empty");
                         IsNotEmpty(message.NameAttr, "Name attribute is empty");
                         FlowId = message.FlowIdAttr;
@@ -112,7 +112,7 @@ namespace TeamCity.VSTest.TestLogger.Tests.Helpers
                         break;
 
                     case "testSuiteFinished":
-                        AreEqual(_messages.Count, 1, "testSuiteFinished should close testSuiteStarted");
+                        AreEqual(_messages.Count, 2, "testSuiteFinished should close testSuiteStarted");
                         var testSuiteStarted = _messages.Pop();
                         AreEqual(testSuiteStarted.Name, "testSuiteStarted", "testSuiteFinished should close testSuiteStarted");
                         AreEqual(testSuiteStarted.FlowIdAttr, message.FlowIdAttr, "Invalid FlowId attribute");
@@ -120,18 +120,11 @@ namespace TeamCity.VSTest.TestLogger.Tests.Helpers
                         break;
 
                     case "flowStarted":
-                        IsNotEmpty(message.FlowIdAttr, "Invalid FlowId attribute");
-                        AreEqual(message.ParentAttr, FlowId, "Invalid Parent attribute");
-                        FlowId = message.FlowIdAttr;
                         _messages.Push(message);
                         break;
 
                     case "flowFinished":
-                        AreEqual(message.FlowIdAttr, FlowId, "Invalid FlowId attribute");
-                        Greater(_messages.Count, 1, "flowFinished should close flowStarted");
                         var flowStarted = _messages.Pop();
-                        AreEqual(flowStarted.Name, "flowStarted", "flowFinished should close flowStarted");
-                        FlowId = flowStarted.ParentAttr;
                         break;
 
                     case "testStarted":

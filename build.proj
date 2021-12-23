@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <PackageVersion Condition=" '$(PackageVersion)' == '' ">1.0.31</PackageVersion>
+        <PackageVersion Condition=" '$(PackageVersion)' == '' ">1.0.32</PackageVersion>
         <Build_Number Condition=" '$(Build_Number)' == '' ">0</Build_Number>
         <Version>$(PackageVersion).$(Build_Number)</Version>
     </PropertyGroup>
@@ -105,9 +105,9 @@
             <DotnetTool Include='$(ProgramW6432)\dotnet\sdk\**\dotnet.dll'/>
         </ItemGroup>
 
-        <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=MS.Tests;DotnetMessagesCount=30;MSBuildMessagesCount=15'/>
-        <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=XUnit.Tests;DotnetMessagesCount=22;MSBuildMessagesCount=10'/>
-        <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=Dual.Tests;DotnetMessagesCount=22;MSBuildMessagesCount=12'/>
+        <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=MS.Tests;DotnetMessagesCount=34;MSBuildMessagesCount=15'/>
+        <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=XUnit.Tests;DotnetMessagesCount=26;MSBuildMessagesCount=10'/>
+        <MSBuild Projects="$(MSBuildProjectFile)" Targets="DotnetIntegrationTest" Properties='Configuration=$(Configuration);DotnetPath=%(DotnetTool.Identity);TestProjectName=Dual.Tests;DotnetMessagesCount=26;MSBuildMessagesCount=12'/>
     </Target>
 
     <Target Name="DotnetIntegrationTest">

@@ -8,12 +8,14 @@
     internal class Root : ITeamCityWriter
     {
         private readonly List<string> _lines;
+        private readonly string _name;
 
-        public Root(List<string> lines)
+        public Root(List<string> lines, string name = "root")
         {
             if (lines == null) throw new ArgumentNullException(nameof(lines));
             _lines = lines;
-            _lines.Add("+ root");
+            _name = name;
+            _lines.Add($"+ {_name}");
         }
 
         public ITeamCityWriter OpenBlock(string blockName)
@@ -23,7 +25,7 @@
 
         public ITeamCityWriter OpenFlow()
         {
-            throw new NotImplementedException();
+            return new Root(_lines, "flow");
         }
 
         public void WriteMessage(string text)
@@ -83,7 +85,7 @@
 
         public void Dispose()
         {
-            _lines.Add("- root");
+            _lines.Add($"- {_name}");
         }
 
         public void WriteRawMessage(IServiceMessage message)
