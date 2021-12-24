@@ -9,17 +9,17 @@ namespace TeamCity.VSTest.TestLogger.Tests
         /*
         Add this to MessageWriter Write for corrupted messages
         
-        if (message.Length > 10 && _rnd.Next(2) == 0 && Environment.GetEnvironmentVariable("AAA") == "A" && !message.Contains("testSuiteFinished"))
+        if (message.Length > 10 && Environment.GetEnvironmentVariable("AAA") == "A" && !message.Contains("flowFinished"))
         {
-            messageToWrite = message.Substring(8, message.Length - 8) + Environment.NewLine;
-        }
-
-        if (message.Length > 10 && _rnd.Next(2) == 0 && Environment.GetEnvironmentVariable("AAA") == "A" && !message.Contains("testSuiteFinished"))
-        {
-            messageToWrite = message.Substring(8) + Environment.NewLine;
+            messageToWrite = _rnd.Next(3) switch
+            {
+                1 => message.Substring(8) + Environment.NewLine,
+                2 => message.Substring(8, message.Length - 8) + Environment.NewLine,
+                _ => messageToWrite
+            };
         }
         
-        private Random _rnd = new Random(1);
+        private readonly Random _rnd = new Random(2);
         */
         
         private readonly Mock<IOptions> _options = new Mock<IOptions>();
