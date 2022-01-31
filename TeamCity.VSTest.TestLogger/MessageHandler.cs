@@ -12,6 +12,7 @@
         [NotNull] private readonly IOptions _options;
         private readonly IAttachments _attachments;
         private readonly ITestNameProvider _testNameProvider;
+        private readonly IEventRegistry _eventRegistry;
         [NotNull] private readonly ITestCaseFilter _testCaseFilter;
         [CanBeNull] private string _testSuiteSource;
         [CanBeNull] private ITeamCityWriter _flowWriter;
@@ -23,14 +24,16 @@
             [NotNull] ISuiteNameProvider suiteNameProvider,
             [NotNull] IOptions options,
             [NotNull] IAttachments attachments,
-            [NotNull] ITestNameProvider testNameProvider)
+            [NotNull] ITestNameProvider testNameProvider,
+            [NotNull] IEventRegistry eventRegistry)
         {
             _rootWriter = rootWriter ?? throw new ArgumentNullException(nameof(rootWriter));
             _testCaseFilter = testCaseFilter ?? throw new ArgumentNullException(nameof(testCaseFilter));
             _suiteNameProvider = suiteNameProvider ?? throw new ArgumentNullException(nameof(suiteNameProvider));
-            _options = options;
+            _options = options ?? throw new ArgumentNullException(nameof(options));
             _attachments = attachments ?? throw new ArgumentNullException(nameof(attachments));
-            _testNameProvider = testNameProvider;
+            _testNameProvider = testNameProvider ?? throw new ArgumentNullException(nameof(testNameProvider));
+            _eventRegistry = eventRegistry ?? throw new ArgumentNullException(nameof(eventRegistry));
         }
 
         public void OnTestRunMessage(TestRunMessageEventArgs ev)
@@ -61,6 +64,7 @@
                 testName = testCase.Id.ToString();
             }
             
+            using (_eventRegistry.Register(new TestEvent(suiteName, testCase)))
             using (var testWriter = testSuiteWriter.OpenTest(testName))
             {
                 // ReSharper disable once SuspiciousTypeConversion.Global

@@ -14,6 +14,7 @@ namespace TeamCity.VSTest.TestLogger
             var indicesWriter = new BytesWriter(ServiceIndicesFile);
             var messagesWriter = new BytesWriter(ServiceMessagesFile);
             var messageWriter = new MessageWriter(this, indicesWriter, messagesWriter);
+            var eventContext = new EventContext();
 
             var teamCityWriter = new TeamCityServiceMessages(
                 new ServiceMessageFormatter(),
@@ -21,7 +22,8 @@ namespace TeamCity.VSTest.TestLogger
                 new IServiceMessageUpdater[]
                 {
                     new TimestampUpdater(() => DateTime.Now),
-                    new MessageBackupUpdater(this)
+                    new MessageBackupUpdater(this),
+                    new TestInfoUpdater(eventContext)
                 }).CreateWriter(message => messageWriter.Write(message));
 
             return new MessageHandler(
@@ -30,7 +32,8 @@ namespace TeamCity.VSTest.TestLogger
                 new SuiteNameProvider(),
                  this,
                 new Attachments(this, idGenerator, teamCityWriter),
-                new TestNameProvider());
+                new TestNameProvider(),
+                eventContext);
         }
     }
 }
