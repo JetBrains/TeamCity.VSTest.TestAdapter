@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="DevTeam.TestAdapter" Version="1.0.9-beta" />
     <PackageReference Include="DevTeam.TestFramework" Version="1.0.9-beta" />
     <PackageReference Include="TeamCity.VSTest.TestAdapter" Version="1.0.34" />    

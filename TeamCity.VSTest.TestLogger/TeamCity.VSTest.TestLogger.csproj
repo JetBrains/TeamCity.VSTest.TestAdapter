@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net35;net40;netstandard1.5</TargetFrameworks>
 
+    <NoWarn>NU5127;NU5128</NoWarn>
     <GenerateAssemblyCompanyAttribute>true</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyConfigurationAttribute>true</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCopyrightAttribute>true</GenerateAssemblyCopyrightAttribute>
