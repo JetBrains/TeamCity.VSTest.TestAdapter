@@ -21,8 +21,6 @@
         private readonly Mock<ISuiteNameProvider> _suiteNameProvider;
         private readonly Mock<IIdGenerator> _idGenerator;
         private readonly Mock<IAttachments> _attachments;
-        private readonly Mock<ITestNameProvider> _testNameProvider;
-        private readonly Mock<IEventRegistry> _eventRegistry;
 
         public MessageHandlerTests()
         {
@@ -32,19 +30,18 @@
             _testCaseFilter.Setup(i => i.IsSupported(It.IsAny<TestCase>())).Returns(true);
 
             _suiteNameProvider = new Mock<ISuiteNameProvider>();
-            _suiteNameProvider.Setup(i => i.GetSuiteName(It.IsAny<string>(), It.IsAny<string>())).Returns<string, string>((baseDir, source) => source);
+            _suiteNameProvider.Setup(i => i.GetSuiteName(It.IsAny<string>())).Returns<string>(source => source);
 
             _idGenerator = new Mock<IIdGenerator>();
-            var options = new Mock<IOptions>();
             _attachments = new Mock<IAttachments>();
 
-            _testNameProvider = new Mock<ITestNameProvider>();
-            _testNameProvider.Setup(i => i.GetTestName(It.IsAny<string>(), It.IsAny<string>())).Returns<string, string>((fullyQualifiedName, displayName) => fullyQualifiedName);
+            var testNameProvider = new Mock<ITestNameProvider>();
+            testNameProvider.Setup(i => i.GetTestName(It.IsAny<string>(), It.IsAny<string>())).Returns<string, string>((fullyQualifiedName, displayName) => fullyQualifiedName);
 
-            _eventRegistry = new Mock<IEventRegistry>();
+            var eventRegistry = new Mock<IEventRegistry>();
 
             var root = new Root(_lines);
-            _events = new MessageHandler(root, _testCaseFilter.Object, _suiteNameProvider.Object, options.Object, _attachments.Object, _testNameProvider.Object, _eventRegistry.Object);
+            _events = new MessageHandler(root, _testCaseFilter.Object, _suiteNameProvider.Object, _attachments.Object, testNameProvider.Object, eventRegistry.Object);
         }
 
         private static TestResultEventArgs CreateTestResult(
@@ -118,12 +115,10 @@
             {
                 "+ root"
                 , "+ flow"
-                , "+ suite assembly.dll"
-                , "+ test assembly.dll/test1"
-                , "# test assembly.dll/test1 duration 00:00:01"
-                , "! test assembly.dll/test1 errorInfo stackTrace"
-                , "- test assembly.dll/test1"
-                , "- suite assembly.dll"
+                , "+ test assembly.dll: test1"
+                , "# test assembly.dll: test1 duration 00:00:01"
+                , "! test assembly.dll: test1 errorInfo stackTrace"
+                , "- test assembly.dll: test1"
                 , "- flow"
                 , "- root"
             });
@@ -143,11 +138,9 @@
             {
                 "+ root"
                 , "+ flow"
-                , "+ suite assembly.dll"
-                , "+ test assembly.dll/test1"
-                , "# test assembly.dll/test1 duration 00:00:01"
-                , "- test assembly.dll/test1"
-                , "- suite assembly.dll"
+                , "+ test assembly.dll: test1"
+                , "# test assembly.dll: test1 duration 00:00:01"
+                , "- test assembly.dll: test1"
                 , "- flow"
                 , "- root"
             });
@@ -173,15 +166,13 @@
             {
                 "+ root"
                 , "+ flow"
-                , "+ suite assembly.dll"
-                , "+ test assembly.dll/test1"
-                , "# test assembly.dll/test1 duration 00:00:01"
-                , "# test assembly.dll/test1 message some text"
-                , "# test assembly.dll/test1 message additional text"
-                , "# test assembly.dll/test1 message trace text"
-                , "# test assembly.dll/test1 error error text"
-                , "- test assembly.dll/test1"
-                , "- suite assembly.dll"
+                , "+ test assembly.dll: test1"
+                , "# test assembly.dll: test1 duration 00:00:01"
+                , "# test assembly.dll: test1 message some text"
+                , "# test assembly.dll: test1 message additional text"
+                , "# test assembly.dll: test1 message trace text"
+                , "# test assembly.dll: test1 error error text"
+                , "- test assembly.dll: test1"
                 , "- flow"
                 , "- root"
             });
@@ -202,14 +193,12 @@
             {
                 "+ root"
                 , "+ flow"
-                , "+ suite assembly.dll"
-                , "+ test assembly.dll/test1"
-                , "# test assembly.dll/test1 duration 00:00:01"
-                , "- test assembly.dll/test1"
-                , "+ test assembly.dll/test2"
-                , "# test assembly.dll/test2 duration 00:00:01"
-                , "- test assembly.dll/test2"
-                , "- suite assembly.dll"
+                , "+ test assembly.dll: test1"
+                , "# test assembly.dll: test1 duration 00:00:01"
+                , "- test assembly.dll: test1"
+                , "+ test assembly.dll: test2"
+                , "# test assembly.dll: test2 duration 00:00:01"
+                , "- test assembly.dll: test2"
                 , "- flow"
                 , "- root"
             });
@@ -232,22 +221,18 @@
             {
                 "+ root"
                 , "+ flow"
-                , "+ suite assembly.dll"
-                , "+ test assembly.dll/test1"
-                , "# test assembly.dll/test1 duration 00:00:01"
-                , "- test assembly.dll/test1"
-                , "+ test assembly.dll/test2"
-                , "# test assembly.dll/test2 duration 00:00:01"
-                , "- test assembly.dll/test2"
-                , "- suite assembly.dll"
-                , "+ suite assembly2.dll"
-                , "+ test assembly2.dll/test3"
-                , "# test assembly2.dll/test3 duration 00:00:01"
-                , "- test assembly2.dll/test3"
-                , "+ test assembly2.dll/test4"
-                , "# test assembly2.dll/test4 duration 00:00:01"
-                , "- test assembly2.dll/test4"
-                , "- suite assembly2.dll"
+                , "+ test assembly.dll: test1"
+                , "# test assembly.dll: test1 duration 00:00:01"
+                , "- test assembly.dll: test1"
+                , "+ test assembly.dll: test2"
+                , "# test assembly.dll: test2 duration 00:00:01"
+                , "- test assembly.dll: test2"
+                , "+ test assembly2.dll: test3"
+                , "# test assembly2.dll: test3 duration 00:00:01"
+                , "- test assembly2.dll: test3"
+                , "+ test assembly2.dll: test4"
+                , "# test assembly2.dll: test4 duration 00:00:01"
+                , "- test assembly2.dll: test4"
                 , "- flow"
                 , "- root"
             });
@@ -267,12 +252,10 @@
             {
                 "+ root"
                 , "+ flow"
-                , "+ suite assembly.dll"
-                , "+ test assembly.dll/test1"
-                , "# test assembly.dll/test1 duration 00:00:01"
-                , "? test assembly.dll/test1 reason"
-                , "- test assembly.dll/test1"
-                , "- suite assembly.dll"
+                , "+ test assembly.dll: test1"
+                , "# test assembly.dll: test1 duration 00:00:01"
+                , "? test assembly.dll: test1 reason"
+                , "- test assembly.dll: test1"
                 , "- flow"
                 , "- root"
             });
@@ -294,12 +277,10 @@
             {
                 "+ root"
                 , "+ flow"
-                , "+ suite assembly.dll"
-                , "+ test assembly.dll/test1"
-                , "# test assembly.dll/test1 duration 00:00:01"
-                , "? test assembly.dll/test1"
-                , "- test assembly.dll/test1"
-                , "- suite assembly.dll"
+                , "+ test assembly.dll: test1"
+                , "# test assembly.dll: test1 duration 00:00:01"
+                , "? test assembly.dll: test1"
+                , "- test assembly.dll: test1"
                 , "- flow"
                 , "- root"
             });
@@ -325,11 +306,9 @@
             {
                 "+ root"
                 , "+ flow"
-                , "+ suite assembly.dll"
-                , "+ test assembly.dll/test2"
-                , "# test assembly.dll/test2 duration 00:00:01"
-                , "- test assembly.dll/test2"
-                , "- suite assembly.dll"
+                , "+ test assembly.dll: test2"
+                , "# test assembly.dll: test2 duration 00:00:01"
+                , "- test assembly.dll: test2"
                 , "- flow"
                 , "- root"
             });
@@ -345,8 +324,7 @@
             _events.OnTestRunComplete();
 
             // Then
-            _suiteNameProvider.Verify(i => i.GetSuiteName(null, "assembly.dll"), Times.Once);
-            _suiteNameProvider.Verify(i => i.Reset(), Times.Once);
+            _suiteNameProvider.Verify(i => i.GetSuiteName("assembly.dll"), Times.Once);
         }
 
         [Fact]
@@ -365,7 +343,7 @@
             _events.OnTestRunComplete();
 
             // Then
-            _attachments.Verify(i => i.SendAttachment("test1", attachment, It.IsAny<ITeamCityTestWriter>() ));
+            _attachments.Verify(i => i.SendAttachment("assembly.dll: test1", attachment, It.IsAny<ITeamCityTestWriter>() ));
         }
     }
 }

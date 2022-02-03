@@ -9,20 +9,16 @@
     {
         [NotNull] private readonly ITeamCityWriter _rootWriter;
         [NotNull] private readonly ISuiteNameProvider _suiteNameProvider;
-        [NotNull] private readonly IOptions _options;
         private readonly IAttachments _attachments;
         private readonly ITestNameProvider _testNameProvider;
         private readonly IEventRegistry _eventRegistry;
         [NotNull] private readonly ITestCaseFilter _testCaseFilter;
-        [CanBeNull] private string _testSuiteSource;
-        [CanBeNull] private ITeamCityWriter _flowWriter;
-        [CanBeNull] private ITeamCityTestsSubWriter _testSuiteWriter;
-
+        [NotNull] private readonly ITeamCityWriter _flowWriter;
+        
         internal MessageHandler(
             [NotNull] ITeamCityWriter rootWriter,
             [NotNull] ITestCaseFilter testCaseFilter,
             [NotNull] ISuiteNameProvider suiteNameProvider,
-            [NotNull] IOptions options,
             [NotNull] IAttachments attachments,
             [NotNull] ITestNameProvider testNameProvider,
             [NotNull] IEventRegistry eventRegistry)
@@ -30,10 +26,10 @@
             _rootWriter = rootWriter ?? throw new ArgumentNullException(nameof(rootWriter));
             _testCaseFilter = testCaseFilter ?? throw new ArgumentNullException(nameof(testCaseFilter));
             _suiteNameProvider = suiteNameProvider ?? throw new ArgumentNullException(nameof(suiteNameProvider));
-            _options = options ?? throw new ArgumentNullException(nameof(options));
             _attachments = attachments ?? throw new ArgumentNullException(nameof(attachments));
             _testNameProvider = testNameProvider ?? throw new ArgumentNullException(nameof(testNameProvider));
             _eventRegistry = eventRegistry ?? throw new ArgumentNullException(nameof(eventRegistry));
+            _flowWriter = _rootWriter.OpenFlow();
         }
 
         public void OnTestRunMessage(TestRunMessageEventArgs ev)
@@ -56,16 +52,20 @@
                 return;
             }
 
-            var suiteName = _suiteNameProvider.GetSuiteName(_options.TestRunDirectory, testCase.Source);
-            var testSuiteWriter = GetTestSuiteWriter(suiteName);
+            var suiteName = _suiteNameProvider.GetSuiteName(testCase.Source);
             var testName = _testNameProvider.GetTestName(testCase.FullyQualifiedName, testCase.DisplayName);
             if (string.IsNullOrEmpty(testName))
             {
                 testName = testCase.Id.ToString();
             }
             
+            if (!string.IsNullOrEmpty(suiteName))
+            {
+                testName = suiteName + ": " + testName;
+            }
+
             using (_eventRegistry.Register(new TestEvent(suiteName, testCase)))
-            using (var testWriter = testSuiteWriter.OpenTest(testName))
+            using (var testWriter = _flowWriter.OpenTest(testName))
             {
                 // ReSharper disable once SuspiciousTypeConversion.Global
                 testWriter.WriteDuration(result.Duration);
@@ -123,26 +123,8 @@
 
         public void OnTestRunComplete()
         {
-            _testSuiteWriter?.Dispose();
-            _flowWriter?.Dispose();
+            _flowWriter.Dispose();
             _rootWriter.Dispose();
-            _suiteNameProvider.Reset();
-        }
-
-        [NotNull]
-        private ITeamCityTestsSubWriter GetTestSuiteWriter([NotNull] string source)
-        {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            if (_testSuiteWriter != null && _testSuiteSource == source)
-                return _testSuiteWriter;
-
-            _testSuiteWriter?.Dispose();
-            _testSuiteSource = source;
-
-            _flowWriter ??= _rootWriter.OpenFlow();
-            var testSuiteWriter = _flowWriter.OpenTestSuite(source);
-            _testSuiteWriter = testSuiteWriter;
-            return testSuiteWriter;
         }
     }
 }

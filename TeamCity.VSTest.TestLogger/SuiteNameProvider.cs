@@ -4,11 +4,16 @@
 
     internal class SuiteNameProvider : ISuiteNameProvider
     {
-        internal const string DefaultSuiteName = "Tests";
-
-        public string GetSuiteName(string baseDirectory, string source)
-            => Strings.IsNullOrWhiteSpace(source) ? DefaultSuiteName : Path.GetFileNameWithoutExtension(source);
-
-        public void Reset() { }
+        public string GetSuiteName(string source)
+        {
+            try
+            {
+                return Strings.IsNullOrWhiteSpace(source) ? string.Empty : Path.GetFileNameWithoutExtension(source);
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
     }
 }

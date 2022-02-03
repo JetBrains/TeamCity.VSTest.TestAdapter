@@ -30,7 +30,6 @@ namespace TeamCity.VSTest.TestLogger
                 teamCityWriter,
                 new TestCaseFilter(),
                 new SuiteNameProvider(),
-                 this,
                 new Attachments(this, idGenerator, teamCityWriter),
                 new TestNameProvider(),
                 eventContext);

@@ -45,12 +45,12 @@
 
         public ITeamCityTestsSubWriter OpenTestSuite(string suiteName)
         {
-            return new Suite(_lines, suiteName);
+            throw new NotImplementedException();
         }
 
         public ITeamCityTestWriter OpenTest(string testName)
         {
-            throw new NotImplementedException();
+            return new Test(_lines, testName);
         }
 
         public ITeamCityWriter OpenCompilationBlock(string compilerName)

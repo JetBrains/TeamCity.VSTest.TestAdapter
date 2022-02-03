@@ -68,8 +68,8 @@
         [InlineData(Null + Br + @"c:\dir\abc.dll" + Br + @"abc")]
         [InlineData(Null + Br + @"somePath\abc.dll" + Br + @"abc")]
         [InlineData(Null + Br + @"abc.dll" + Br + @"abc")]
-        [InlineData(Null + Br + Null + Br + SuiteNameProvider.DefaultSuiteName)]
-        [InlineData("" + Br + "" + Br + SuiteNameProvider.DefaultSuiteName)]
+        [InlineData(Null + Br + Null + Br)]
+        [InlineData("" + Br + "" + Br)]
         public void ShouldProvideSuiteName(string descriptions)
         {
             // Given
@@ -78,7 +78,7 @@
             // When
             foreach (var getSuiteNameAction in GetSuiteNameAction.CreateMany(descriptions))
             {
-                var actualSuiteName = nameProvider.GetSuiteName(getSuiteNameAction.BaseDirectory, getSuiteNameAction.Source);
+                var actualSuiteName = nameProvider.GetSuiteName(getSuiteNameAction.Source);
 
                 // Then
                 actualSuiteName.ShouldBe(getSuiteNameAction.ExpectedSuiteName);
