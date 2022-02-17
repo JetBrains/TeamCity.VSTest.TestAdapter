@@ -20,7 +20,6 @@ namespace TeamCity.VSTest.TestLogger
                 .Bind<IAutowiringStrategy>().To(ctx => autowiringStrategy)
                 .Bind<IMessageHandler>().To<MessageHandler>()
                 .Bind<IOptions>().As(Singleton).To<Options>()
-                .Bind<ITestCaseFilter>().To<TestCaseFilter>()
                 .Bind<ITestNameProvider>().As(Singleton).To<TestNameProvider>()
                 .Bind<ISuiteNameProvider>().As(Singleton).To<SuiteNameProvider>()
                 .Bind<IEventRegistry>().Bind<IEventContext>().As(Singleton).To<EventContext>()

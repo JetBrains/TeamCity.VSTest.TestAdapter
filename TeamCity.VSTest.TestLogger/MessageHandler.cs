@@ -12,19 +12,16 @@
         private readonly IAttachments _attachments;
         private readonly ITestNameProvider _testNameProvider;
         private readonly IEventRegistry _eventRegistry;
-        [NotNull] private readonly ITestCaseFilter _testCaseFilter;
         [NotNull] private readonly ITeamCityWriter _flowWriter;
         
         internal MessageHandler(
             [NotNull] ITeamCityWriter rootWriter,
-            [NotNull] ITestCaseFilter testCaseFilter,
             [NotNull] ISuiteNameProvider suiteNameProvider,
             [NotNull] IAttachments attachments,
             [NotNull] ITestNameProvider testNameProvider,
             [NotNull] IEventRegistry eventRegistry)
         {
             _rootWriter = rootWriter ?? throw new ArgumentNullException(nameof(rootWriter));
-            _testCaseFilter = testCaseFilter ?? throw new ArgumentNullException(nameof(testCaseFilter));
             _suiteNameProvider = suiteNameProvider ?? throw new ArgumentNullException(nameof(suiteNameProvider));
             _attachments = attachments ?? throw new ArgumentNullException(nameof(attachments));
             _testNameProvider = testNameProvider ?? throw new ArgumentNullException(nameof(testNameProvider));
@@ -33,25 +30,17 @@
         }
 
         public void OnTestRunMessage(TestRunMessageEventArgs ev)
-        {
-            if (ev == null) throw new ArgumentNullException(nameof(ev));
-            if (ev.Level == TestMessageLevel.Informational && !Strings.IsNullOrWhiteSpace(ev.Message))
-            {
-                _testCaseFilter.RegisterOutputMessage(ev.Message);
-            }
-        }
+        { }
 
         public void OnTestResult(TestResultEventArgs ev)
         {
-            if (ev == null) throw new ArgumentNullException(nameof(ev));
-
-            var result = ev.Result;
-            var testCase = result.TestCase;
-            if (!_testCaseFilter.IsSupported(testCase))
+            if (ev == null)
             {
                 return;
             }
 
+            var result = ev.Result;
+            var testCase = result.TestCase;
             var suiteName = _suiteNameProvider.GetSuiteName(testCase.Source);
             var testName = _testNameProvider.GetTestName(testCase.FullyQualifiedName, testCase.DisplayName);
             if (string.IsNullOrEmpty(testName))

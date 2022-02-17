@@ -17,7 +17,6 @@
     {
         private readonly List<string> _lines = new List<string>();
         private readonly IMessageHandler _events;
-        private readonly Mock<ITestCaseFilter> _testCaseFilter;
         private readonly Mock<ISuiteNameProvider> _suiteNameProvider;
         private readonly Mock<IIdGenerator> _idGenerator;
         private readonly Mock<IAttachments> _attachments;
@@ -25,9 +24,6 @@
         public MessageHandlerTests()
         {
             _lines.Clear();
-
-            _testCaseFilter = new Mock<ITestCaseFilter>();
-            _testCaseFilter.Setup(i => i.IsSupported(It.IsAny<TestCase>())).Returns(true);
 
             _suiteNameProvider = new Mock<ISuiteNameProvider>();
             _suiteNameProvider.Setup(i => i.GetSuiteName(It.IsAny<string>())).Returns<string>(source => source);
@@ -41,7 +37,7 @@
             var eventRegistry = new Mock<IEventRegistry>();
 
             var root = new Root(_lines);
-            _events = new MessageHandler(root, _testCaseFilter.Object, _suiteNameProvider.Object, _attachments.Object, testNameProvider.Object, eventRegistry.Object);
+            _events = new MessageHandler(root, _suiteNameProvider.Object, _attachments.Object, testNameProvider.Object, eventRegistry.Object);
         }
 
         private static TestResultEventArgs CreateTestResult(
@@ -64,41 +60,6 @@
                     ErrorMessage = errorMessage,
                     ErrorStackTrace = errorStackTrace
                 });
-        }
-
-        [Fact]
-        public void ShouldNotProduceAnyMessagesWhenTestCaseFilterFiltersAllMessages()
-        {
-            // Given
-            var testResult = CreateTestResult(TestOutcome.Passed, "test2");
-
-            // When
-            _testCaseFilter.Setup(i => i.IsSupported(testResult.Result.TestCase)).Returns(false);
-            _events.OnTestResult(testResult);
-            _events.OnTestRunComplete();
-
-            // Then
-            _lines.ShouldNotBeEmpty();
-        }
-
-        [Fact]
-        public void ShouldRegisterOutputMessageInTestCaseFilterWhenReceiveTestRunMessageEventArgs()
-        {
-            // Given
-            var testResult = CreateTestResult();
-
-            // When
-            _testCaseFilter.Setup(i => i.IsSupported(testResult.Result.TestCase)).Returns(false);
-            _events.OnTestRunMessage(new TestRunMessageEventArgs(TestMessageLevel.Error, "err"));
-            _events.OnTestRunMessage(new TestRunMessageEventArgs(TestMessageLevel.Informational, "abc"));
-            _events.OnTestRunMessage(new TestRunMessageEventArgs(TestMessageLevel.Warning, "warn"));
-            _events.OnTestResult(testResult);
-            _events.OnTestRunComplete();
-
-            // Then
-            _testCaseFilter.Verify(i => i.RegisterOutputMessage("err"), Times.Never);
-            _testCaseFilter.Verify(i => i.RegisterOutputMessage("abc"), Times.Once);
-            _testCaseFilter.Verify(i => i.RegisterOutputMessage("warn"), Times.Never);
         }
 
         [Fact]
@@ -281,34 +242,6 @@
                 , "# test assembly.dll: test1 duration 00:00:01"
                 , "? test assembly.dll: test1"
                 , "- test assembly.dll: test1"
-                , "- flow"
-                , "- root"
-            });
-        }
-
-        [Fact]
-        public void ShouldProduceMessagesWhenTestCaseFilterFiltersNotAllMessages()
-        {
-            // Given
-            var testResult1 = CreateTestResult();
-            var testResult2 = CreateTestResult(TestOutcome.Passed, "test2");
-
-            // When
-            _testCaseFilter.Setup(i => i.IsSupported(testResult1.Result.TestCase)).Returns(false);
-            _testCaseFilter.Setup(i => i.IsSupported(testResult2.Result.TestCase)).Returns(true);
-            _events.OnTestResult(testResult1);
-            _events.OnTestResult(testResult2);
-            _events.OnTestRunComplete();
-
-            // Then
-            // Then
-            _lines.ShouldBe(new[]
-            {
-                "+ root"
-                , "+ flow"
-                , "+ test assembly.dll: test2"
-                , "# test assembly.dll: test2 duration 00:00:01"
-                , "- test assembly.dll: test2"
                 , "- flow"
                 , "- root"
             });

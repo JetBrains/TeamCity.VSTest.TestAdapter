@@ -28,7 +28,6 @@ namespace TeamCity.VSTest.TestLogger
 
             return new MessageHandler(
                 teamCityWriter,
-                new TestCaseFilter(),
                 new SuiteNameProvider(),
                 new Attachments(this, idGenerator, teamCityWriter),
                 new TestNameProvider(),
