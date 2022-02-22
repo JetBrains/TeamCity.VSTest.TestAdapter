@@ -29,7 +29,7 @@ namespace TeamCity.VSTest.TestLogger
             
             if (!string.IsNullOrEmpty(testEvent.TestCase.Source))
             {
-                newMessage.Add("source", testEvent.TestCase.Source);
+                newMessage.Add("testSource", testEvent.TestCase.Source);
             }
             
             if (!string.IsNullOrEmpty(testEvent.TestCase.DisplayName))
