@@ -53,7 +53,6 @@ namespace TeamCity.VSTest.TestLogger
             MetadataEnableVal = GetBool(GetEnvironmentVariable("TEAMCITY_DOTNET_TEST_METADATA_ENABLE"), true);
             
             Environment.SetEnvironmentVariable("TEAMCITY_PROJECT_NAME", string.Empty);
-            Environment.SetEnvironmentVariable("TEAMCITY_VERSION", string.Empty);
         }
 
         public string TestRunDirectory { get; set; }
