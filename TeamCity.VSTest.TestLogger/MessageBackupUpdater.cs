@@ -24,11 +24,10 @@ namespace TeamCity.VSTest.TestLogger
                 return message;
             }
             
-            return new PatchedServiceMessage(message)
-            {
-                { "source", _options.ServiceMessagesSource },
-                { "index", (_index++).ToString() }
-            };
+            var patchedMessage = new PatchedServiceMessage(message);
+            patchedMessage.Add("source", _options.ServiceMessagesSource);
+            patchedMessage.Add("index", (_index++).ToString());
+            return patchedMessage;
         }
     }
 }

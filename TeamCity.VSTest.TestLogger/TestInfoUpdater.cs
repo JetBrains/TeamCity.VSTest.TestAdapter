@@ -8,10 +8,7 @@ namespace TeamCity.VSTest.TestLogger
     {
         private readonly IEventContext _eventContext;
 
-        public TestInfoUpdater(IEventContext eventContext)
-        {
-            _eventContext = eventContext;
-        }
+        public TestInfoUpdater(IEventContext eventContext) => _eventContext = eventContext;
 
         public IServiceMessage UpdateServiceMessage(IServiceMessage message)
         {
