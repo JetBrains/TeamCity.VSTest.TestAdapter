@@ -75,12 +75,10 @@
             _lines.ShouldBe(new[]
             {
                 "+ root"
-                , "+ flow"
                 , "+ test assembly.dll: test1"
                 , "# test assembly.dll: test1 duration 00:00:01"
                 , "! test assembly.dll: test1 errorInfo stackTrace"
                 , "- test assembly.dll: test1"
-                , "- flow"
                 , "- root"
             });
         }
@@ -98,11 +96,9 @@
             _lines.ShouldBe(new[]
             {
                 "+ root"
-                , "+ flow"
                 , "+ test assembly.dll: test1"
                 , "# test assembly.dll: test1 duration 00:00:01"
                 , "- test assembly.dll: test1"
-                , "- flow"
                 , "- root"
             });
         }
@@ -126,7 +122,6 @@
             _lines.ShouldBe(new[]
             {
                 "+ root"
-                , "+ flow"
                 , "+ test assembly.dll: test1"
                 , "# test assembly.dll: test1 duration 00:00:01"
                 , "# test assembly.dll: test1 message some text"
@@ -134,7 +129,6 @@
                 , "# test assembly.dll: test1 message trace text"
                 , "# test assembly.dll: test1 error error text"
                 , "- test assembly.dll: test1"
-                , "- flow"
                 , "- root"
             });
         }
@@ -153,14 +147,12 @@
             _lines.ShouldBe(new[]
             {
                 "+ root"
-                , "+ flow"
                 , "+ test assembly.dll: test1"
                 , "# test assembly.dll: test1 duration 00:00:01"
                 , "- test assembly.dll: test1"
                 , "+ test assembly.dll: test2"
                 , "# test assembly.dll: test2 duration 00:00:01"
                 , "- test assembly.dll: test2"
-                , "- flow"
                 , "- root"
             });
         }
@@ -181,7 +173,6 @@
             _lines.ShouldBe(new[]
             {
                 "+ root"
-                , "+ flow"
                 , "+ test assembly.dll: test1"
                 , "# test assembly.dll: test1 duration 00:00:01"
                 , "- test assembly.dll: test1"
@@ -194,7 +185,6 @@
                 , "+ test assembly2.dll: test4"
                 , "# test assembly2.dll: test4 duration 00:00:01"
                 , "- test assembly2.dll: test4"
-                , "- flow"
                 , "- root"
             });
         }
@@ -212,12 +202,10 @@
             _lines.ShouldBe(new[]
             {
                 "+ root"
-                , "+ flow"
                 , "+ test assembly.dll: test1"
                 , "# test assembly.dll: test1 duration 00:00:01"
                 , "? test assembly.dll: test1 reason"
                 , "- test assembly.dll: test1"
-                , "- flow"
                 , "- root"
             });
         }
@@ -237,11 +225,57 @@
             _lines.ShouldBe(new[]
             {
                 "+ root"
-                , "+ flow"
                 , "+ test assembly.dll: test1"
                 , "# test assembly.dll: test1 duration 00:00:01"
                 , "? test assembly.dll: test1"
                 , "- test assembly.dll: test1"
+                , "- root"
+            });
+        }
+
+        [Fact]
+        public void ShouldWrapTestOutputInBlockWithDescriptionWhenOnTestRunStartIsCalled()
+        {
+            // Given
+
+            // When
+            _events.OnTestRunStart("foo", false);
+            _events.OnTestResult(CreateTestResult());
+            _events.OnTestRunComplete();
+
+            // Then
+            _lines.ShouldBe(new[]
+            {
+                "+ root"
+                , "+ block"
+                , "+ test assembly.dll: test1"
+                , "# test assembly.dll: test1 duration 00:00:01"
+                , "- test assembly.dll: test1"
+                , "- block"
+                , "- root"
+            });
+        }
+
+        [Fact]
+        public void ShouldOpenFlowWhenOnTestRunStartIsCalledWithTheCorrespondingParameter()
+        {
+            // Given
+
+            // When
+            _events.OnTestRunStart("foo", true);
+            _events.OnTestResult(CreateTestResult());
+            _events.OnTestRunComplete();
+
+            // Then
+            _lines.ShouldBe(new[]
+            {
+                "+ root"
+                , "+ flow"
+                , "+ block"
+                , "+ test assembly.dll: test1"
+                , "# test assembly.dll: test1 duration 00:00:01"
+                , "- test assembly.dll: test1"
+                , "- block"
                 , "- flow"
                 , "- root"
             });

@@ -4,6 +4,8 @@
 
     internal interface IMessageHandler
     {
+        void OnTestRunStart(string testRunDescription, bool shouldOpenNewFlow);
+
         void OnTestRunMessage([NotNull] TestRunMessageEventArgs ev);
         
         void OnTestResult([NotNull] TestResultEventArgs ev);

@@ -19,7 +19,7 @@ namespace TeamCity.VSTest.TestLogger.Tests
         {
             // Given
             var updater = CreateInstance();
-            _options.SetupGet(i => i.ServiceMessagesSource).Returns("Src");
+            _options.SetupGet(i => i.ServiceMessagesBackupSource).Returns("Src");
 
             // When
             var patchedMessage1 = updater.UpdateServiceMessage(new ServiceMessage("Abc"));

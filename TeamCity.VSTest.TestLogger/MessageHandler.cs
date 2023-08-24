@@ -12,8 +12,11 @@
         private readonly IAttachments _attachments;
         private readonly ITestNameProvider _testNameProvider;
         private readonly IEventRegistry _eventRegistry;
-        [NotNull] private readonly ITeamCityWriter _flowWriter;
-        
+        private ITeamCityWriter _flowWriter;
+        private ITeamCityWriter _blockWriter;
+
+        private ITeamCityWriter CurrentWriter => _blockWriter ?? _flowWriter ?? _rootWriter;
+
         internal MessageHandler(
             [NotNull] ITeamCityWriter rootWriter,
             [NotNull] ISuiteNameProvider suiteNameProvider,
@@ -26,7 +29,6 @@
             _attachments = attachments ?? throw new ArgumentNullException(nameof(attachments));
             _testNameProvider = testNameProvider ?? throw new ArgumentNullException(nameof(testNameProvider));
             _eventRegistry = eventRegistry ?? throw new ArgumentNullException(nameof(eventRegistry));
-            _flowWriter = _rootWriter.OpenFlow();
         }
 
         public void OnTestRunMessage(TestRunMessageEventArgs ev)
@@ -54,7 +56,7 @@
             }
 
             using (_eventRegistry.Register(new TestEvent(suiteName, testCase)))
-            using (var testWriter = _flowWriter.OpenTest(testName))
+            using (var testWriter = CurrentWriter.OpenTest(testName))
             {
                 // ReSharper disable once SuspiciousTypeConversion.Global
                 testWriter.WriteDuration(result.Duration);
@@ -110,9 +112,20 @@
             }
         }
 
+        public void OnTestRunStart(string testRunDescription, bool shouldOpenNewFlow)
+        {
+            if (shouldOpenNewFlow)
+            {
+                _flowWriter = _rootWriter.OpenFlow();
+            }
+
+            _blockWriter = (_flowWriter ?? _rootWriter).OpenBlock(testRunDescription);
+        }
+
         public void OnTestRunComplete()
         {
-            _flowWriter.Dispose();
+            _blockWriter?.Dispose();
+            _flowWriter?.Dispose();
             _rootWriter.Dispose();
         }
     }

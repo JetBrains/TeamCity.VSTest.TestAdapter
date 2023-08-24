@@ -20,7 +20,7 @@
 
         public ITeamCityWriter OpenBlock(string blockName)
         {
-            throw new NotImplementedException();
+            return new Root(_lines, "block");
         }
 
         public ITeamCityWriter OpenFlow()

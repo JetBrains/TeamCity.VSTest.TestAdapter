@@ -25,7 +25,7 @@ namespace TeamCity.VSTest.TestLogger
             }
             
             var patchedMessage = new PatchedServiceMessage(message);
-            patchedMessage.Add("source", _options.ServiceMessagesSource);
+            patchedMessage.Add("source", _options.ServiceMessagesBackupSource);
             patchedMessage.Add("index", (_index++).ToString());
             return patchedMessage;
         }

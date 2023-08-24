@@ -26,9 +26,10 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/JetBrains/TeamCity.VSTest.TestAdapter</PackageProjectUrl>
     <PackageIcon>_common\icon.png</PackageIcon>
+    <PackageReleaseNotes>Release descriptions are available at https://github.com/JetBrains/TeamCity.VSTest.TestAdapter/releases</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Copyright>JetBrains</Copyright>
-    <Description>Provides an integration TeamCity and test frameworks.
+    <Description>Provides an integration with TeamCity for test frameworks.
 
 Usage:
 
@@ -62,7 +63,7 @@ Usage:
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="TeamCity.ServiceMessages" Version="3.0.13" />
+    <PackageReference Include="TeamCity.ServiceMessages" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.5'">

@@ -1,24 +1,20 @@
 // ReSharper disable ClassNeverInstantiated.Global
-namespace TeamCity.VSTest.TestLogger
+namespace TeamCity.VSTest.TestLogger.MessageWriters
 {
     using System;
     using System.Text;
 
-    internal class MessageWriter : IMessageWriter
+    internal class StdOutMessageWriterWithBackup : IMessageWriter
     {
         private readonly IBytesWriter _indicesWriter;
         private readonly IBytesWriter _messagesWriter;
-        private bool _allowServiceMessageBackup;
+        private bool _allowServiceMessageBackup = true;
         private ulong _position;
 
-        public MessageWriter(
-            IOptions options,
-            [Tag("Indices")] IBytesWriter indicesWriter,
-            [Tag("Messages")] IBytesWriter messagesWriter)
+        public StdOutMessageWriterWithBackup(IBytesWriter indicesWriter, IBytesWriter messagesWriter)
         {
             _indicesWriter = indicesWriter;
             _messagesWriter = messagesWriter;
-            _allowServiceMessageBackup = options.AllowServiceMessageBackup;
         }
 
         public void Write(string message)
@@ -47,5 +43,7 @@ namespace TeamCity.VSTest.TestLogger
             
             Console.Write(messageToWrite);
         }
+
+        public void Flush() { }
     }
 }

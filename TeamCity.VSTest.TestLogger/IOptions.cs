@@ -7,14 +7,16 @@
         TeamCityVersion Version { get; }
 
         string RootFlowId { get; }
+
+        public string ServiceMessagesFileSavePath { get; }
+
+        bool FallbackToStdOutTestReporting { get; }
         
         bool AllowServiceMessageBackup { get; }
         
-        string ServiceMessagesSource { get; }
-        
-        string ServiceIndicesFile { get; }
+        string ServiceMessagesBackupPath { get; }
 
-        string ServiceMessagesFile { get; }
+        string ServiceMessagesBackupSource { get; }
 
         bool AllowExperimental { get; }
 

@@ -5,16 +5,17 @@ namespace TeamCity.VSTest.TestLogger
     using JetBrains.TeamCity.ServiceMessages.Write;
     using JetBrains.TeamCity.ServiceMessages.Write.Special;
     using JetBrains.TeamCity.ServiceMessages.Write.Special.Impl.Updater;
+    using MessageWriters;
 
     internal class ServiceLocatorNet35: Options
     {
-        public IMessageHandler CreateMessageHandler()
+        public ServiceLocatorNet35()
         {
             var idGenerator = new IdGenerator();
-            var indicesWriter = new BytesWriter(ServiceIndicesFile);
-            var messagesWriter = new BytesWriter(ServiceMessagesFile);
-            var messageWriter = new MessageWriter(this, indicesWriter, messagesWriter);
+            var messageWriterFactory = new MessageWriterFactory(this);
             var eventContext = new EventContext();
+
+            MessageWriter = messageWriterFactory.GetMessageWriter();
 
             var teamCityWriter = new TeamCityServiceMessages(
                 new ServiceMessageFormatter(),
@@ -24,15 +25,19 @@ namespace TeamCity.VSTest.TestLogger
                     new TimestampUpdater(() => DateTime.Now),
                     new MessageBackupUpdater(this),
                     new TestInfoUpdater(eventContext)
-                }).CreateWriter(message => messageWriter.Write(message));
+                }).CreateWriter(message => MessageWriter.Write(message), FallbackToStdOutTestReporting);
 
-            return new MessageHandler(
+            MessageHandler = new MessageHandler(
                 teamCityWriter,
                 new SuiteNameProvider(),
                 new Attachments(this, idGenerator, teamCityWriter),
                 new TestNameProvider(),
                 eventContext);
         }
+
+        public IMessageWriter MessageWriter { get; }
+
+        public IMessageHandler MessageHandler { get; }
     }
 }
 #endif

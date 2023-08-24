@@ -13,10 +13,12 @@ namespace TeamCity.VSTest.TestLogger
         private static readonly TeamCityVersion TestMetadataSupportVersionVal = new TeamCityVersion("2018.2");
         private static readonly TeamCityVersion VersionVal;
         private static readonly string RootFlowIdVal;
+        private static readonly string ServiceMessagesFileSavePathVal;
+        private static readonly bool FallbackToStdOutTestReportingVal;
         private static readonly bool AllowServiceMessageBackupVal;
         private static readonly bool AllowExperimentalVal;
-        private static readonly string ServiceMessagesSourceVal;
-        private static readonly string ServiceMessagesPathVal;
+        private static readonly string ServiceMessagesBackupSourceVal;
+        private static readonly string ServiceMessagesBackupPathVal;
         private static readonly bool MetadataEnableVal;
 
         static Options()
@@ -30,17 +32,21 @@ namespace TeamCity.VSTest.TestLogger
             
             VersionVal = new TeamCityVersion(GetEnvironmentVariable("TEAMCITY_VERSION"));
             RootFlowIdVal = GetEnvironmentVariable("TEAMCITY_PROCESS_FLOW_ID") ?? string.Empty;
-            
-            ServiceMessagesPathVal = GetEnvironmentVariable("TEAMCITY_SERVICE_MESSAGES_PATH") ?? string.Empty;
-            AllowServiceMessageBackupVal = !string.IsNullOrEmpty(ServiceMessagesPathVal);
-            ServiceMessagesSourceVal = Guid.NewGuid().ToString().Substring(0, 8);
+
+            ServiceMessagesFileSavePathVal = GetEnvironmentVariable("TEAMCITY_TEST_REPORT_FILES_PATH") ?? string.Empty;
+            FallbackToStdOutTestReportingVal = string.IsNullOrEmpty(ServiceMessagesFileSavePathVal)
+                                               || GetBool(GetEnvironmentVariable("TEAMCITY_FALLBACK_TO_STDOUT_TEST_REPORTING"), false);
+
+            ServiceMessagesBackupPathVal = GetEnvironmentVariable("TEAMCITY_SERVICE_MESSAGES_PATH") ?? string.Empty;
+            AllowServiceMessageBackupVal = !string.IsNullOrEmpty(ServiceMessagesBackupPathVal);
+            ServiceMessagesBackupSourceVal = Guid.NewGuid().ToString().Substring(0, 8);
             if (AllowServiceMessageBackupVal)
             {
                 try
                 {
-                    if (!Directory.Exists(ServiceMessagesPathVal))
+                    if (!Directory.Exists(ServiceMessagesBackupPathVal))
                     {
-                        Directory.CreateDirectory(ServiceMessagesPathVal);
+                        Directory.CreateDirectory(ServiceMessagesBackupPathVal);
                     }
                 }
                 catch
@@ -61,15 +67,15 @@ namespace TeamCity.VSTest.TestLogger
 
         public string RootFlowId => RootFlowIdVal;
 
+        public string ServiceMessagesFileSavePath => ServiceMessagesFileSavePathVal;
+
+        public bool FallbackToStdOutTestReporting => FallbackToStdOutTestReportingVal;
+
         public bool AllowServiceMessageBackup => AllowServiceMessageBackupVal;
 
-        public string ServiceMessagesSource => ServiceMessagesSourceVal;
+        public string ServiceMessagesBackupPath => ServiceMessagesBackupPathVal;
 
-        private string ServiceMessagesPath => AllowServiceMessageBackupVal ? Path.Combine(ServiceMessagesPathVal, ServiceMessagesSource) : ServiceMessagesSource;
-
-        public string ServiceIndicesFile => ServiceMessagesPath;
-
-        public string ServiceMessagesFile => ServiceMessagesPath + ".msg";
+        public string ServiceMessagesBackupSource => ServiceMessagesBackupSourceVal;
 
         public bool AllowExperimental => AllowExperimentalVal;
 
