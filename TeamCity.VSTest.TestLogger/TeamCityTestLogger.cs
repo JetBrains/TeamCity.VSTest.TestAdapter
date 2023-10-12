@@ -2,12 +2,13 @@
 namespace TeamCity.VSTest.TestLogger
 {
     using System;
+    using System.Reflection;
 #if !NET35
     using IoC;
 #endif
     using Microsoft.VisualStudio.TestPlatform.ObjectModel;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
-    
+
     [ExtensionUri(ExtensionId)]
     [FriendlyName(FriendlyName)]
     public class TeamCityTestLogger : ITestLogger
@@ -30,6 +31,8 @@ namespace TeamCity.VSTest.TestLogger
         public void Initialize([NotNull] TestLoggerEvents events, [CanBeNull] string testRunDirectory)
         {
             if (events == null) throw new ArgumentNullException(nameof(events));
+
+            OutputLoggerInitializedMessage();
 
             _options.TestRunDirectory = testRunDirectory;
 
@@ -56,6 +59,19 @@ namespace TeamCity.VSTest.TestLogger
                 "Unit tests from " + string.Join(" ", args.TestRunCriteria.Sources),
                 shouldOpenNewFlowForServiceMessages);
             #endif
+        }
+
+        private void OutputLoggerInitializedMessage()
+        {
+            Version currentAssemblyVersion;
+
+            #if (NET35 || NET40)
+                currentAssemblyVersion = GetType().Assembly.GetName().Version;
+            #else
+                currentAssemblyVersion = GetType().GetTypeInfo().Assembly.GetName().Version;
+            #endif
+
+            Console.WriteLine($"TeamCity test logger version {currentAssemblyVersion} is initialized");
         }
     }
 }
