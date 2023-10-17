@@ -48,7 +48,7 @@ namespace TeamCity.VSTest.TestLogger.MessageWriters
 
         private IMessageWriter GetFileMessageWriter()
         {
-            var messagesFilePath = Path.Combine(_options.ServiceMessagesFileSavePath, Guid.NewGuid().ToString()) + ".msg";
+            var messagesFilePath = Path.Combine(_options.ServiceMessagesFileSavePath, Guid.NewGuid().ToString("n")) + ".msg";
             var messageBytesWriter = new BytesWriter(messagesFilePath);
             return new FileMessageWriter(messageBytesWriter);
         }
