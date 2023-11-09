@@ -16,6 +16,11 @@ namespace TeamCity.VSTest.TestLogger
             {
                 return displayName;
             }
+
+            if (!string.IsNullOrEmpty(displayName)) // TODO check env variable with feature toggle
+            {
+                return displayName;
+            }
             
             if (displayName == string.Empty)
             {

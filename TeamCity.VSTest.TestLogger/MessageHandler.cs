@@ -44,7 +44,7 @@
             var result = ev.Result;
             var testCase = result.TestCase;
             var suiteName = _suiteNameProvider.GetSuiteName(testCase.Source);
-            var testName = _testNameProvider.GetTestName(testCase.FullyQualifiedName, testCase.DisplayName);
+            var testName = _testNameProvider.GetTestName(testCase.FullyQualifiedName, result.DisplayName);
             if (string.IsNullOrEmpty(testName))
             {
                 testName = testCase.Id.ToString();
@@ -55,7 +55,7 @@
                 testName = suiteName + ": " + testName;
             }
 
-            using (_eventRegistry.Register(new TestEvent(suiteName, testCase)))
+            using (_eventRegistry.Register(new TestEvent(suiteName, testCase, result.DisplayName)))
             using (var testWriter = CurrentWriter.OpenTest(testName))
             {
                 // ReSharper disable once SuspiciousTypeConversion.Global

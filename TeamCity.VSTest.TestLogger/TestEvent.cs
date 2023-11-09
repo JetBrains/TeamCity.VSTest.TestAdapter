@@ -6,11 +6,13 @@ namespace TeamCity.VSTest.TestLogger
     {
         public readonly string SuiteName;
         public readonly TestCase TestCase;
+        public readonly string TestResultDisplayName;
 
-        public TestEvent(string suiteName, TestCase testCase)
+        public TestEvent(string suiteName, TestCase testCase, string testResultDisplayName)
         {
             SuiteName = suiteName;
             TestCase = testCase;
+            TestResultDisplayName = testResultDisplayName;
         }
     }
 }

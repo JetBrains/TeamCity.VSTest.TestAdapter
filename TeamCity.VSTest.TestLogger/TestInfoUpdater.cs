@@ -34,6 +34,11 @@ namespace TeamCity.VSTest.TestLogger
                 newMessage.Add("displayName", testEvent.TestCase.DisplayName);
             }
             
+            if (!string.IsNullOrEmpty(testEvent.TestCase.DisplayName))
+            {
+                newMessage.Add("testCaseDisplayName", testEvent.TestCase.DisplayName);
+            }
+            
             if (!string.IsNullOrEmpty(testEvent.TestCase.CodeFilePath))
             {
                 newMessage.Add("codeFilePath", testEvent.TestCase.CodeFilePath);
