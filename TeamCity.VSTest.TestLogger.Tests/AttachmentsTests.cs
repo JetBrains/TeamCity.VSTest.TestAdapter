@@ -23,7 +23,8 @@
             _options = new Mock<IOptions>();
             _rootWriter = new Mock<ITeamCityWriter>();
             _testWriter = new Mock<ITeamCityTestWriter>();
-            _attachments = new Attachments(_options.Object, _idGenerator.Object, _rootWriter.Object);
+            var testAttachmentPathResolver = new Mock<ITestAttachmentPathResolver>();
+            _attachments = new Attachments(_options.Object, _idGenerator.Object, _rootWriter.Object, testAttachmentPathResolver.Object);
         }
 
         [Theory]

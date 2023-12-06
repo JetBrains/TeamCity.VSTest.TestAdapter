@@ -14,6 +14,7 @@ namespace TeamCity.VSTest.TestLogger
             var idGenerator = new IdGenerator();
             var messageWriterFactory = new MessageWriterFactory(this);
             var eventContext = new EventContext();
+            var testAttachmentPathResolver = new TestAttachmentPathResolver();
 
             MessageWriter = messageWriterFactory.GetMessageWriter();
 
@@ -30,7 +31,7 @@ namespace TeamCity.VSTest.TestLogger
             MessageHandler = new MessageHandler(
                 teamCityWriter,
                 new SuiteNameProvider(),
-                new Attachments(this, idGenerator, teamCityWriter),
+                new Attachments(this, idGenerator, teamCityWriter, testAttachmentPathResolver),
                 new TestNameProvider(),
                 eventContext);
         }

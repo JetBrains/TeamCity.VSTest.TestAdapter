@@ -14,15 +14,18 @@
         private readonly IOptions _options;
         private readonly IIdGenerator _idGenerator;
         private readonly ITeamCityWriter _rootWriter;
+        private readonly ITestAttachmentPathResolver _testAttachmentPathResolver;
 
         public Attachments(
             [NotNull] IOptions options,
             [NotNull] IIdGenerator idGenerator,
-            [NotNull] ITeamCityWriter rootWriter)
+            [NotNull] ITeamCityWriter rootWriter,
+            [NotNull] ITestAttachmentPathResolver testAttachmentPathResolver)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _idGenerator = idGenerator ?? throw new ArgumentNullException(nameof(idGenerator));
             _rootWriter = rootWriter ?? throw new ArgumentNullException(nameof(rootWriter));
+            _testAttachmentPathResolver = testAttachmentPathResolver ?? throw new ArgumentNullException(nameof(testAttachmentPathResolver));
         }
 
         public void SendAttachment(string testName, UriDataAttachment attachment, ITeamCityTestWriter testWriter)
@@ -69,7 +72,8 @@
 
             if (artifactDir == null)
             {
-                var testDirName = new string(NormalizeTestName(testName).ToArray());
+                var normalized = new string(NormalizeTestName(testName).ToArray());
+                var testDirName = _testAttachmentPathResolver.Resolve(normalized);
                 artifactDir = ".teamcity/VSTest/" + testDirName + "/" + _idGenerator.NewId();
             }
 
