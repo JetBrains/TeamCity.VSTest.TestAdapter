@@ -1,26 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>    
-    <TargetFrameworks>net45;netcoreapp2.0</TargetFrameworks>    
-    <PreBuildEvent>
 
-</PreBuildEvent>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFrameworks>net48;net8.0</TargetFrameworks>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="DevTeam.TestAdapter\**" />
-    <EmbeddedResource Remove="DevTeam.TestAdapter\**" />
-    <None Remove="DevTeam.TestAdapter\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="DevTeam.TestAdapter\**"/>
+        <EmbeddedResource Remove="DevTeam.TestAdapter\**"/>
+        <None Remove="DevTeam.TestAdapter\**"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-    <PackageReference Include="DevTeam.TestAdapter" Version="1.0.9-beta" />
-    <PackageReference Include="DevTeam.TestFramework" Version="1.0.9-beta" />
-    <PackageReference Include="TeamCity.VSTest.TestAdapter" Version="1.0.36" />    
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+        <PackageReference Include="DevTeam.TestAdapter" Version="1.0.9-beta"/>
+        <PackageReference Include="DevTeam.TestFramework" Version="1.0.9-beta"/>
+        <PackageReference Include="TeamCity.VSTest.TestAdapter" Version="1.0.38" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DevTeam.TestAdapter\" Visible="False" />
-  </ItemGroup>
+    <ItemGroup>
+        <Folder Include="DevTeam.TestAdapter\" Visible="False"/>
+    </ItemGroup>
 
 </Project>
