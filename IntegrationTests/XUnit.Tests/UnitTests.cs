@@ -1,8 +1,13 @@
+using System.Diagnostics.CodeAnalysis;
+// ReSharper disable Xunit.XunitTestWithConsoleOutput
+// ReSharper disable CheckNamespace
+
 namespace dotNetCore.XUnit.Tests
 {
     using System;
     using Xunit;
 
+    [SuppressMessage("Assertions", "xUnit2020:Do not use always-failing boolean assertions")]
     public class UnitTests
     {
         [Fact]

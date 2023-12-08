@@ -58,7 +58,7 @@
             </VSTestVersion>
         </ItemGroup>
 
-        <RemoveDir Directories="$(BinPath)" />
+        <RemoveDir Directories="$(BinPath)" ContinueOnError="True" />
         <MSBuild Projects="$(MSBuildProjectFile)" Targets="Publish" Properties="Configuration=$(Configuration);TargetFramework=%(VSTestVersion.TargetFramework);VSTestLoggerPath=%(VSTestVersion.VSTestLoggerPath);Version=$(Version);AssemblyName=%(VSTestVersion.AssemblyName)"/>
         <Message Text="##teamcity[publishArtifacts '$(OutPath)\**\*.dll=>TeamCity.VSTest.TestLogger.zip']" />
     </Target>
@@ -71,7 +71,7 @@
             <CachePath>@(GlobaPackagesInfo->Replace("info : global-packages:", "")->Trim())</CachePath>
         </PropertyGroup>
         <Message Text='CachePath=$(CachePath)' />
-        <RemoveDir Directories="$(CachePath)teamcity.vstest.testadapter\$(PackageVersion)" />
+        <RemoveDir Directories="$(CachePath)teamcity.vstest.testadapter\$(PackageVersion)" ContinueOnError="True" />
     </Target>
 
     <Target Name="Publish">
@@ -91,7 +91,7 @@
         </ItemGroup>
 
         <Move SourceFiles="@(AdapterFiles)" DestinationFolder="$(OutPath)"/>
-        <RemoveDir Directories="$(PublishPath)" />
+        <RemoveDir Directories="$(PublishPath)" ContinueOnError="True" />
     </Target>
 
     <Target Name="IntegrationTest" DependsOnTargets="Pack;ClearNugetCache">
@@ -140,7 +140,7 @@
             File="@(GlobalJsonFile)"
             Lines="@(GlobalJsonFileLine)"
             Overwrite="true"
-            Encoding="Unicode"/>
+            Encoding="UTF-8"/>
 
         <Message Text="!!!Start" />
 
