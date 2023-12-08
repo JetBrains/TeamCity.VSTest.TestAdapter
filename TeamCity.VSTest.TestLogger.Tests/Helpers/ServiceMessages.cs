@@ -178,6 +178,16 @@ namespace TeamCity.VSTest.TestLogger.Tests.Helpers
                         AreEqual(testStartedForTestIgnored.NameAttr, message.NameAttr, "Invalid Name attribute");
                         // IsNotEmpty(message.MessageAttr, "Message attribute is empty");
                         break;
+                    
+                    case "blockOpened":
+                        AreEqual(message.FlowIdAttr, FlowId, "Invalid FlowId attribute");
+                        IsNotEmpty(message.NameAttr, "Name attribute is empty");
+                        break;
+                    
+                    case "blockClosed":
+                        AreEqual(message.FlowIdAttr, FlowId, "Invalid FlowId attribute");
+                        IsNotEmpty(message.NameAttr, "Name attribute is empty");
+                        break;
 
                     default:
                         Fail($"Unexpected message {message.Name}");
