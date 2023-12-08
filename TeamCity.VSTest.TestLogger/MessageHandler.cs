@@ -55,7 +55,7 @@
                 testName = suiteName + ": " + testName;
             }
 
-            using (_eventRegistry.Register(new TestEvent(suiteName, testCase)))
+            using (_eventRegistry.Register(new TestEvent(suiteName, ev.Result.DisplayName, testCase)))
             using (var testWriter = CurrentWriter.OpenTest(testName))
             {
                 // ReSharper disable once SuspiciousTypeConversion.Global
