@@ -1,9 +1,8 @@
-namespace TeamCity.VSTest.TestLogger
-{
-    internal interface IMessageWriter
-    {
-        void Write(string message);
+namespace TeamCity.VSTest.TestLogger;
 
-        void Flush();
-    }
+internal interface IMessageWriter
+{
+    void Write(string message);
+
+    void Flush();
 }

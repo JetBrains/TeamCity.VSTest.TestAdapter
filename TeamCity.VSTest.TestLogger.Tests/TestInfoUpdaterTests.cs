@@ -45,6 +45,5 @@ public class TestInfoUpdaterTests
         patchedMessage.GetValue("lineNumber").ShouldBe(testCase.LineNumber.ToString());
     }
 
-    private TestInfoUpdater CreateInstance() =>
-        new TestInfoUpdater(_eventContext.Object);
+    private TestInfoUpdater CreateInstance() => new(_eventContext.Object);
 }

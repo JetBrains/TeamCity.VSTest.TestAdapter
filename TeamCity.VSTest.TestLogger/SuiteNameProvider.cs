@@ -1,19 +1,18 @@
-﻿namespace TeamCity.VSTest.TestLogger
-{
-    using System.IO;
+﻿namespace TeamCity.VSTest.TestLogger;
 
-    internal class SuiteNameProvider : ISuiteNameProvider
+using System.IO;
+
+internal class SuiteNameProvider : ISuiteNameProvider
+{
+    public string GetSuiteName(string? source)
     {
-        public string GetSuiteName(string? source)
+        try
         {
-            try
-            {
-                return Strings.IsNullOrWhiteSpace(source) ? string.Empty : Path.GetFileNameWithoutExtension(source);
-            }
-            catch
-            {
-                return string.Empty;
-            }
+            return Strings.IsNullOrWhiteSpace(source) ? string.Empty : Path.GetFileNameWithoutExtension(source);
+        }
+        catch
+        {
+            return string.Empty;
         }
     }
 }

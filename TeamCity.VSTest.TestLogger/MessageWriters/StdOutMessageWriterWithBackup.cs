@@ -1,49 +1,40 @@
 // ReSharper disable ClassNeverInstantiated.Global
-namespace TeamCity.VSTest.TestLogger.MessageWriters
+namespace TeamCity.VSTest.TestLogger.MessageWriters;
+
+using System;
+using System.Text;
+
+internal class StdOutMessageWriterWithBackup(IBytesWriter indicesWriter, IBytesWriter messagesWriter) : IMessageWriter
 {
-    using System;
-    using System.Text;
+    private bool _allowServiceMessageBackup = true;
+    private ulong _position;
 
-    internal class StdOutMessageWriterWithBackup : IMessageWriter
+    public void Write(string message)
     {
-        private readonly IBytesWriter _indicesWriter;
-        private readonly IBytesWriter _messagesWriter;
-        private bool _allowServiceMessageBackup = true;
-        private ulong _position;
-
-        public StdOutMessageWriterWithBackup(IBytesWriter indicesWriter, IBytesWriter messagesWriter)
+        var messageToWrite = message + Environment.NewLine;
+        if (_allowServiceMessageBackup)
         {
-            _indicesWriter = indicesWriter;
-            _messagesWriter = messagesWriter;
-        }
-
-        public void Write(string message)
-        {
-            var messageToWrite = message + Environment.NewLine;
-            if (_allowServiceMessageBackup)
+            try
             {
-                try
-                {
-                    var messageBytes = Encoding.UTF8.GetBytes(messageToWrite);
-                    _messagesWriter.Write(messageBytes);
-                    _messagesWriter.Flush();
-                    _position += (ulong)messageBytes.Length;
+                var messageBytes = Encoding.UTF8.GetBytes(messageToWrite);
+                messagesWriter.Write(messageBytes);
+                messagesWriter.Flush();
+                _position += (ulong)messageBytes.Length;
 
-                    // Write ulong in Java style
-                    var positionBytes = BitConverter.GetBytes(_position);
-                    Array.Reverse(positionBytes);
-                    _indicesWriter.Write(positionBytes);
-                    _indicesWriter.Flush();
-                }
-                catch
-                {
-                    _allowServiceMessageBackup = false;
-                }
+                // Write ulong in Java style
+                var positionBytes = BitConverter.GetBytes(_position);
+                Array.Reverse(positionBytes);
+                indicesWriter.Write(positionBytes);
+                indicesWriter.Flush();
             }
-            
-            Console.Write(messageToWrite);
+            catch
+            {
+                _allowServiceMessageBackup = false;
+            }
         }
-
-        public void Flush() { }
+            
+        Console.Write(messageToWrite);
     }
+
+    public void Flush() { }
 }

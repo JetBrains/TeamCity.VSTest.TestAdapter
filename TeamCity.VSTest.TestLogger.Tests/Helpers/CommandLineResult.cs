@@ -1,27 +1,19 @@
-﻿namespace TeamCity.VSTest.TestLogger.Tests.Helpers
+﻿// ReSharper disable UnusedMember.Global
+namespace TeamCity.VSTest.TestLogger.Tests.Helpers;
+
+using System;
+
+public class CommandLineResult(
+    CommandLine commandLine,
+    int exitCode,
+    string stdOut,
+    string stdError)
 {
-    using System;
+    public CommandLine CommandLine { get; } = commandLine ?? throw new ArgumentNullException(nameof(commandLine));
 
-    public class CommandLineResult
-    {
-        public CommandLineResult(
-            CommandLine commandLine,
-            int exitCode,
-            string stdOut,
-            string stdError)
-        {
-            CommandLine = commandLine ?? throw new ArgumentNullException(nameof(commandLine));
-            ExitCode = exitCode;
-            StdOut = stdOut ?? throw new ArgumentNullException(nameof(stdOut));
-            StdError = stdError ?? throw new ArgumentNullException(nameof(stdError));
-        }
+    public int ExitCode { get; } = exitCode;
 
-        public CommandLine CommandLine { get; }
+    public string StdOut { get; } = stdOut ?? throw new ArgumentNullException(nameof(stdOut));
 
-        public int ExitCode { get; }
-
-        public string StdOut { get; }
-
-        public string StdError { get; }
-    }
+    public string StdError { get; } = stdError ?? throw new ArgumentNullException(nameof(stdError));
 }

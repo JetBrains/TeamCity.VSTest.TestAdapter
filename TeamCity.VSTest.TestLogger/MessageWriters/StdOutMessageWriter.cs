@@ -1,15 +1,14 @@
-namespace TeamCity.VSTest.TestLogger.MessageWriters
+namespace TeamCity.VSTest.TestLogger.MessageWriters;
+
+using System;
+
+public class StdOutMessageWriter : IMessageWriter
 {
-    using System;
-
-    public class StdOutMessageWriter : IMessageWriter
+    public void Write(string message)
     {
-        public void Write(string message)
-        {
-            var messageToWrite = message + Environment.NewLine;
-            Console.WriteLine(messageToWrite);
-        }
-
-        public void Flush() {}
+        var messageToWrite = message + Environment.NewLine;
+        Console.WriteLine(messageToWrite);
     }
+
+    public void Flush() {}
 }

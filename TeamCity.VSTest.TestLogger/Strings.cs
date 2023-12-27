@@ -1,8 +1,7 @@
-﻿namespace TeamCity.VSTest.TestLogger
+﻿namespace TeamCity.VSTest.TestLogger;
+
+internal static class Strings
 {
-    internal static class Strings
-    {
-        public static bool IsNullOrWhiteSpace(string? str)
-            => str == null || str.Trim() == string.Empty;
-    }
+    public static bool IsNullOrWhiteSpace(string? str)
+        => str == null || str.Trim() == string.Empty;
 }

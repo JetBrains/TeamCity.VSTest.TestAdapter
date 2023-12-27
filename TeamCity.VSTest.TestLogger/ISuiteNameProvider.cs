@@ -1,7 +1,6 @@
-﻿namespace TeamCity.VSTest.TestLogger
+﻿namespace TeamCity.VSTest.TestLogger;
+
+internal interface ISuiteNameProvider
 {
-    internal interface ISuiteNameProvider
-    {
-        string GetSuiteName(string? source);
-    }
+    string GetSuiteName(string? source);
 }

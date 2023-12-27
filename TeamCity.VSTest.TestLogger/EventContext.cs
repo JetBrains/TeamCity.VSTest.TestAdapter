@@ -1,29 +1,28 @@
 // ReSharper disable ClassNeverInstantiated.Global
-namespace TeamCity.VSTest.TestLogger
+namespace TeamCity.VSTest.TestLogger;
+
+using System;
+
+internal class EventContext : IEventRegistry, IEventContext
 {
-    using System;
+    private TestEvent? _event;
 
-    internal class EventContext : IEventRegistry, IEventContext
+    public IDisposable Register(TestEvent testEvent)
     {
-        private TestEvent? _event;
+        var prevEvent = _event;
+        _event = testEvent;
+        return Disposable.Create(() => { _event = prevEvent; });
+    }
 
-        public IDisposable Register(TestEvent testEvent)
+    public bool TryGetEvent(out TestEvent? testEvent)
+    {
+        if (_event != null)
         {
-            var prevEvent = _event;
-            _event = testEvent;
-            return Disposable.Create(() => { _event = prevEvent; });
+            testEvent = _event;
+            return true;
         }
 
-        public bool TryGetEvent(out TestEvent? testEvent)
-        {
-            if (_event != null)
-            {
-                testEvent = _event;
-                return true;
-            }
-
-            testEvent = default;
-            return false;
-        }
+        testEvent = default;
+        return false;
     }
 }

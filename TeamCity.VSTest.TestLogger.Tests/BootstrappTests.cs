@@ -1,17 +1,16 @@
-﻿namespace TeamCity.VSTest.TestLogger.Tests
-{
-    using IoC;
-    using JetBrains.TeamCity.ServiceMessages.Write.Special;
-    using Xunit;
+﻿namespace TeamCity.VSTest.TestLogger.Tests;
 
-    public class BootstrappTests
+using IoC;
+using JetBrains.TeamCity.ServiceMessages.Write.Special;
+using Xunit;
+
+public class BootstrappTests
+{
+    [Fact]
+    public void ShouldResolveTeamCityWriter()
     {
-        [Fact]
-        public void ShouldResolveTeamCityWriter()
-        {
             using var container = Container.Create().Using<IoCConfiguration>();
             var writer = container.Resolve<ITeamCityWriter>();
             writer.WriteMessage("abc");
         }
-    }
 }

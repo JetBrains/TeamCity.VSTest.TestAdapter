@@ -1,4 +1,5 @@
-﻿namespace TeamCity.VSTest.TestLogger.Tests;
+﻿// ReSharper disable ConvertToConstant.Local
+namespace TeamCity.VSTest.TestLogger.Tests;
 
 using System;
 using System.Collections.Generic;
@@ -51,16 +52,16 @@ public class IntegrationTests
         Tuple<int, StringBuilder>? messageBlock = default;
         foreach (var line in File.ReadLines(_resultsPath))
         {
-            var trimedLine = line.Trim();
-            if (trimedLine.Length > 3 && trimedLine.Substring(0, 3) == "!!!")
+            var trimmedLine = line.Trim();
+            if (trimmedLine.Length > 3 && trimmedLine[..3] == "!!!")
             {
-                var stateInfo = trimedLine.Substring(3, trimedLine.Length - 3);
+                var stateInfo = trimmedLine.Substring(3, trimmedLine.Length - 3);
                 var stateParts = stateInfo.Split(':');
                 if (stateParts.Length > 0 && Enum.TryParse(stateParts[0], true, out State curState))
                 {
                     if (curState == State.Messages && stateParts.Length > 1)
                     {
-                        if (int.TryParse(stateParts[1], out int curMessageCount))
+                        if (int.TryParse(stateParts[1], out var curMessageCount))
                         {
                             state = curState;
                             messageBlock = Tuple.Create(curMessageCount, new StringBuilder());
@@ -75,6 +76,7 @@ public class IntegrationTests
                 }
             }
 
+            // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
             switch (state)
             {
                 case State.Start:
@@ -127,27 +129,19 @@ public class IntegrationTests
         Finish
     }
 
-    private class TestResult
+    private class TestResult(
+        string header,
+        string commands,
+        string results,
+        ICollection<Tuple<int, string>> messages)
     {
-        public TestResult(
-            string header,
-            string commands,
-            string results,
-            ICollection<Tuple<int, string>> messages)
-        {
-            Header = header ?? throw new ArgumentNullException(nameof(header));
-            Commands = commands ?? throw new ArgumentNullException(nameof(commands));
-            Results = results ?? throw new ArgumentNullException(nameof(results));
-            Messages = messages ?? throw new ArgumentNullException(nameof(messages));
-        }
+        private string Header { get; } = header ?? throw new ArgumentNullException(nameof(header));
 
-        public string Header { get; }
+        private string Commands { get; } = commands ?? throw new ArgumentNullException(nameof(commands));
 
-        public string Commands { get; }
+        private string Results { get; } = results ?? throw new ArgumentNullException(nameof(results));
 
-        public string Results { get; }
-
-        public ICollection<Tuple<int, string>> Messages { get; }
+        public IEnumerable<Tuple<int, string>> Messages { get; } = messages ?? throw new ArgumentNullException(nameof(messages));
 
         public override string ToString()
         {
