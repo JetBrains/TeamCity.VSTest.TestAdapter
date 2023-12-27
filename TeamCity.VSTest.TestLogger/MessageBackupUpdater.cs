@@ -1,33 +1,25 @@
-namespace TeamCity.VSTest.TestLogger
+namespace TeamCity.VSTest.TestLogger;
+
+using System;
+using JetBrains.TeamCity.ServiceMessages;
+using JetBrains.TeamCity.ServiceMessages.Write.Special;
+
+internal class MessageBackupUpdater(IOptions options) : IServiceMessageUpdater
 {
-    using System;
-    using JetBrains.TeamCity.ServiceMessages;
-    using JetBrains.TeamCity.ServiceMessages.Write.Special;
+    private long _index;
+    private readonly bool _allowServiceMessageBackup = options.AllowServiceMessageBackup;
 
-    internal class MessageBackupUpdater: IServiceMessageUpdater
+    public IServiceMessage UpdateServiceMessage(IServiceMessage message)
     {
-        private readonly IOptions _options;
-        private long _index;
-        private readonly bool _allowServiceMessageBackup;
-
-        public MessageBackupUpdater(IOptions options)
+        if (message == null) throw new ArgumentNullException(nameof(message));
+        if (!_allowServiceMessageBackup)
         {
-            _options = options;
-            _allowServiceMessageBackup = options.AllowServiceMessageBackup;
+            return message;
         }
-
-        public IServiceMessage UpdateServiceMessage(IServiceMessage message)
-        {
-            if (message == null) throw new ArgumentNullException(nameof(message));
-            if (!_allowServiceMessageBackup)
-            {
-                return message;
-            }
             
-            var patchedMessage = new PatchedServiceMessage(message);
-            patchedMessage.Add("source", _options.ServiceMessagesBackupSource);
-            patchedMessage.Add("index", (_index++).ToString());
-            return patchedMessage;
-        }
+        var patchedMessage = new PatchedServiceMessage(message);
+        patchedMessage.Add("source", options.ServiceMessagesBackupSource);
+        patchedMessage.Add("index", (_index++).ToString());
+        return patchedMessage;
     }
 }

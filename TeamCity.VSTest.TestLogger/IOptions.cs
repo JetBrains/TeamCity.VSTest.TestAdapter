@@ -1,27 +1,27 @@
-﻿namespace TeamCity.VSTest.TestLogger
+﻿// ReSharper disable UnusedMember.Global
+namespace TeamCity.VSTest.TestLogger;
+
+internal interface IOptions
 {
-    internal interface IOptions
-    {
-        string? TestRunDirectory { get; set; }
+    string? TestRunDirectory { get; set; }
 
-        TeamCityVersion Version { get; }
+    TeamCityVersion Version { get; }
 
-        string RootFlowId { get; }
+    string RootFlowId { get; }
 
-        public string ServiceMessagesFileSavePath { get; }
+    public string ServiceMessagesFileSavePath { get; }
 
-        bool FallbackToStdOutTestReporting { get; }
+    bool FallbackToStdOutTestReporting { get; }
         
-        bool AllowServiceMessageBackup { get; }
+    bool AllowServiceMessageBackup { get; }
         
-        string ServiceMessagesBackupPath { get; }
+    string ServiceMessagesBackupPath { get; }
 
-        string ServiceMessagesBackupSource { get; }
+    string ServiceMessagesBackupSource { get; }
 
-        bool AllowExperimental { get; }
+    bool AllowExperimental { get; }
 
-        bool MetadataEnable { get; }
+    bool MetadataEnable { get; }
 
-        TeamCityVersion TestMetadataSupportVersion { get; }
-    }
+    TeamCityVersion TestMetadataSupportVersion { get; }
 }

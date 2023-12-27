@@ -1,10 +1,9 @@
 ﻿// ReSharper disable ClassNeverInstantiated.Global
-namespace TeamCity.VSTest.TestLogger
-{
-    using System;
+namespace TeamCity.VSTest.TestLogger;
 
-    internal class IdGenerator : IIdGenerator
-    {
-        public string NewId() => Guid.NewGuid().ToString().Substring(0, 8);
-    }
+using System;
+
+internal class IdGenerator : IIdGenerator
+{
+    public string NewId() => Guid.NewGuid().ToString().Substring(0, 8);
 }

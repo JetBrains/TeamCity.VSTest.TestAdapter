@@ -1,9 +1,8 @@
-namespace TeamCity.VSTest.TestLogger
-{
-    internal interface IBytesWriter
-    {
-        void Write(byte[] bytes);
+namespace TeamCity.VSTest.TestLogger;
 
-        void Flush();
-    }
+internal interface IBytesWriter
+{
+    void Write(byte[] bytes);
+
+    void Flush();
 }

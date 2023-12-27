@@ -1,7 +1,6 @@
-﻿namespace TeamCity.VSTest.TestLogger
+﻿namespace TeamCity.VSTest.TestLogger;
+
+internal interface IIdGenerator
 {
-    internal interface IIdGenerator
-    {
-        string NewId();
-    }
+    string NewId();
 }

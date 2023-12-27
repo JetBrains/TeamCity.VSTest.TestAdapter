@@ -1,88 +1,85 @@
-﻿namespace TeamCity.VSTest.TestLogger.Tests
+﻿// ReSharper disable UnusedAutoPropertyAccessor.Local
+namespace TeamCity.VSTest.TestLogger.Tests;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Shouldly;
+using Xunit;
+
+public class SuiteNameProviderTests
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Shouldly;
-    using Xunit;
+    private const string Null = "null";
+    private const string Br = ";";
 
-    public class SuiteNameProviderTests
+    private static SuiteNameProvider CreateInstance()
     {
-        private const string Null = "null";
-        private const string Br = ";";
+        return new SuiteNameProvider();
+    }
 
-        private static SuiteNameProvider CreateInstance()
+    private class GetSuiteNameAction
+    {
+        private GetSuiteNameAction(
+            string? baseDirectory,
+            string? source,
+            string? expectedSuiteName)
         {
-            return new SuiteNameProvider();
+            BaseDirectory = baseDirectory;
+            Source = source;
+            ExpectedSuiteName = expectedSuiteName;
         }
 
-        private class GetSuiteNameAction
+        public string? BaseDirectory { get; }
+
+        public string? Source { get; }
+
+        public string? ExpectedSuiteName { get; }
+
+        private static GetSuiteNameAction Create(string description)
         {
-            private GetSuiteNameAction(
-                string? baseDirectory,
-                string? source,
-                string? expectedSuiteName)
-            {
-                BaseDirectory = baseDirectory;
-                Source = source;
-                ExpectedSuiteName = expectedSuiteName;
-            }
-
-            public string? BaseDirectory { get; }
-
-            public string? Source { get; }
-
-            public string? ExpectedSuiteName { get; }
-
-            private static GetSuiteNameAction Create(string description)
-            {
-                var parts = description.Split(new[] {Br}, StringSplitOptions.None);
-                return new GetSuiteNameAction(ParsePart(parts, 0), ParsePart(parts, 1), ParsePart(parts, 2));
-            }
-
-            public static IEnumerable<GetSuiteNameAction> CreateMany(string descriptions)
-            {
-                var lines = descriptions.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
-                return
-                    from line in lines
-                    select Create(line);
-            }
-
-            private static string? ParsePart(string[] parts, int index)
-            {
-                if (index >= parts.Length)
-                    return null;
-
-                var value = parts[index];
-                if (Null.Equals(value, StringComparison.CurrentCultureIgnoreCase))
-                    return null;
-
-                return value;
-            }
+            var parts = description.Split([Br], StringSplitOptions.None);
+            return new GetSuiteNameAction(ParsePart(parts, 0), ParsePart(parts, 1), ParsePart(parts, 2));
         }
 
-        [Theory]
-        [InlineData(@"c:\dir" + Br + @"c:\dir\abc.dll" + Br + @"abc")]
-        [InlineData(@"c:\dir" + Br + @"somePath\abc.dll" + Br + @"abc")]
-        [InlineData(@"c:\dir" + Br + @"abc.dll" + Br + @"abc")]
-        [InlineData(Null + Br + @"c:\dir\abc.dll" + Br + @"abc")]
-        [InlineData(Null + Br + @"somePath\abc.dll" + Br + @"abc")]
-        [InlineData(Null + Br + @"abc.dll" + Br + @"abc")]
-        [InlineData(Null + Br + Null + Br)]
-        [InlineData("" + Br + "" + Br)]
-        public void ShouldProvideSuiteName(string descriptions)
+        public static IEnumerable<GetSuiteNameAction> CreateMany(string descriptions)
         {
-            // Given
-            var nameProvider = CreateInstance();
+            var lines = descriptions.Split([Environment.NewLine], StringSplitOptions.None);
+            return
+                from line in lines
+                select Create(line);
+        }
 
-            // When
-            foreach (var getSuiteNameAction in GetSuiteNameAction.CreateMany(descriptions))
-            {
-                var actualSuiteName = nameProvider.GetSuiteName(getSuiteNameAction.Source);
+        private static string? ParsePart(IReadOnlyList<string> parts, int index)
+        {
+            if (index >= parts.Count)
+                return null;
 
-                // Then
-                actualSuiteName.ShouldBe(getSuiteNameAction.ExpectedSuiteName);
-            }
+            var value = parts[index];
+            return Null.Equals(value, StringComparison.CurrentCultureIgnoreCase) ? null : value;
+        }
+    }
+
+    [Theory]
+    [InlineData(@"c:\dir" + Br + @"c:\dir\abc.dll" + Br + "abc")]
+    [InlineData(@"c:\dir" + Br + @"somePath\abc.dll" + Br + "abc")]
+    [InlineData(@"c:\dir" + Br + "abc.dll" + Br + "abc")]
+    [InlineData(Null + Br + @"c:\dir\abc.dll" + Br + "abc")]
+    [InlineData(Null + Br + @"somePath\abc.dll" + Br + "abc")]
+    [InlineData(Null + Br + "abc.dll" + Br + "abc")]
+    [InlineData(Null + Br + Null + Br)]
+    [InlineData("" + Br + "" + Br)]
+    public void ShouldProvideSuiteName(string descriptions)
+    {
+        // Given
+        var nameProvider = CreateInstance();
+
+        // When
+        foreach (var getSuiteNameAction in GetSuiteNameAction.CreateMany(descriptions))
+        {
+            var actualSuiteName = nameProvider.GetSuiteName(getSuiteNameAction.Source);
+
+            // Then
+            actualSuiteName.ShouldBe(getSuiteNameAction.ExpectedSuiteName);
         }
     }
 }

@@ -1,66 +1,58 @@
-namespace TeamCity.VSTest.TestLogger.MessageWriters
+namespace TeamCity.VSTest.TestLogger.MessageWriters;
+
+using System;
+using System.IO;
+
+internal class MessageWriterFactory(IOptions options)
 {
-    using System;
-    using System.IO;
-
-    internal class MessageWriterFactory
+    public IMessageWriter GetMessageWriter()
     {
-        private readonly IOptions _options;
-
-        public MessageWriterFactory(IOptions options)
+        if (options.FallbackToStdOutTestReporting == false && EnsureServiceMessagesFileDirectoryExists())
         {
-            _options = options;
+            return GetFileMessageWriter();
         }
 
-        public IMessageWriter GetMessageWriter()
+        return options.AllowServiceMessageBackup
+            ? GetStdOutWriterWithBackup()
+            : new StdOutMessageWriter();
+    }
+
+    private bool EnsureServiceMessagesFileDirectoryExists()
+    {
+        if (string.IsNullOrEmpty(options.ServiceMessagesFileSavePath))
         {
-            if (_options.FallbackToStdOutTestReporting == false && EnsureServiceMessagesFileDirectoryExists())
+            return false;
+        }
+
+        try
+        {
+            if (!Directory.Exists(options.ServiceMessagesFileSavePath))
             {
-                return GetFileMessageWriter();
+                Directory.CreateDirectory(options.ServiceMessagesFileSavePath);
             }
 
-            return _options.AllowServiceMessageBackup
-                ? GetStdOutWriterWithBackup()
-                : new StdOutMessageWriter();
+            return true;
         }
-
-        private bool EnsureServiceMessagesFileDirectoryExists()
+        catch
         {
-            if (string.IsNullOrEmpty(_options.ServiceMessagesFileSavePath))
-            {
-                return false;
-            }
-
-            try
-            {
-                if (!Directory.Exists(_options.ServiceMessagesFileSavePath))
-                {
-                    Directory.CreateDirectory(_options.ServiceMessagesFileSavePath);
-                }
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            return false;
         }
+    }
 
-        private IMessageWriter GetFileMessageWriter()
-        {
-            var messagesFilePath = Path.Combine(_options.ServiceMessagesFileSavePath, Guid.NewGuid().ToString("n")) + ".msg";
-            var messageBytesWriter = new BytesWriter(messagesFilePath);
-            return new FileMessageWriter(messageBytesWriter);
-        }
+    private IMessageWriter GetFileMessageWriter()
+    {
+        var messagesFilePath = Path.Combine(options.ServiceMessagesFileSavePath, Guid.NewGuid().ToString("n")) + ".msg";
+        var messageBytesWriter = new BytesWriter(messagesFilePath);
+        return new FileMessageWriter(messageBytesWriter);
+    }
 
-        private IMessageWriter GetStdOutWriterWithBackup()
-        {
-            var indicesFilePath = Path.Combine(_options.ServiceMessagesBackupPath, _options.ServiceMessagesBackupSource);
-            var messagesFilePath = Path.Combine(_options.ServiceMessagesBackupPath, _options.ServiceMessagesBackupSource) + ".msg";
-            var indicesBytesWriter = new BytesWriter(indicesFilePath);
-            var messageBytesWriter = new BytesWriter(messagesFilePath);
+    private IMessageWriter GetStdOutWriterWithBackup()
+    {
+        var indicesFilePath = Path.Combine(options.ServiceMessagesBackupPath, options.ServiceMessagesBackupSource);
+        var messagesFilePath = Path.Combine(options.ServiceMessagesBackupPath, options.ServiceMessagesBackupSource) + ".msg";
+        var indicesBytesWriter = new BytesWriter(indicesFilePath);
+        var messageBytesWriter = new BytesWriter(messagesFilePath);
 
-            return new StdOutMessageWriterWithBackup(indicesBytesWriter, messageBytesWriter);
-        }
+        return new StdOutMessageWriterWithBackup(indicesBytesWriter, messageBytesWriter);
     }
 }

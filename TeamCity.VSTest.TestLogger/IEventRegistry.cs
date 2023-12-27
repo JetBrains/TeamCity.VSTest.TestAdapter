@@ -1,9 +1,8 @@
-namespace TeamCity.VSTest.TestLogger
-{
-    using System;
+namespace TeamCity.VSTest.TestLogger;
 
-    internal interface IEventRegistry
-    {
-        IDisposable Register(TestEvent testEvent);
-    }
+using System;
+
+internal interface IEventRegistry
+{
+    IDisposable Register(TestEvent testEvent);
 }
