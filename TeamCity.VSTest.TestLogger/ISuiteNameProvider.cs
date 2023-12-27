@@ -2,7 +2,6 @@
 {
     internal interface ISuiteNameProvider
     {
-        [NotNull]
-        string GetSuiteName([CanBeNull] string source);
+        string GetSuiteName(string? source);
     }
 }

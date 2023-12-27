@@ -9,7 +9,7 @@ internal class TestInfoUpdater(IEventContext eventContext) : IServiceMessageUpda
     public IServiceMessage UpdateServiceMessage(IServiceMessage message)
     {
         if (message == null) throw new ArgumentNullException(nameof(message));
-        if (!eventContext.TryGetEvent(out var testEvent))
+        if (!eventContext.TryGetEvent(out var testEvent) || testEvent == default)
         {
             return message;
         }

@@ -56,7 +56,7 @@ namespace TeamCity.VSTest.TestLogger.Tests
         [InlineData("", "Abc", "Abc")]
         [InlineData("        ", "Abc", "Abc")]
         [InlineData(null, null, "")]
-        public void ShouldProvideName(string fullyQualifiedName, string displayName, string expected)
+        public void ShouldProvideName(string? fullyQualifiedName, string? displayName, string expected)
         {
             // Given
             var nameFactory = CreateInstance();

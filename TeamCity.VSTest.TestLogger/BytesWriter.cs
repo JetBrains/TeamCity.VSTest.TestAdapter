@@ -6,21 +6,21 @@ namespace TeamCity.VSTest.TestLogger
     internal class BytesWriter : IBytesWriter, IDisposable
     {
         private readonly string _fileName;
-        private FileStream _stream;
-        private BinaryWriter _writer;
+        private FileStream? _stream;
+        private BinaryWriter? _writer;
 
         public BytesWriter(string fileName) => _fileName = fileName;
 
         public void Write(byte[] bytes)
         {
             EnsureOpened();
-            _writer.Write(bytes);
+            _writer!.Write(bytes);
         }
 
         public void Flush()
         {
             EnsureOpened();
-            _writer.Flush();
+            _writer!.Flush();
         }
 
         public void Dispose() => _stream?.Dispose();

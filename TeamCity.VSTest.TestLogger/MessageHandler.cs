@@ -7,22 +7,22 @@
 
     internal class MessageHandler : IMessageHandler
     {
-        [NotNull] private readonly ITeamCityWriter _rootWriter;
-        [NotNull] private readonly ISuiteNameProvider _suiteNameProvider;
+        private readonly ITeamCityWriter _rootWriter;
+        private readonly ISuiteNameProvider _suiteNameProvider;
         private readonly IAttachments _attachments;
         private readonly ITestNameProvider _testNameProvider;
         private readonly IEventRegistry _eventRegistry;
-        private ITeamCityWriter _flowWriter;
-        private ITeamCityWriter _blockWriter;
+        private ITeamCityWriter? _flowWriter;
+        private ITeamCityWriter? _blockWriter;
 
         private ITeamCityWriter CurrentWriter => _blockWriter ?? _flowWriter ?? _rootWriter;
 
         internal MessageHandler(
-            [NotNull] ITeamCityWriter rootWriter,
-            [NotNull] ISuiteNameProvider suiteNameProvider,
-            [NotNull] IAttachments attachments,
-            [NotNull] ITestNameProvider testNameProvider,
-            [NotNull] IEventRegistry eventRegistry)
+            ITeamCityWriter rootWriter,
+            ISuiteNameProvider suiteNameProvider,
+            IAttachments attachments,
+            ITestNameProvider testNameProvider,
+            IEventRegistry eventRegistry)
         {
             _rootWriter = rootWriter ?? throw new ArgumentNullException(nameof(rootWriter));
             _suiteNameProvider = suiteNameProvider ?? throw new ArgumentNullException(nameof(suiteNameProvider));
@@ -31,10 +31,10 @@
             _eventRegistry = eventRegistry ?? throw new ArgumentNullException(nameof(eventRegistry));
         }
 
-        public void OnTestRunMessage(TestRunMessageEventArgs ev)
+        public void OnTestRunMessage(TestRunMessageEventArgs? ev)
         { }
 
-        public void OnTestResult(TestResultEventArgs ev)
+        public void OnTestResult(TestResultEventArgs? ev)
         {
             if (ev == null)
             {

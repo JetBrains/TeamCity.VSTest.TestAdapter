@@ -13,14 +13,14 @@ namespace TeamCity.VSTest.TestLogger.Tests.Helpers
     {
         private static readonly IServiceMessageParser Parser = new ServiceMessageParser();
 
-        public static int GetNumberOfServiceMessages([NotNull] string text)
+        public static int GetNumberOfServiceMessages(string text)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
             var actualMessages = Parser.ParseServiceMessages(text).ToList();
             return actualMessages.Count;
         }
 
-        public static void ResultShouldContainCorrectStructureAndSequence([NotNull] string text)
+        public static void ResultShouldContainCorrectStructureAndSequence(string text)
         {
             if (text == null) throw new ArgumentNullException(nameof(text));
             var messages = Parser.ParseServiceMessages(text).ToList();

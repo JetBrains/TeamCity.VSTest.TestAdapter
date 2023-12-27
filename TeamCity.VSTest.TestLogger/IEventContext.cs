@@ -2,6 +2,6 @@ namespace TeamCity.VSTest.TestLogger
 {
     internal interface IEventContext
     {
-        bool TryGetEvent(out TestEvent testEvent);
+        bool TryGetEvent(out TestEvent? testEvent);
     }
 }

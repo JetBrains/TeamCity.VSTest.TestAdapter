@@ -19,20 +19,20 @@
         private class GetSuiteNameAction
         {
             private GetSuiteNameAction(
-                [CanBeNull] string baseDirectory,
-                [CanBeNull] string source,
-                string expectedSuiteName)
+                string? baseDirectory,
+                string? source,
+                string? expectedSuiteName)
             {
                 BaseDirectory = baseDirectory;
                 Source = source;
                 ExpectedSuiteName = expectedSuiteName;
             }
 
-            public string BaseDirectory { [CanBeNull] get; }
+            public string? BaseDirectory { get; }
 
-            public string Source { [CanBeNull] get; }
+            public string? Source { get; }
 
-            public string ExpectedSuiteName { [CanBeNull] get; }
+            public string? ExpectedSuiteName { get; }
 
             private static GetSuiteNameAction Create(string description)
             {
@@ -48,7 +48,7 @@
                     select Create(line);
             }
 
-            private static string ParsePart(string[] parts, int index)
+            private static string? ParsePart(string[] parts, int index)
             {
                 if (index >= parts.Length)
                     return null;

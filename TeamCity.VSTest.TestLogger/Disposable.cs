@@ -9,11 +9,10 @@ namespace TeamCity.VSTest.TestLogger
 
     internal static class Disposable
     {
-        [NotNull] public static readonly IDisposable Empty = EmptyDisposable.Shared;
+        public static readonly IDisposable Empty = EmptyDisposable.Shared;
 
         [MethodImpl((MethodImplOptions)0x100)]
-        [NotNull]
-        public static IDisposable Create([NotNull] Action action)
+        public static IDisposable Create(Action action)
         {
 #if DEBUG
             if (action == null) throw new ArgumentNullException(nameof(action));
@@ -22,8 +21,7 @@ namespace TeamCity.VSTest.TestLogger
         }
         
         [MethodImpl((MethodImplOptions)0x100)]
-        [NotNull]
-        public static IDisposable Create([NotNull][ItemCanBeNull] IEnumerable<IDisposable> disposables)
+        public static IDisposable Create(IEnumerable<IDisposable?> disposables)
         {
 #if DEBUG
             if (disposables == null) throw new ArgumentNullException(nameof(disposables));
@@ -33,11 +31,11 @@ namespace TeamCity.VSTest.TestLogger
 
         private sealed class DisposableAction : IDisposable
         {
-            [NotNull] private readonly Action _action;
-            [CanBeNull] private readonly object _key;
+            private readonly Action _action;
+            private readonly object _key;
             private int _counter;
 
-            public DisposableAction([NotNull] Action action, [CanBeNull] object key = null)
+            public DisposableAction(Action action, object? key = null)
             {
                 _action = action;
                 _key = key ?? action;
@@ -62,10 +60,10 @@ namespace TeamCity.VSTest.TestLogger
 
         private sealed class CompositeDisposable : IDisposable
         {
-            private readonly IEnumerable<IDisposable> _disposables;
+            private readonly IEnumerable<IDisposable?> _disposables;
             private int _counter;
 
-            public CompositeDisposable(IEnumerable<IDisposable> disposables)
+            public CompositeDisposable(IEnumerable<IDisposable?> disposables)
                 => _disposables = disposables;
 
             public void Dispose()
@@ -80,7 +78,7 @@ namespace TeamCity.VSTest.TestLogger
 
         private sealed class EmptyDisposable : IDisposable
         {
-            [NotNull] public static readonly IDisposable Shared = new EmptyDisposable();
+            public static readonly IDisposable Shared = new EmptyDisposable();
 
             private EmptyDisposable() { }
 

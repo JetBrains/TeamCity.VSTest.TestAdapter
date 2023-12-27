@@ -5,7 +5,7 @@ namespace TeamCity.VSTest.TestLogger
 
     internal class EventContext : IEventRegistry, IEventContext
     {
-        [CanBeNull] private TestEvent _event;
+        private TestEvent? _event;
 
         public IDisposable Register(TestEvent testEvent)
         {
@@ -14,7 +14,7 @@ namespace TeamCity.VSTest.TestLogger
             return Disposable.Create(() => { _event = prevEvent; });
         }
 
-        public bool TryGetEvent(out TestEvent testEvent)
+        public bool TryGetEvent(out TestEvent? testEvent)
         {
             if (_event != null)
             {

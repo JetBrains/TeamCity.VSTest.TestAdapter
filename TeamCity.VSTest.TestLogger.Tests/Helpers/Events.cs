@@ -1,4 +1,5 @@
-﻿namespace TeamCity.VSTest.TestLogger.Tests.Helpers
+﻿#pragma warning disable CS0067
+namespace TeamCity.VSTest.TestLogger.Tests.Helpers
 {
     using System;
     using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
@@ -6,14 +7,14 @@
 
     internal class Events : TestLoggerEvents
     {
-        public override event EventHandler<TestRunMessageEventArgs> TestRunMessage;
-        public override event EventHandler<TestResultEventArgs> TestResult;
-        public override event EventHandler<TestRunCompleteEventArgs> TestRunComplete;
-        public override event EventHandler<TestRunStartEventArgs> TestRunStart;
-        public override event EventHandler<DiscoveryStartEventArgs> DiscoveryStart;
-        public override event EventHandler<TestRunMessageEventArgs> DiscoveryMessage;
-        public override event EventHandler<DiscoveredTestsEventArgs> DiscoveredTests;
-        public override event EventHandler<DiscoveryCompleteEventArgs> DiscoveryComplete;
+        public override event EventHandler<TestRunMessageEventArgs>? TestRunMessage;
+        public override event EventHandler<TestResultEventArgs>? TestResult;
+        public override event EventHandler<TestRunCompleteEventArgs>? TestRunComplete;
+        public override event EventHandler<TestRunStartEventArgs>? TestRunStart;
+        public override event EventHandler<DiscoveryStartEventArgs>? DiscoveryStart;
+        public override event EventHandler<TestRunMessageEventArgs>? DiscoveryMessage;
+        public override event EventHandler<DiscoveredTestsEventArgs>? DiscoveredTests;
+        public override event EventHandler<DiscoveryCompleteEventArgs>? DiscoveryComplete;
 
         public void SendTestRunMessage(TestRunMessageEventArgs ev)
         {

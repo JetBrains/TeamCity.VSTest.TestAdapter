@@ -26,7 +26,7 @@
             _lines.Add($"# test {_testName} warning {text}");
         }
 
-        public void WriteError(string text, string errorDetails = null)
+        public void WriteError(string text, string? errorDetails = default)
         {
             _lines.Add($"# test {_testName} error {text} {errorDetails ?? string.Empty}".Trim());
         }
