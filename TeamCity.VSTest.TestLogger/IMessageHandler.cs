@@ -6,9 +6,9 @@
     {
         void OnTestRunStart(string testRunDescription, bool shouldOpenNewFlow);
 
-        void OnTestRunMessage([NotNull] TestRunMessageEventArgs ev);
+        void OnTestRunMessage(TestRunMessageEventArgs ev);
         
-        void OnTestResult([NotNull] TestResultEventArgs ev);
+        void OnTestResult(TestResultEventArgs ev);
 
         void OnTestRunComplete();
     }

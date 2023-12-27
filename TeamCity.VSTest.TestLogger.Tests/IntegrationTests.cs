@@ -48,7 +48,7 @@ public class IntegrationTests
         var commands = new StringBuilder();
         var results = new StringBuilder();
         var messages = new List<Tuple<int, StringBuilder>>();
-        Tuple<int, StringBuilder> messageBlock = null;
+        Tuple<int, StringBuilder>? messageBlock = default;
         foreach (var line in File.ReadLines(_resultsPath))
         {
             var trimedLine = line.Trim();
@@ -110,7 +110,7 @@ public class IntegrationTests
                     commands.Clear();
                     results.Clear();
                     messages.Clear();
-                    messageBlock = null;
+                    messageBlock = default;
                     break;
             }
         }

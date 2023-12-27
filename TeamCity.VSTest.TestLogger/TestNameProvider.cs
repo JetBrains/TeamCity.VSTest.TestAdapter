@@ -7,7 +7,7 @@ namespace TeamCity.VSTest.TestLogger
 
     internal class TestNameProvider : ITestNameProvider
     {
-        public string GetTestName(string fullyQualifiedName, string displayName)
+        public string GetTestName(string? fullyQualifiedName, string? displayName)
         {
             fullyQualifiedName = fullyQualifiedName?.Trim() ?? string.Empty;
             displayName = displayName?.Trim() ?? string.Empty;

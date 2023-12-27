@@ -5,10 +5,10 @@ namespace TeamCity.VSTest.TestLogger
 
     internal class PatchedServiceMessage : IServiceMessage
     {
-        [NotNull] private readonly IServiceMessage _message;
-        [NotNull] private readonly Dictionary<string, string> _values = new Dictionary<string, string>();
+        private readonly IServiceMessage _message;
+        private readonly Dictionary<string, string> _values = new Dictionary<string, string>();
 
-        public PatchedServiceMessage([NotNull] IServiceMessage message)
+        public PatchedServiceMessage(IServiceMessage message)
         {
             _message = message;
             foreach (var key in _message.Keys)
@@ -17,7 +17,7 @@ namespace TeamCity.VSTest.TestLogger
             }
         }
 
-        public string GetValue(string key) => _values.TryGetValue(key, out var value) ? value : default;
+        public string? GetValue(string key) => _values.TryGetValue(key, out var value) ? value : default;
 
         public string Name => _message.Name;
 

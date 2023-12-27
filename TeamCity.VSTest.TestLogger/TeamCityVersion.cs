@@ -7,7 +7,7 @@ namespace TeamCity.VSTest.TestLogger
     {
         private static readonly Regex VersionRegex = new Regex("^(\\d+)(\\.(\\d+)|).*", RegexOptions.Compiled);
 
-        public TeamCityVersion(string version)
+        public TeamCityVersion(string? version)
         {
             try
             {

@@ -38,7 +38,7 @@
             throw new NotImplementedException();
         }
 
-        public void WriteError(string text, string errorDetails = null)
+        public void WriteError(string text, string? errorDetails = default)
         {
             throw new NotImplementedException();
         }

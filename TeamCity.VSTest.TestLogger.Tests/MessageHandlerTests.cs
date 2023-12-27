@@ -44,8 +44,8 @@
             TestOutcome outcome = TestOutcome.Passed,
             string fullyQualifiedName = "test1",
             string source = "assembly.dll",
-            string errorMessage = null,
-            string errorStackTrace = null,
+            string? errorMessage = default,
+            string? errorStackTrace = default,
             string extensionId = TeamCityTestLogger.ExtensionId)
         {
             return new TestResultEventArgs(
@@ -213,7 +213,7 @@
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        public void ShouldProcessWhenSkippedTestWithoutReason(string reason)
+        public void ShouldProcessWhenSkippedTestWithoutReason(string? reason)
         {
             // Given
 

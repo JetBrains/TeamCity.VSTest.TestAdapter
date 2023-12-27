@@ -2,7 +2,7 @@
 {
     internal interface IOptions
     {
-        [CanBeNull] string TestRunDirectory { get; set; }
+        string? TestRunDirectory { get; set; }
 
         TeamCityVersion Version { get; }
 

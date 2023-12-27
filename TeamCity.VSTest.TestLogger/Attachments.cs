@@ -17,10 +17,10 @@
         private readonly ITestAttachmentPathResolver _testAttachmentPathResolver;
 
         public Attachments(
-            [NotNull] IOptions options,
-            [NotNull] IIdGenerator idGenerator,
-            [NotNull] ITeamCityWriter rootWriter,
-            [NotNull] ITestAttachmentPathResolver testAttachmentPathResolver)
+            IOptions options,
+            IIdGenerator idGenerator,
+            ITeamCityWriter rootWriter,
+            ITestAttachmentPathResolver testAttachmentPathResolver)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _idGenerator = idGenerator ?? throw new ArgumentNullException(nameof(idGenerator));
@@ -59,7 +59,7 @@
 
             var fileName = Path.GetFileName(filePath);
             var fileExtension = Path.GetExtension(fileName).ToLowerInvariant();
-            string artifactDir = null;
+            string? artifactDir = default;
             if (!string.IsNullOrEmpty(description))
             {
                 var match = AttachmentDescriptionRegex.Match(description);

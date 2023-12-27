@@ -18,17 +18,17 @@ namespace TeamCity.VSTest.TestLogger
 
 #if NET35
         private static readonly ServiceLocatorNet35 ServiceLocatorNet35 = new ServiceLocatorNet35();
-        [NotNull] private readonly IMessageHandler _handler = ServiceLocatorNet35.MessageHandler;
-        [NotNull] private readonly IOptions _options = ServiceLocatorNet35;
-        [NotNull] private readonly IMessageWriter _messageWriter = ServiceLocatorNet35.MessageWriter;
+        private readonly IMessageHandler _handler = ServiceLocatorNet35.MessageHandler;
+        private readonly IOptions _options = ServiceLocatorNet35;
+        private readonly IMessageWriter _messageWriter = ServiceLocatorNet35.MessageWriter;
 #else
         private static readonly IMutableContainer Container = IoC.Container.Create().Using<IoCConfiguration>();
-        [NotNull] private readonly IMessageHandler _handler = Container.Resolve<IMessageHandler>();
-        [NotNull] private readonly IOptions _options = Container.Resolve<IOptions>();
-        [NotNull] private readonly IMessageWriter _messageWriter = Container.Resolve<IMessageWriter>();
+        private readonly IMessageHandler _handler = Container.Resolve<IMessageHandler>();
+        private readonly IOptions _options = Container.Resolve<IOptions>();
+        private readonly IMessageWriter _messageWriter = Container.Resolve<IMessageWriter>();
 #endif
 
-        public void Initialize([NotNull] TestLoggerEvents events, [CanBeNull] string testRunDirectory)
+        public void Initialize(TestLoggerEvents events, string testRunDirectory)
         {
             if (events == null) throw new ArgumentNullException(nameof(events));
 

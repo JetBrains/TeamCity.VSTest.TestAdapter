@@ -25,19 +25,16 @@ namespace TeamCity.VSTest.TestLogger
         {
             foreach (var entry in Environment.GetEnvironmentVariables().OfType<DictionaryEntry>())
             {
-                var key = entry.Key?.ToString()?.Trim() ?? string.Empty;
-                var value = entry.Value?.ToString()?.Trim() ?? string.Empty; 
+                var key = entry.Key?.ToString().Trim() ?? string.Empty;
+                var value = entry.Value?.ToString().Trim() ?? string.Empty; 
                 Envs[key] = value;
             }
             
             VersionVal = new TeamCityVersion(GetEnvironmentVariable("TEAMCITY_VERSION"));
-            RootFlowIdVal = GetEnvironmentVariable("TEAMCITY_PROCESS_FLOW_ID") ?? string.Empty;
-
-            ServiceMessagesFileSavePathVal = GetEnvironmentVariable("TEAMCITY_TEST_REPORT_FILES_PATH") ?? string.Empty;
-            FallbackToStdOutTestReportingVal = string.IsNullOrEmpty(ServiceMessagesFileSavePathVal)
-                                               || GetBool(GetEnvironmentVariable("TEAMCITY_FALLBACK_TO_STDOUT_TEST_REPORTING"), false);
-
-            ServiceMessagesBackupPathVal = GetEnvironmentVariable("TEAMCITY_SERVICE_MESSAGES_PATH") ?? string.Empty;
+            RootFlowIdVal = GetEnvironmentVariable("TEAMCITY_PROCESS_FLOW_ID");
+            ServiceMessagesFileSavePathVal = GetEnvironmentVariable("TEAMCITY_TEST_REPORT_FILES_PATH");
+            FallbackToStdOutTestReportingVal = string.IsNullOrEmpty(ServiceMessagesFileSavePathVal) || GetBool(GetEnvironmentVariable("TEAMCITY_FALLBACK_TO_STDOUT_TEST_REPORTING"), false);
+            ServiceMessagesBackupPathVal = GetEnvironmentVariable("TEAMCITY_SERVICE_MESSAGES_PATH");
             AllowServiceMessageBackupVal = !string.IsNullOrEmpty(ServiceMessagesBackupPathVal);
             ServiceMessagesBackupSourceVal = Guid.NewGuid().ToString().Substring(0, 8);
             if (AllowServiceMessageBackupVal)
@@ -61,7 +58,7 @@ namespace TeamCity.VSTest.TestLogger
             Environment.SetEnvironmentVariable("TEAMCITY_PROJECT_NAME", string.Empty);
         }
 
-        public string TestRunDirectory { get; set; }
+        public string? TestRunDirectory { get; set; }
         
         public TeamCityVersion Version => VersionVal;
 

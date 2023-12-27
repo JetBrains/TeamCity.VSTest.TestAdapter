@@ -10,7 +10,7 @@
 
     public class CommandLine
     {
-        private readonly Dictionary<string, string> _envitonmentVariables = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _environmentVariables = new Dictionary<string, string>();
 
         public CommandLine(CommandLine commandLine, params string[] additionalArgs)
             :this(
@@ -25,22 +25,22 @@
             Args = args ?? throw new ArgumentNullException(nameof(args));
         }
 
-        public string ExecutableFile { [NotNull] get; }
+        public string ExecutableFile { get; }
 
-        public string[] Args { [NotNull] get; }
+        public string[] Args { get; }
 
         public static string WorkingDirectory
         {
-            [NotNull] get => Path.GetFullPath(Path.Combine(typeof(CommandLine).GetTypeInfo().Assembly.Location, "../../../../../"));
+            get => Path.GetFullPath(Path.Combine(typeof(CommandLine).GetTypeInfo().Assembly.Location, "../../../../../"));
         }
 
-        public void AddEnvitonmentVariable([NotNull] string name, [CanBeNull] string value)
+        public void AddEnvitonmentVariable(string name, string value)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
-            _envitonmentVariables.Add(name, value);
+            _environmentVariables.Add(name, value);
         }
 
-        public bool TryExecute(out CommandLineResult result)
+        public bool TryExecute(out CommandLineResult? result)
         {
             var process = new Process
             {
@@ -56,7 +56,7 @@
                 }
             };
 
-            foreach (var envVar in _envitonmentVariables)
+            foreach (var envVar in _environmentVariables)
             {
 #if NET45
                 if (envVar.Value == null)

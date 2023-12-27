@@ -4,7 +4,7 @@
 
     internal class SuiteNameProvider : ISuiteNameProvider
     {
-        public string GetSuiteName(string source)
+        public string GetSuiteName(string? source)
         {
             try
             {

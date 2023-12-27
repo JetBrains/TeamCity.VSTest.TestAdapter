@@ -27,7 +27,7 @@ namespace TeamCity.VSTest.TestLogger.Tests
         [InlineData("10", "11", -1)]
         [InlineData("12", "11", 1)]
         [InlineData("10", "2018.2", -1)]
-        public void ShouldCompareTeamCityVersions(string version1, string version2, int expectedCompareResult)
+        public void ShouldCompareTeamCityVersions(string? version1, string? version2, int expectedCompareResult)
         {
             // Given
             var v1 = new TeamCityVersion(version1);

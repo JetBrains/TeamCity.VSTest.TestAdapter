@@ -5,26 +5,23 @@
     public class CommandLineResult
     {
         public CommandLineResult(
-            [NotNull] CommandLine commandLine,
+            CommandLine commandLine,
             int exitCode,
-            [NotNull] string stdOut,
-            [NotNull] string stdError)
+            string stdOut,
+            string stdError)
         {
-            if (commandLine == null) throw new ArgumentNullException(nameof(commandLine));
-            if (stdOut == null) throw new ArgumentNullException(nameof(stdOut));
-            if (stdError == null) throw new ArgumentNullException(nameof(stdError));
-            CommandLine = commandLine;
+            CommandLine = commandLine ?? throw new ArgumentNullException(nameof(commandLine));
             ExitCode = exitCode;
-            StdOut = stdOut;
-            StdError = stdError;
+            StdOut = stdOut ?? throw new ArgumentNullException(nameof(stdOut));
+            StdError = stdError ?? throw new ArgumentNullException(nameof(stdError));
         }
 
-        public CommandLine CommandLine { [NotNull] get; }
+        public CommandLine CommandLine { get; }
 
         public int ExitCode { get; }
 
-        public string StdOut { [NotNull] get; }
+        public string StdOut { get; }
 
-        public string StdError { [NotNull] get; }
+        public string StdError { get; }
     }
 }
