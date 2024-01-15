@@ -1,8 +1,6 @@
-namespace TeamCity.VSTest.TestLogger
+namespace TeamCity.VSTest.TestLogger;
+
+internal interface ITestAttachmentPathResolver
 {
-    internal interface ITestAttachmentPathResolver
-    {
-        [NotNull]
-        public string Resolve([NotNull] string testFullyQualifiedName);
-    }
+    public string Resolve(string testFullyQualifiedName);
 }

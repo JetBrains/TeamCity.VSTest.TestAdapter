@@ -6,7 +6,7 @@
 
     public class TestAttachmentPathResolverTests
     {
-        private readonly ITestAttachmentPathResolver _testAttachmentPathResolver = new TestAttachmentPathResolver();
+        private readonly TestAttachmentPathResolver _testAttachmentPathResolver = new();
 
         [Theory]
         [InlineData("", "")]

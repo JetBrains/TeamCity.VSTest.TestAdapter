@@ -8,25 +8,25 @@ using Moq;
 using TestLogger;
 using Xunit;
 
-    [SuppressMessage("ReSharper", "ImplicitlyCapturedClosure")]
-    public class AttachmentsTests
-    {
-        private readonly Mock<IOptions> _options;
-        private readonly Mock<IIdGenerator> _idGenerator;
-        private readonly Mock<ITeamCityWriter> _rootWriter;
-        private readonly Mock<ITeamCityTestWriter> _testWriter;
-        private readonly Mock<ITestAttachmentPathResolver> _testAttachmentPathResolver;
-        private readonly Attachments _attachments;
+[SuppressMessage("ReSharper", "ImplicitlyCapturedClosure")]
+public class AttachmentsTests
+{
+    private readonly Mock<IOptions> _options;
+    private readonly Mock<IIdGenerator> _idGenerator;
+    private readonly Mock<ITeamCityWriter> _rootWriter;
+    private readonly Mock<ITeamCityTestWriter> _testWriter;
+    private readonly Mock<ITestAttachmentPathResolver> _testAttachmentPathResolver;
+    private readonly Attachments _attachments;
 
-        public AttachmentsTests()
-        {
-            _idGenerator = new Mock<IIdGenerator>();
-            _options = new Mock<IOptions>();
-            _rootWriter = new Mock<ITeamCityWriter>();
-            _testWriter = new Mock<ITeamCityTestWriter>();
-            _testAttachmentPathResolver = new Mock<ITestAttachmentPathResolver>();
-            _attachments = new Attachments(_options.Object, _idGenerator.Object, _rootWriter.Object, _testAttachmentPathResolver.Object);
-        }
+    public AttachmentsTests()
+    {
+        _idGenerator = new Mock<IIdGenerator>();
+        _options = new Mock<IOptions>();
+        _rootWriter = new Mock<ITeamCityWriter>();
+        _testWriter = new Mock<ITeamCityTestWriter>();
+        _testAttachmentPathResolver = new Mock<ITestAttachmentPathResolver>();
+        _attachments = new Attachments(_options.Object, _idGenerator.Object, _rootWriter.Object, _testAttachmentPathResolver.Object);
+    }
 
     [Theory]
     [InlineData("file:///Images/My.jpg", "My image")]
@@ -84,51 +84,51 @@ using Xunit;
         _testWriter.Verify(i => i.WriteFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
     }
 
-        [Theory]
-        [InlineData("file:///Images/My.jpg", "My image", "/Images/My.jpg => .teamcity/VSTest/{0}/id", ".teamcity/VSTest/{0}/id/My.jpg", "My image")]
-        [InlineData("file:///Images/My.jpg", "Images/My.jpg", "/Images/My.jpg => .teamcity/VSTest/{0}/id", ".teamcity/VSTest/{0}/id/My.jpg", "Images/My.jpg")]
-        [InlineData("file:///c:/Images/My.jpg", "c:\\Images\\My.jpg", "c:\\Images\\My.jpg => .teamcity/VSTest/{0}/id", ".teamcity/VSTest/{0}/id/My.jpg", "")]
-        public void ShouldPublishAttachedImage(string uri, string description, string publish, string destination, string imageDescription)
-        {
-            // Given
-            const string testName = "test1";
-            _idGenerator.Setup(i => i.NewId()).Returns("id");
+    [Theory]
+    [InlineData("file:///Images/My.jpg", "My image", "/Images/My.jpg => .teamcity/VSTest/{0}/id", ".teamcity/VSTest/{0}/id/My.jpg", "My image")]
+    [InlineData("file:///Images/My.jpg", "Images/My.jpg", "/Images/My.jpg => .teamcity/VSTest/{0}/id", ".teamcity/VSTest/{0}/id/My.jpg", "Images/My.jpg")]
+    [InlineData("file:///c:/Images/My.jpg", @"c:\Images\My.jpg", @"c:\Images\My.jpg => .teamcity/VSTest/{0}/id", ".teamcity/VSTest/{0}/id/My.jpg", "")]
+    public void ShouldPublishAttachedImage(string uri, string description, string publish, string destination, string imageDescription)
+    {
+        // Given
+        const string testName = "test1";
+        _idGenerator.Setup(i => i.NewId()).Returns("id");
 
-            // When
-            _options.SetupGet(i => i.AllowExperimental).Returns(true);
-            _options.SetupGet(i => i.MetadataEnable).Returns(true);
-            _options.SetupGet(i => i.TestMetadataSupportVersion).Returns(new TeamCityVersion("2018.2"));
-            _options.SetupGet(i => i.Version).Returns(new TeamCityVersion("2018.3"));
-            _testAttachmentPathResolver.Setup(i => i.Resolve(testName)).Returns(testName);
-            _attachments.SendAttachment(testName, new UriDataAttachment(new Uri(uri), description), _testWriter.Object);
+        // When
+        _options.SetupGet(i => i.AllowExperimental).Returns(true);
+        _options.SetupGet(i => i.MetadataEnable).Returns(true);
+        _options.SetupGet(i => i.TestMetadataSupportVersion).Returns(new TeamCityVersion("2018.2"));
+        _options.SetupGet(i => i.Version).Returns(new TeamCityVersion("2018.3"));
+        _testAttachmentPathResolver.Setup(i => i.Resolve(testName)).Returns(testName);
+        _attachments.SendAttachment(testName, new UriDataAttachment(new Uri(uri), description), _testWriter.Object);
 
-            // Then
-            _testWriter.Verify(i => i.WriteStdOutput(It.IsAny<string>()), Times.Never);
-            _rootWriter.Verify(i => i.PublishArtifact(String.Format(publish, testName)));
-            _testWriter.Verify(i => i.WriteImage(String.Format(destination, testName), imageDescription));
-        }
+        // Then
+        _testWriter.Verify(i => i.WriteStdOutput(It.IsAny<string>()), Times.Never);
+        _rootWriter.Verify(i => i.PublishArtifact(string.Format(publish, testName)));
+        _testWriter.Verify(i => i.WriteImage(string.Format(destination, testName), imageDescription));
+    }
 
-        [Theory]
-        [InlineData("file:///Data/My.txt", "My data", "/Data/My.txt => .teamcity/VSTest/{0}/id", ".teamcity/VSTest/test1/id/My.txt")]
-        public void ShouldPublishAttachedFile(string uri, string description, string publish, string destination)
-        {
-            // Given
-            const string testName = "test1";
-            _idGenerator.Setup(i => i.NewId()).Returns("id");
+    [Theory]
+    [InlineData("file:///Data/My.txt", "My data", "/Data/My.txt => .teamcity/VSTest/{0}/id", ".teamcity/VSTest/test1/id/My.txt")]
+    public void ShouldPublishAttachedFile(string uri, string description, string publish, string destination)
+    {
+        // Given
+        const string testName = "test1";
+        _idGenerator.Setup(i => i.NewId()).Returns("id");
 
-            // When
-            _options.SetupGet(i => i.AllowExperimental).Returns(true);
-            _options.SetupGet(i => i.MetadataEnable).Returns(true);
-            _options.SetupGet(i => i.TestMetadataSupportVersion).Returns(new TeamCityVersion("2018.2"));
-            _options.SetupGet(i => i.Version).Returns(new TeamCityVersion("2018.3"));
-            _testAttachmentPathResolver.Setup(i => i.Resolve(testName)).Returns(testName);
-            _attachments.SendAttachment("test1", new UriDataAttachment(new Uri(uri), description), _testWriter.Object);
+        // When
+        _options.SetupGet(i => i.AllowExperimental).Returns(true);
+        _options.SetupGet(i => i.MetadataEnable).Returns(true);
+        _options.SetupGet(i => i.TestMetadataSupportVersion).Returns(new TeamCityVersion("2018.2"));
+        _options.SetupGet(i => i.Version).Returns(new TeamCityVersion("2018.3"));
+        _testAttachmentPathResolver.Setup(i => i.Resolve(testName)).Returns(testName);
+        _attachments.SendAttachment("test1", new UriDataAttachment(new Uri(uri), description), _testWriter.Object);
 
-            // Then
-            _testWriter.Verify(i => i.WriteStdOutput(It.IsAny<string>()), Times.Never);
-            _rootWriter.Verify(i => i.PublishArtifact(String.Format(publish, testName)));
-            _testWriter.Verify(i => i.WriteFile(destination, description));
-        }
+        // Then
+        _testWriter.Verify(i => i.WriteStdOutput(It.IsAny<string>()), Times.Never);
+        _rootWriter.Verify(i => i.PublishArtifact(string.Format(publish, testName)));
+        _testWriter.Verify(i => i.WriteFile(destination, description));
+    }
 
     [Theory]
     [InlineData("test1", "test1")]
