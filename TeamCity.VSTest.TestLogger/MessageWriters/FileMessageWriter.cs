@@ -12,8 +12,8 @@ internal class FileMessageWriter(IBytesWriter messageBytesWriter) : IMessageWrit
         messageBytesWriter.Write(messageBytes);
     }
 
-    public void Flush()
+    public void Dispose()
     {
-        messageBytesWriter.Flush();
+        messageBytesWriter.Dispose();
     }
 }

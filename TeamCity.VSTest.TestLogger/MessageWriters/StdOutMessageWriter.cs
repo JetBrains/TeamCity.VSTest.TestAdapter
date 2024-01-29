@@ -10,5 +10,5 @@ public class StdOutMessageWriter : IMessageWriter
         Console.WriteLine(messageToWrite);
     }
 
-    public void Flush() {}
+    public void Dispose() {}
 }

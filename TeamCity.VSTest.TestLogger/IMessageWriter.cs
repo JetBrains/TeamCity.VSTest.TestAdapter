@@ -1,8 +1,8 @@
 namespace TeamCity.VSTest.TestLogger;
 
-internal interface IMessageWriter
+using System;
+
+internal interface IMessageWriter : IDisposable
 {
     void Write(string message);
-
-    void Flush();
 }

@@ -36,6 +36,8 @@ namespace TeamCity.VSTest.TestLogger
                 .Bind<IServiceMessageUpdater>().Tag(typeof(TestInfoUpdater)).As(Singleton).To<TestInfoUpdater>()
                 .Bind<IAttachments>().As(Singleton).To<Attachments>()
                 .Bind<ITestAttachmentPathResolver>().As(Singleton).To<TestAttachmentPathResolver>()
+                .Bind<IBytesWriterFactory>().As(Singleton).To<BytesWriterFactory>()
+                .Bind<IFailedTestsReportWriter>().As(Singleton).To<FailedTestsReportWriter>()
                 .Bind<IMessageWriter>().As(Singleton).To(ctx => new MessageWriterFactory(ctx.Container.Inject<Options>()).GetMessageWriter())
                 .Bind<ITeamCityWriter>().To(
                     ctx => ctx.Container.Inject<ITeamCityServiceMessages>().CreateWriter(

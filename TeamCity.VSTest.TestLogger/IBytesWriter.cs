@@ -1,6 +1,8 @@
 namespace TeamCity.VSTest.TestLogger;
 
-internal interface IBytesWriter
+using System;
+
+internal interface IBytesWriter : IDisposable
 {
     void Write(byte[] bytes);
 

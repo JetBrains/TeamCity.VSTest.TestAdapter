@@ -9,7 +9,9 @@ internal interface IOptions
 
     string RootFlowId { get; }
 
-    public string ServiceMessagesFileSavePath { get; }
+    string ServiceMessagesFileSavePath { get; }
+    
+    string FailedTestsReportSavePath { get; }
 
     bool FallbackToStdOutTestReporting { get; }
         

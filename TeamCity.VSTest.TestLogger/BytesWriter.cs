@@ -1,9 +1,8 @@
 namespace TeamCity.VSTest.TestLogger;
 
-using System;
 using System.IO;
 
-internal class BytesWriter(string fileName) : IBytesWriter, IDisposable
+internal class BytesWriter(string fileName) : IBytesWriter
 {
     private FileStream? _stream;
     private BinaryWriter? _writer;
@@ -16,11 +15,14 @@ internal class BytesWriter(string fileName) : IBytesWriter, IDisposable
 
     public void Flush()
     {
-        EnsureOpened();
-        _writer!.Flush();
+        _writer?.Flush();
     }
 
-    public void Dispose() => _stream?.Dispose();
+    public void Dispose()
+    {
+        _writer?.Flush();
+        _stream?.Dispose();
+    }
 
     private void EnsureOpened()
     {

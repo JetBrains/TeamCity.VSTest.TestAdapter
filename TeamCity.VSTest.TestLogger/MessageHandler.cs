@@ -12,6 +12,7 @@ internal class MessageHandler : IMessageHandler
     private readonly IAttachments _attachments;
     private readonly ITestNameProvider _testNameProvider;
     private readonly IEventRegistry _eventRegistry;
+    private readonly IFailedTestsReportWriter _failedTestsReportWriter;
     private ITeamCityWriter? _flowWriter;
     private ITeamCityWriter? _blockWriter;
 
@@ -22,17 +23,20 @@ internal class MessageHandler : IMessageHandler
         ISuiteNameProvider suiteNameProvider,
         IAttachments attachments,
         ITestNameProvider testNameProvider,
-        IEventRegistry eventRegistry)
+        IEventRegistry eventRegistry,
+        IFailedTestsReportWriter failedTestsReportWriter)
     {
         _rootWriter = rootWriter ?? throw new ArgumentNullException(nameof(rootWriter));
         _suiteNameProvider = suiteNameProvider ?? throw new ArgumentNullException(nameof(suiteNameProvider));
         _attachments = attachments ?? throw new ArgumentNullException(nameof(attachments));
         _testNameProvider = testNameProvider ?? throw new ArgumentNullException(nameof(testNameProvider));
         _eventRegistry = eventRegistry ?? throw new ArgumentNullException(nameof(eventRegistry));
+        _failedTestsReportWriter = failedTestsReportWriter ?? throw new ArgumentNullException(nameof(failedTestsReportWriter));
     }
 
     public void OnTestRunMessage(TestRunMessageEventArgs? ev)
-    { }
+    {
+    }
 
     public void OnTestResult(TestResultEventArgs? ev)
     {
@@ -49,7 +53,7 @@ internal class MessageHandler : IMessageHandler
         {
             testName = testCase.Id.ToString();
         }
-            
+
         if (!string.IsNullOrEmpty(suiteName))
         {
             testName = suiteName + ": " + testName;
@@ -94,6 +98,7 @@ internal class MessageHandler : IMessageHandler
 
                 case TestOutcome.Failed:
                     testWriter.WriteFailed(result.ErrorMessage ?? string.Empty, result.ErrorStackTrace ?? string.Empty);
+                    _failedTestsReportWriter.ReportFailedTest(testCase);
                     break;
 
                 case TestOutcome.Skipped:
@@ -127,5 +132,6 @@ internal class MessageHandler : IMessageHandler
         _blockWriter?.Dispose();
         _flowWriter?.Dispose();
         _rootWriter.Dispose();
+        _failedTestsReportWriter.Dispose();
     }
 }

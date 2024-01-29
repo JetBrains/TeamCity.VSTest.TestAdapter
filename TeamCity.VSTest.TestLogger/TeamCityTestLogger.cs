@@ -46,7 +46,7 @@ public class TeamCityTestLogger : ITestLogger
         events.TestRunComplete += (_, _) =>
         {
             _handler.OnTestRunComplete();
-            _messageWriter.Flush();
+            _messageWriter.Dispose();
         };
 
 #if (NET35 || NET40)

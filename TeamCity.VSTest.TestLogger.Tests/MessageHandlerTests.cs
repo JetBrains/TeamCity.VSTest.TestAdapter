@@ -36,9 +36,10 @@ public class MessageHandlerTests
         testNameProvider.Setup(i => i.GetTestName(It.IsAny<string>(), It.IsAny<string>())).Returns<string, string>((fullyQualifiedName, _) => fullyQualifiedName);
 
         var eventRegistry = new Mock<IEventRegistry>();
+        var failedTestsWriter = new Mock<IFailedTestsReportWriter>();
 
         var root = new Root(_lines);
-        _events = new MessageHandler(root, _suiteNameProvider.Object, _attachments.Object, testNameProvider.Object, eventRegistry.Object);
+        _events = new MessageHandler(root, _suiteNameProvider.Object, _attachments.Object, testNameProvider.Object, eventRegistry.Object, failedTestsWriter.Object);
     }
 
     private static TestResultEventArgs CreateTestResult(

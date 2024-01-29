@@ -32,9 +32,9 @@ internal class StdOutMessageWriterWithBackup(IBytesWriter indicesWriter, IBytesW
                 _allowServiceMessageBackup = false;
             }
         }
-            
+
         Console.Write(messageToWrite);
     }
 
-    public void Flush() { }
+    public void Dispose() { }
 }
