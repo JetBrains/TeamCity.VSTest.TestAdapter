@@ -45,7 +45,7 @@ internal class FailedTestsReportWriter : IFailedTestsReportWriter
         if (_reportWriter == null)
             return;
 
-        if (string.IsNullOrWhiteSpace(testCase.FullyQualifiedName))
+        if (Strings.IsNullOrWhiteSpace(testCase.FullyQualifiedName))
             return;
 
         var testName = GetTestNameForRetry(testCase.FullyQualifiedName);
