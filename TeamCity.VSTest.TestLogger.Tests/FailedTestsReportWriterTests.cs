@@ -54,6 +54,25 @@ public class FailedTestsReportWriterTests
         _bytesWriterMock.Verify(x => x.Flush(), Times.Once);
         _bytesWriterMock.VerifyNoOtherCalls();
     }
+    
+    [Fact]
+    public void ShouldRemoveTypeParameters()
+    {
+        // Arrange
+        _optionsMock
+            .SetupGet(x => x.FailedTestsReportSavePath)
+            .Returns("path-to-report");
+        var writer = new FailedTestsReportWriter(_optionsMock.Object, _bytesWriterFactoryMock.Object);
+        
+        // Act
+        writer.ReportFailedTest(CreateTestCase("ParametrizedTest<Double,String>(1)"));
+        
+        // Assert
+        var expected = Encoding.UTF8.GetBytes("ParametrizedTest" + Environment.NewLine);
+        _bytesWriterMock.Verify(x => x.Write(expected), Times.Once);
+        _bytesWriterMock.Verify(x => x.Flush(), Times.Once);
+        _bytesWriterMock.VerifyNoOtherCalls();
+    }
 
     private static TestCase CreateTestCase(string testName) => new(testName, new Uri("executor://NUnit3TestExecutor"), "Tests");
 }
