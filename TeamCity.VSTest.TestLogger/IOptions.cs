@@ -26,4 +26,6 @@ internal interface IOptions
     bool MetadataEnable { get; }
 
     TeamCityVersion TestMetadataSupportVersion { get; }
+    
+    public bool UseTestResultDisplayName { get; }
 }

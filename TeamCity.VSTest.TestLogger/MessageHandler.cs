@@ -13,6 +13,7 @@ internal class MessageHandler : IMessageHandler
     private readonly ITestNameProvider _testNameProvider;
     private readonly IEventRegistry _eventRegistry;
     private readonly IFailedTestsReportWriter _failedTestsReportWriter;
+    private readonly IOptions _options;
     private ITeamCityWriter? _flowWriter;
     private ITeamCityWriter? _blockWriter;
 
@@ -24,7 +25,8 @@ internal class MessageHandler : IMessageHandler
         IAttachments attachments,
         ITestNameProvider testNameProvider,
         IEventRegistry eventRegistry,
-        IFailedTestsReportWriter failedTestsReportWriter)
+        IFailedTestsReportWriter failedTestsReportWriter,
+        IOptions options)
     {
         _rootWriter = rootWriter ?? throw new ArgumentNullException(nameof(rootWriter));
         _suiteNameProvider = suiteNameProvider ?? throw new ArgumentNullException(nameof(suiteNameProvider));
@@ -32,6 +34,7 @@ internal class MessageHandler : IMessageHandler
         _testNameProvider = testNameProvider ?? throw new ArgumentNullException(nameof(testNameProvider));
         _eventRegistry = eventRegistry ?? throw new ArgumentNullException(nameof(eventRegistry));
         _failedTestsReportWriter = failedTestsReportWriter ?? throw new ArgumentNullException(nameof(failedTestsReportWriter));
+        _options = options;
     }
 
     public void OnTestRunMessage(TestRunMessageEventArgs? ev)
@@ -47,8 +50,12 @@ internal class MessageHandler : IMessageHandler
 
         var result = ev.Result;
         var testCase = result.TestCase;
+        // For data-driven tests which don't usually have a unique display name
+        // before execution is better to use display name from the test run result rather that from testCase.
+        // It makes a display name enriched with test parameters what makes test display name unique
+        var displayName = _options.UseTestResultDisplayName && !IsNullOrWhiteSpace(result.DisplayName) ? result.DisplayName : testCase.DisplayName;
         var suiteName = _suiteNameProvider.GetSuiteName(testCase.Source);
-        var testName = _testNameProvider.GetTestName(testCase.FullyQualifiedName, testCase.DisplayName);
+        var testName = _testNameProvider.GetTestName(testCase.FullyQualifiedName, displayName);
         if (string.IsNullOrEmpty(testName))
         {
             testName = testCase.Id.ToString();
@@ -134,4 +141,7 @@ internal class MessageHandler : IMessageHandler
         _rootWriter.Dispose();
         _failedTestsReportWriter.Dispose();
     }
+    
+    private static bool IsNullOrWhiteSpace(string value) =>
+        string.IsNullOrEmpty(value) || value.Trim().Length == 0;
 }

@@ -21,6 +21,7 @@ internal class Options : IOptions
     private static readonly string ServiceMessagesBackupPathVal;
     private static readonly bool MetadataEnableVal;
     private static readonly string FailedTestsReportSavePathVal;
+    private static readonly bool UseTestResultDisplayNameVal;
 
     static Options()
     {
@@ -56,6 +57,7 @@ internal class Options : IOptions
         AllowExperimentalVal = GetBool(GetEnvironmentVariable("TEAMCITY_LOGGER_ALLOW_EXPERIMENTAL"), true);
         MetadataEnableVal = GetBool(GetEnvironmentVariable("TEAMCITY_DOTNET_TEST_METADATA_ENABLE"), true);
         FailedTestsReportSavePathVal = GetEnvironmentVariable("TEAMCITY_FAILED_TESTS_REPORTING_PATH");
+        UseTestResultDisplayNameVal = GetBool(GetEnvironmentVariable("TEAMCITY_USE_TEST_RESULT_DISPLAY_NAME"), false);
             
         Environment.SetEnvironmentVariable("TEAMCITY_PROJECT_NAME", string.Empty);
     }
@@ -83,6 +85,8 @@ internal class Options : IOptions
     public string FailedTestsReportSavePath => FailedTestsReportSavePathVal;
 
     public TeamCityVersion TestMetadataSupportVersion => TestMetadataSupportVersionVal;
+
+    public bool UseTestResultDisplayName => UseTestResultDisplayNameVal;
 
     private static string GetEnvironmentVariable(string name) => Envs.TryGetValue(name, out var val) ? val : string.Empty;
 

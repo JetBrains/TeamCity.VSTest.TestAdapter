@@ -34,7 +34,8 @@ namespace TeamCity.VSTest.TestLogger
                 new Attachments(this, idGenerator, teamCityWriter, testAttachmentPathResolver),
                 new TestNameProvider(),
                 eventContext,
-                new FailedTestsReportWriter(this, new BytesWriterFactory()));
+                new FailedTestsReportWriter(this, new BytesWriterFactory()),
+                this);
         }
 
         public IMessageWriter MessageWriter { get; }

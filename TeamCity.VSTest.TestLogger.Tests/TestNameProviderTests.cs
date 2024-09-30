@@ -56,6 +56,11 @@ public class TestNameProviderTests
     [InlineData("", "Abc", "Abc")]
     [InlineData("        ", "Abc", "Abc")]
     [InlineData(null, null, "")]
+    [InlineData(
+        "TeamCityTestCount.Tests.DynamicDataClassTest",
+        "DynamicDataClassTest (TeamCityTestCount.Tests+TestClass,2)",
+        "TeamCityTestCount.Tests.DynamicDataClassTest(TeamCityTestCount.Tests+TestClass,2)"
+    )]
     public void ShouldProvideName(string? fullyQualifiedName, string? displayName, string expected)
     {
         // Given

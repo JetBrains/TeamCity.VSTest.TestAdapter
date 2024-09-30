@@ -19,8 +19,10 @@ public class MessageHandlerTests
     private readonly List<string> _lines = [];
     private readonly MessageHandler _events;
     private readonly Mock<ISuiteNameProvider> _suiteNameProvider;
+    private readonly Mock<ITestNameProvider> _testNameProvider;
     private readonly Mock<IIdGenerator> _idGenerator;
     private readonly Mock<IAttachments> _attachments;
+    private readonly Mock<IOptions> _options;
 
     public MessageHandlerTests()
     {
@@ -31,15 +33,15 @@ public class MessageHandlerTests
 
         _idGenerator = new Mock<IIdGenerator>();
         _attachments = new Mock<IAttachments>();
-
-        var testNameProvider = new Mock<ITestNameProvider>();
-        testNameProvider.Setup(i => i.GetTestName(It.IsAny<string>(), It.IsAny<string>())).Returns<string, string>((fullyQualifiedName, _) => fullyQualifiedName);
+        _options = new Mock<IOptions>();
+        _testNameProvider = new Mock<ITestNameProvider>();
+        _testNameProvider.Setup(i => i.GetTestName(It.IsAny<string>(), It.IsAny<string>())).Returns<string, string>((fullyQualifiedName, _) => fullyQualifiedName);
 
         var eventRegistry = new Mock<IEventRegistry>();
         var failedTestsWriter = new Mock<IFailedTestsReportWriter>();
 
         var root = new Root(_lines);
-        _events = new MessageHandler(root, _suiteNameProvider.Object, _attachments.Object, testNameProvider.Object, eventRegistry.Object, failedTestsWriter.Object);
+        _events = new MessageHandler(root, _suiteNameProvider.Object, _attachments.Object, _testNameProvider.Object, eventRegistry.Object, failedTestsWriter.Object, _options.Object);
     }
 
     private static TestResultEventArgs CreateTestResult(
@@ -48,19 +50,25 @@ public class MessageHandlerTests
         string source = "assembly.dll",
         string? errorMessage = default,
         string? errorStackTrace = default,
-        string extensionId = TeamCityTestLogger.ExtensionId)
+        string extensionId = TeamCityTestLogger.ExtensionId,
+        string resultDisplayName = "test1 result display name",
+        string caseDisplayName = "test1 case display name")
     {
         return new TestResultEventArgs(
             new TestResult(
                 new TestCase(
                     fullyQualifiedName,
                     new Uri(extensionId),
-                    source))
+                    source)
+                {
+                    DisplayName = caseDisplayName
+                })
             {
                 Outcome = outcome,
                 Duration = TimeSpan.FromSeconds(1),
                 ErrorMessage = errorMessage,
-                ErrorStackTrace = errorStackTrace
+                ErrorStackTrace = errorStackTrace,
+                DisplayName = resultDisplayName
             });
     }
 
@@ -313,5 +321,38 @@ public class MessageHandlerTests
 
         // Then
         _attachments.Verify(i => i.SendAttachment("assembly.dll: test1", attachment, It.IsAny<ITeamCityTestWriter>() ));
+    }
+    
+    [Theory]
+    [InlineData(true, "test1 result display name")]
+    [InlineData(false, "test1 case display name")]
+    public void ShouldUseTestResultDisplayNameWhenOptionEnabled(bool useTestResultDisplayName, string expectedDisplayName)
+    {
+        // Given
+        _options.Setup(o => o.UseTestResultDisplayName).Returns(useTestResultDisplayName);
+
+        // When
+        _events.OnTestResult(CreateTestResult());
+        _events.OnTestRunComplete();
+
+        // Then
+        _testNameProvider.Verify(p => p.GetTestName(It.IsAny<string>(), expectedDisplayName), Times.Once);
+    }
+    
+    [Theory]
+    [InlineData("")]
+    [InlineData("  ")]
+    public void ShouldUseTestCaseDisplayNameWhenOptionEnabledButResultDisplayNameIsEmpty(string emptyResultDisplayName)
+    {
+        // Given
+        const string caseDisplayName = "case display name";
+        _options.Setup(o => o.UseTestResultDisplayName).Returns(true);
+
+        // When
+        _events.OnTestResult(CreateTestResult(resultDisplayName: emptyResultDisplayName, caseDisplayName: caseDisplayName));
+        _events.OnTestRunComplete();
+
+        // Then
+        _testNameProvider.Verify(p => p.GetTestName(It.IsAny<string>(), caseDisplayName), Times.Once);
     }
 }
