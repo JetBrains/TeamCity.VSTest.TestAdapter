@@ -11,7 +11,7 @@ public class TeamCityVersionTest
     [InlineData("2024.1.1", "2024.1.2", -1)]
     [InlineData("2024.1.1", "2024.1.1", 0)]
     [InlineData("2024.12.1 (build SNAPSHOT)", "2024.12.1 (build SNAPSHOT 2)", 0)]
-    [InlineData("2024.12.1 (build SNAPSHOT)", "2024.12.1 (build SNAPSHOT 2)", 0)]
+    [InlineData("2024.12.1 (build SNAPSHOT)", "2024.12.2 (build SNAPSHOT 2)", -1)]
     [InlineData("2024.12.2 (build SNAPSHOT)", "2024.12.1 (build SNAPSHOT 2)", 1)]
     [InlineData("2024.12.1", "2024.12", 1)]
     [InlineData("2024.12.10", "2024.12.2", 1)]
