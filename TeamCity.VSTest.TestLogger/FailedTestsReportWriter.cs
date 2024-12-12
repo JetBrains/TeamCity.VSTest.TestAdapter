@@ -51,18 +51,22 @@ internal class FailedTestsReportWriter : IFailedTestsReportWriter
         var testName = GetTestNameForRetry(testCase.FullyQualifiedName);
         if (!_reportedTests.Add(testName))
             return;
-        
+
         var bytesToWrite = Encoding.UTF8.GetBytes(testName + Environment.NewLine);
         _reportWriter.Write(bytesToWrite);
         _reportWriter.Flush();
     }
-    
+
     /// <summary>
     /// For MSTest and XUnit FullyQualifiedName is supported as is
     /// In case of NUnit we have to remove arguments from FullyQualifiedName
     /// </summary>
     private string GetTestNameForRetry(string fullyQualifiedName)
     {
+        // Starting from TC version 2024.12.1 this logic was moved to dotnet-plugin
+        if (_options.Version.CompareTo(new TeamCityVersion("2024.12")) > 0)
+            return fullyQualifiedName;
+
         var name = fullyQualifiedName.Trim();
         var argsPosition = name.IndexOf("(", StringComparison.Ordinal);
         var hasArgs = argsPosition >= 0;

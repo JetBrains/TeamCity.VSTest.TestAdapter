@@ -5,29 +5,35 @@ namespace TeamCity.VSTest.TestLogger;
 using System;
 using System.Text.RegularExpressions;
 
-public class TeamCityVersion: IComparable<TeamCityVersion>
+public class TeamCityVersion : IComparable<TeamCityVersion>
 {
-    private static readonly Regex VersionRegex = new(@"^(\d+)(\.(\d+)|).*", RegexOptions.Compiled);
+    private static readonly Regex VersionRegex = new(@"^(?<Major>\d+)(\.(?<Minor>\d+))?(\.(?<Patch>\d+))?", RegexOptions.Compiled);
 
     public TeamCityVersion(string? version)
     {
         try
         {
-            if (!string.IsNullOrEmpty(version))
+            if (string.IsNullOrEmpty(version)) return;
+            
+            var match = VersionRegex.Match(version);
+            if (!match.Success) return;
+            
+            var majorGroup = match.Groups["Major"];
+            if (int.TryParse(majorGroup.Value, out var val))
             {
-                var match = VersionRegex.Match(version);
-                if (match.Success)
-                {
-                    if (int.TryParse(match.Groups[1].Value, out var val))
-                    {
-                        Major = val;
-                    }
+                Major = val;
+            }
 
-                    if (int.TryParse(match.Groups[3].Value, out val))
-                    {
-                        Minor = val;
-                    }
-                }
+            var minorGroup = match.Groups["Minor"];
+            if (minorGroup.Success && int.TryParse(minorGroup.Value, out val))
+            {
+                Minor = val;
+            }
+
+            var patchGroup = match.Groups["Patch"];
+            if (patchGroup.Success && int.TryParse(patchGroup.Value, out val))
+            {
+                Patch = val;
             }
         }
         catch
@@ -40,14 +46,23 @@ public class TeamCityVersion: IComparable<TeamCityVersion>
 
     public int Minor { get; }
 
+    public int Patch { get; }
+
     public int CompareTo(TeamCityVersion other)
     {
         var result = Major.CompareTo(other.Major);
-        return result != 0 ? result : Minor.CompareTo(other.Minor);
+        if (result != 0)
+            return result;
+
+        result = Minor.CompareTo(other.Minor);
+        if (result != 0)
+            return result;
+
+        return Patch.CompareTo(other.Patch);
     }
 
     public override string ToString()
     {
-        return Major + "." + Minor;
+        return $"{Major}.{Minor}.{Patch}";
     }
 }
